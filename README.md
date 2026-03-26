@@ -1,27 +1,23 @@
-# Hue Creative Agency — Nuxt 4 Site
+# Hue — Creative Marketing Studio
 
-Strategic brand positioning, lead generation, and creative execution for growth-stage B2B companies.
+Full-service creative marketing for growth-stage companies. Brand strategy, digital experience, and lead generation — built on Nuxt 4 and Directus.
 
 ## Stack
 
 - **Framework**: Nuxt 4 (`compatibilityVersion: 4`)
+- **CMS**: Directus (headless, self-hosted at `admin.huestudios.company`)
 - **Styling**: Tailwind CSS v4 + custom design tokens (`hue-theme.css`)
-- **CMS**: Directus (self-hosted at `admin.huestudios.company`)
-- **Fonts**: DM Sans (Avenir Next proxy) + Cormorant Garamond (Bodoni proxy)
+- **Fonts**: DM Sans + Cormorant Garamond
 - **Icons**: Nuxt Icon (`lucide:*`)
 - **Animation**: GSAP 3 (hero entrances) + CSS scroll reveal
 - **UI**: shadcn-nuxt + Reka UI
+- **Forms**: Server-side API route with Directus static token — all form submissions create leads, contacts, and mailing list entries in the CRM pipeline
 
 ## Setup
 
 ```bash
-# 1. Install dependencies
 pnpm install
-
-# 2. Copy env file and add your Directus URL
-cp .env.example .env
-
-# 3. Start dev server
+cp .env.example .env   # Add DIRECTUS_STATIC_TOKEN + NUXT_PUBLIC_DIRECTUS_URL
 pnpm dev
 ```
 
@@ -29,74 +25,74 @@ pnpm dev
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage — GSAP hero, real 4-stage process, packages, live portfolio preview, industries, brand audit CTA, founding quote |
-| `/portfolio` | Live Directus portfolio with dual service + industry filters |
-| `/portfolio/[slug]` | Portfolio item detail — images, before/after (junction resolved), challenge, industry cross-links |
-| `/creative-services` | Packages ($15K/$30K/$50K), expandable service list, retainers, à la carte, real process |
-| `/creative-services/[slug]` | Individual service detail — deliverables, who it's for, process steps, industry links |
-| `/industries` | Industries hub with "why industry matters" dark section |
-| `/industries/[slug]` | Industry detail — challenges, solutions, live Directus portfolio filtered to sector |
-| `/case-studies` | Case studies index from `case_studies` Directus collection, service filters |
-| `/case-studies/[url]` | Case study detail — challenge, solution, results, gallery |
-| `/brand-audit` | Free Brand Perception Audit form — POSTs to `requests` collection |
-| `/about` | Camila & Peter bios (real, from live site), founding story, real 4-stage process, principles |
-| `/partnerships` | Agency/developer/referral partnerships page |
-| `/contact` | Contact form — POSTs to `requests` collection |
+| `/` | Homepage — GSAP hero, packages, process, live portfolio preview, industries, brand audit CTA |
+| `/portfolio` | Portfolio grid with dual service + industry filters, featured case studies |
+| `/portfolio/[slug]` | Case study / portfolio detail — challenge, creation, results, before/after, child projects |
+| `/creative-services` | Service packages ($15K/$30K/$50K), retainers, à la carte |
+| `/creative-services/[slug]` | Service detail — deliverables, who it's for, process steps, related work |
+| `/industries` | Industries hub with sector positioning |
+| `/industries/[slug]` | Industry detail — challenges, solutions, filtered portfolio |
+| `/case-studies` | Case studies from `case_studies` collection (legacy — migrating to portfolio) |
+| `/case-studies/[url]` | Case study detail from legacy collection |
+| `/brand-audit` | Free Brand Perception Audit → creates lead + contact in CRM |
+| `/about` | Team bios, founding story, process, principles |
+| `/partnerships` | Agency / developer / referral partnerships |
+| `/contact` | Strategy session request → creates lead + contact + newsletter subscription |
 
-## Real brand details incorporated
+## Lead Generation Pipeline
 
-- **Founded**: 2005 by Camila Hoffman and Peter Hoffman
-- **Camila**: Art Director at A|X Armani Exchange 8+ years, Parsons BFA Communications Design, 24 years experience
-- **Peter**: Digital Director since 2006, BA Hobart College
-- **Office**: 605 Lincoln Road, Suite 200, Miami Beach, FL 33139
-- **Process**: Understanding → Positioning → Brand Meaning → Big Idea (real 4-stage framework from live site)
-- **Taglines**: "Design is intelligence made visible" (Lou Danziger) · "Visual excellence is achieved through a process that is executed with a defined purpose"
-- **Clients**: A|X Armani Exchange, Pepsi, Eljin Construction, Omega Construction, Killowen, RKC Architecture, Water Works Realty, Dana Blair Designs, Binghamton Philharmonic, and more
-- **Partnerships typo fixed**: "Parnertships" → "Partnerships" throughout
+All website forms flow through a single server API route (`/api/submit`) that uses a Directus static token to create records in the CRM:
+
+| Form | Type | Creates |
+|------|------|---------|
+| Strategy Session (contact) | `contact` | Contact + Lead (scored) + Activity + Request + Newsletter sub |
+| Brand Audit | `audit` | Contact + Lead (mid-funnel) + Activity + Request |
+| Newsletter | `subscribe` | Contact + Mailing list entry |
+
+Leads are auto-scored by budget, auto-prioritized, and assigned follow-up dates. They appear immediately in the Earnest CRM dashboard.
+
+## Portfolio as Case Studies
+
+Portfolio items with `parent_id` children serve as case studies. The parent tells the story (`synopsis`, `challenge`, `creation`, `results`), and child items in `projects` are the individual deliverables. Key fields:
+
+- `synopsis` — overview / brief
+- `challenge` — the business problem
+- `creation` — how we solved it
+- `results` — business outcomes (new field)
+- `featured` — flag for homepage/featured placement (new field)
+- `project_year` / `project_duration` — meta card details (new fields)
+- `before_and_afters` — visual transformation pairs
+- `projects` — child portfolio items (O2M self-reference)
 
 ## Directus API
 
-The `useDirectus` composable in `app/composables/useDirectus.ts` handles all API calls.
+The `useDirectus` composable handles all reads. Key methods:
 
-The portfolio endpoint used:
-```
-GET /items/portfolio
-  ?fields=id,name,slug,url,status,caption,description,featured_image,
-          client.*,industries.industries_id.*,service.*,images.directus_files_id
-  &filter[status][_eq]=published
-  &sort=sort
-```
+- `fetchPortfolio()` — all published portfolio items with full nested relations
+- `fetchPortfolioItem(slug)` — single item by slug
+- `fetchFeaturedPortfolio()` — featured case studies (parent items, `featured: true`)
+- `submitContact()` / `submitAudit()` / `submitSubscribe()` — form submissions via `/api/submit`
 
-Assets are served via:
-```
-https://admin.huestudios.company/assets/{uuid}?width=600&height=400&fit=cover&quality=80
-```
+Assets: `https://admin.huestudios.company/assets/{uuid}?width=600&fit=cover&quality=80`
 
 ## Design System
 
-All design tokens live in `app/assets/css/hue-theme.css`.
+Tokens in `app/assets/css/hue-theme.css`:
 
-Key classes:
-- `.hue-display-xl/lg/md` — Avenir Next ultralight headlines
-- `.hue-editorial-xl/lg/md` — Cormorant Garamond italic accents
-- `.hue-btn` / `.hue-btn-ghost` / `.hue-btn-outline` — pill buttons
-- `.hue-card` / `.hue-card-featured` — card components
+- `.hue-display-xl/lg/md` — ultralight headlines
+- `.hue-editorial-xl/lg/md` — italic serif accents
+- `.hue-btn` / `.hue-btn-ghost` / `.hue-btn-outline` — buttons
+- `.hue-card` / `.hue-card-featured` — cards
 - `.hue-section` / `.hue-section-alt` / `.hue-section-dark` — section backgrounds
 - `.hue-container` / `.hue-container-sm` — max-width containers
-- `.reveal` + `.is-visible` — scroll-triggered fade-in animation
+- `.reveal` — scroll-triggered fade-in
 
 ## Deployment
 
 ```bash
-# Build
-pnpm build
-
-# Preview production build
-pnpm preview
-
-# Generate static site (if no SSR needed)
-pnpm generate
+pnpm build      # SSR build (Vercel/Netlify)
+pnpm preview    # Preview production build
+pnpm generate   # Static generation
 ```
 
-The site is configured for SSR by default to support live Directus data fetching.
-For Vercel/Netlify, set the `NUXT_PUBLIC_DIRECTUS_URL` environment variable in your deployment settings.
+Set `NUXT_PUBLIC_DIRECTUS_URL` and `DIRECTUS_STATIC_TOKEN` in your deployment environment.

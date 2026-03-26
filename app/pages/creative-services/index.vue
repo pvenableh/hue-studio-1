@@ -90,7 +90,7 @@
           <h2 class="hue-display-lg">Six disciplines.<br>One studio.</h2>
         </div>
 
-        <div class="space-y-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)]">
+        <div class="space-y-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]">
           <div
             v-for="(svc, i) in serviceDetails"
             :key="svc.id"
@@ -227,7 +227,7 @@
           <h2 class="hue-display-lg">Need something specific?</h2>
           <p class="mt-4 max-w-md hue-body">Individual deliverables with fixed-price transparency.</p>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
           <div
             v-for="svc in alacarteServices"
             :key="svc.name"
@@ -242,6 +242,12 @@
       </div>
     </section>
 
+    <!-- Why Hue -->
+    <WhyHue variant="services" headline="Why clients choose Hue for their most important work." :show-cta="false" />
+
+    <!-- Post-Launch -->
+    <PostLaunch />
+
     <!-- Process -->
     <section class="hue-section px-6 py-24 md:py-32">
       <div class="hue-container">
@@ -249,7 +255,7 @@
           <p class="hue-label mb-3">How We Work</p>
           <h2 class="hue-display-lg">From first call to final delivery.</h2>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-5">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-5">
           <div
             v-for="step in processSteps"
             :key="step.number"
@@ -263,19 +269,36 @@
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="hue-section-dark px-6 py-28 text-center md:py-36">
-      <div class="mx-auto max-w-md">
-        <p class="hue-label mb-4 text-white/40">Start a Project</p>
-        <h2 class="hue-display-lg mb-5 reveal text-white">
-          Not sure which service<br>you need?
-          <span style="font-family:var(--font-editorial);font-style:italic;"> That's what we're here for.</span>
-        </h2>
-        <p class="mb-8 text-[0.9375rem] text-white/40 reveal reveal-delay-1">Book a 30-minute strategy session. We'll figure it out together.</p>
-        <NuxtLink to="/contact" class="hue-btn-ghost reveal reveal-delay-2">
-          Book a Strategy Session
-          <Icon name="lucide:arrow-right" class="size-3.5" />
-        </NuxtLink>
+    <!-- Inline capture -->
+    <InlineCapture
+      label="Quick Start"
+      headline="Know what you need? Tell us and we'll get back to you."
+      button-text="Send"
+      context="Services Page Inquiry"
+    />
+
+    <!-- CTA — dual path -->
+    <section class="hue-section-dark px-6 py-24">
+      <div class="hue-container grid gap-px overflow-hidden rounded-sm md:grid-cols-2">
+        <div class="bg-[#111110] p-10 text-center">
+          <p class="mb-3 text-[0.625rem] font-medium uppercase tracking-[0.25em] text-white/25">Ready to start</p>
+          <h3 class="mb-4 text-[1.5rem] font-light text-white" style="font-family: var(--font-editorial);">
+            Book a strategy session.
+          </h3>
+          <p class="mx-auto mb-6 max-w-xs text-[0.8125rem] text-white/35">30 minutes. No pitch decks. We'll figure out what you need together.</p>
+          <MeetingRequest class="hue-btn-ghost" />
+        </div>
+        <div class="bg-[#111110] p-10 text-center">
+          <p class="mb-3 text-[0.625rem] font-medium uppercase tracking-[0.25em] text-white/25">Not sure yet</p>
+          <h3 class="mb-4 text-[1.5rem] font-light text-white" style="font-family: var(--font-editorial);">
+            Start with a free audit.
+          </h3>
+          <p class="mx-auto mb-6 max-w-xs text-[0.8125rem] text-white/35">8 questions. 15 minutes. A custom Brand Perception Presentation in 5 days.</p>
+          <NuxtLink to="/brand-audit" class="hue-btn-ghost">
+            Free Brand Audit
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
       </div>
     </section>
   </div>
@@ -288,8 +311,8 @@ import { packages, retainerPlans, alacarteServices, processSteps, serviceDetails
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Creative Services & Packages | B2B Branding | Hue Creative Agency',
-  description: 'Strategic brand positioning, lead generation, and creative execution packages for growth-stage B2B companies. Packages starting at $15,000. Monthly retainers from $3,500/mo.',
+  title: 'Creative Services & Packages | Hue — Creative Marketing Studio',
+  description: 'Full-service creative marketing packages for growth-stage companies. Brand strategy, digital experience, print, video. Packages from $15,000. Retainers from $3,500/mo.',
 })
 
 const open = ref(-1)

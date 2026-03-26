@@ -9,7 +9,7 @@
             Not sure where your brand stands? In 8 questions and 15 minutes, we'll assess your current positioning and deliver a custom Brand Perception Presentation in 5 business days. Free. Confidential. No obligation.
           </p>
           <div class="mb-10 grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            <div v-for="s in stats" :key="s.label" class="text-center rounded-xl border border-[var(--silk)] p-5">
+            <div v-for="s in stats" :key="s.label" class="text-center rounded-sm border border-[var(--silk)] p-5">
               <p class="hue-editorial-xl">{{ s.value }}</p>
               <p class="hue-label-sm mt-1">{{ s.label }}</p>
             </div>
@@ -122,7 +122,7 @@ const form = reactive({
   industry: '', challenge: '', revenue: '',
 })
 
-const { submitRequest } = useDirectus()
+const { submitAudit } = useDirectus()
 const submitting = ref(false)
 const submitted  = ref(false)
 const submitError = ref(false)
@@ -130,17 +130,20 @@ const submitError = ref(false)
 async function submitForm() {
   submitting.value = true
   submitError.value = false
-  const ok = await submitRequest({
+  const result = await submitAudit({
     first_name:  form.firstName,
     last_name:   form.lastName,
     email:       form.email,
     company:     form.company,
-    project:     'Branding / Strategy',
-    explanation: `[Brand Audit Request]\nIndustry: ${form.industry}\nRevenue: ${form.revenue}\nChallenge: ${form.challenge}`,
-    contact_preference: 'email',
+    explanation: form.challenge,
+    audit_answers: {
+      industry: form.industry,
+      revenue: form.revenue,
+      challenge: form.challenge,
+    },
   })
   submitting.value = false
-  if (ok) { submitted.value = true } else { submitError.value = true }
+  if (result.success) { submitted.value = true } else { submitError.value = true }
 }
 
 onMounted(() => useScrollReveal())

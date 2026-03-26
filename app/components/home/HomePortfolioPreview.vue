@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-if="pending" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+    <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
       <div v-for="i in 3" :key="i" class="h-64 animate-pulse bg-[var(--cloud)]" />
     </div>
 
-    <div v-else-if="featured.length" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+    <div v-else-if="featured.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
       <NuxtLink
         v-for="(item, i) in featured"
         :key="item.id"

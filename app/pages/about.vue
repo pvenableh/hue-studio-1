@@ -45,14 +45,14 @@
               <p class="hue-label-sm mt-2">{{ stat.label }}</p>
             </div>
           </div>
-          <div class="rounded-xl border border-[var(--silk)] p-7">
+          <div class="rounded-sm border border-[var(--silk)] p-7">
             <p class="hue-label-sm mb-4 text-[var(--silver)]">Our studios</p>
             <p class="mb-1 text-[0.9375rem] font-medium">Miami Beach, FL</p>
             <p class="hue-body-sm mb-5">605 Lincoln Road, Suite 200 · Miami Beach, FL 33139</p>
             <p class="mb-1 text-[0.9375rem] font-medium">New York, NY</p>
             <p class="hue-body-sm">New York Metropolitan Area</p>
           </div>
-          <div class="rounded-xl border border-[var(--silk)] p-7">
+          <div class="rounded-sm border border-[var(--silk)] p-7">
             <p class="hue-label-sm mb-3 text-[var(--silver)]">Community</p>
             <p class="hue-body-sm">Proud members of the Miami Beach Chamber of Commerce</p>
           </div>
@@ -67,7 +67,7 @@
           <p class="hue-label mb-3">Our Process</p>
           <h2 class="hue-display-lg max-w-xl">A holistic approach that shapes one singular voice.</h2>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
           <div v-for="step in processSteps" :key="step.number" class="bg-white p-9">
             <span class="hue-label-sm text-[var(--silver)]">{{ step.number }}</span>
             <h3 class="mt-4 mb-1.5 text-[1.05rem] font-medium">{{ step.title }}</h3>
@@ -96,7 +96,7 @@
 
           <!-- Camila -->
           <div>
-            <div class="mb-8 overflow-hidden rounded-xl bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
+            <div class="mb-8 overflow-hidden rounded-sm bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
               <img
                 src="https://admin.huestudios.company/assets/3b1d0737-f242-43f2-92cb-5bfdd0c907d8?width=552&height=875&format=webp"
                 alt="Camila Hoffman — Creative Director / CEO at Hue"
@@ -121,23 +121,36 @@
 
           <!-- Peter -->
           <div>
-            <div class="mb-8 overflow-hidden rounded-xl bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
+            <div class="mb-8 overflow-hidden rounded-sm bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
               <img
                 src="https://admin.huestudios.company/assets/b7d8b15b-78d1-4c98-8e75-dfa8e2554381?width=552&height=875&format=webp"
-                alt="Peter Hoffman — Digital Director / Senior Developer at Hue"
+                alt="Peter Hoffman — Web Director & Development Lead at Hue"
                 class="h-full w-full object-cover"
                 loading="lazy"
               />
             </div>
-            <p class="hue-label mb-1">Digital Director / Senior Developer</p>
+            <p class="hue-label mb-1">Web Director & Development Lead</p>
             <h2 class="mb-4 text-[1.75rem] font-light">Peter Hoffman</h2>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
-                Peter joined Hue in 2006 as a web developer and has since overseen all web-related projects — from web design and development to social media campaigns and online advertising. He holds a BA from Hobart College and averages 10–15 hours per month in continuing education to stay ahead of emerging technologies.
+                Peter joined Hue in 2006 and has since led every digital experience the firm has produced — from complex CMS builds and interactive data platforms to native apps, SaaS programs, and full digital campaign infrastructure. To call him a web developer would be to undersell what he actually does. Peter is a builder of digital ecosystems.
               </p>
               <p class="hue-body">
-                His holistic perspective, seeing all parts of a system at once, has made him a vital component of every digital project hue delivers. He has pushed the studio to stay in tune with leading web technologies — building dynamic, standards-based sites that function across all browsers, devices, and native app environments.
+                What sets Peter apart is his active integration of emerging technologies into real client work. He is building platforms that incorporate AI-powered connection mapping, automated data workflows, and realtime collaboration — turning static information hubs into dynamic, responsive environments.
               </p>
+              <p class="hue-body">
+                Peter holds a BA from Hobart College in Geneva, New York. His background in literature and design gives him the ability to see the relationship between content, architecture, and human experience — and build accordingly. He averages 10–15 hours per month in structured technical learning.
+              </p>
+              <!-- Tech capabilities -->
+              <div class="mt-6 rounded-lg border border-[var(--silk)] p-5">
+                <p class="hue-label-sm mb-4 text-[var(--silver)]">Technical Capabilities</p>
+                <div class="grid grid-cols-2 gap-3">
+                  <div v-for="cap in techCaps" :key="cap.label">
+                    <p class="text-[0.6875rem] font-medium text-[var(--dark-grey)]">{{ cap.label }}</p>
+                    <p class="text-[0.75rem] text-[var(--grey)]">{{ cap.items }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -171,7 +184,7 @@
     <section class="hue-section px-6 py-24">
       <div class="hue-container">
         <p class="hue-label mb-12">Our Principles</p>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
           <div v-for="p in principles" :key="p.title" class="bg-white p-9">
             <span class="hue-label-sm text-[var(--silver)]">{{ p.num }}</span>
             <h3 class="mt-4 mb-3 text-[1rem] font-medium">{{ p.title }}</h3>
@@ -180,6 +193,9 @@
         </div>
       </div>
     </section>
+
+    <!-- Why Hue -->
+    <WhyHue headline="Three things that set us apart from every other agency." />
 
     <!-- Quote -->
     <section class="hue-section px-6 py-20 text-center">
@@ -211,9 +227,18 @@
 import { processSteps } from '~/data/services'
 
 useSeoMeta({
-  title: 'About Hue Creative Agency | Miami Beach & New York | Founded 2005',
-  description: 'Boutique B2B creative agency founded in 2005 by Camila Hoffman (former A|X Armani Exchange Art Director) and Peter Hoffman. Based at 605 Lincoln Road, Miami Beach.',
+  title: 'About Hue | Creative Marketing Studio | Miami Beach & New York',
+  description: 'Full-service creative marketing studio founded in 2005 by Camila Hoffman (former A|X Armani Exchange Art Director) and Peter Hoffman. Miami Beach & New York.',
 })
+
+const techCaps = [
+  { label: 'Frontend', items: 'Nuxt, Vue, React, GSAP' },
+  { label: 'Backend / CMS', items: 'Directus, Node.js, API design' },
+  { label: 'AI & Data', items: 'LLM integration, MCP, data pipelines' },
+  { label: 'Platform', items: 'SaaS, PWA, multi-tenant architecture' },
+  { label: 'Commerce', items: 'Stripe, subscription infrastructure' },
+  { label: 'DevOps', items: 'Vercel, CDN, CI/CD, WebSockets' },
+]
 
 const stats = [
   { value: '20+', label: 'Years in Business' },

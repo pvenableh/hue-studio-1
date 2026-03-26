@@ -1,13 +1,32 @@
 /* ================================================================
-   HUE CREATIVE AGENCY — DESIGN SYSTEM
-   Avenir Next (proxied via DM Sans) + Cormorant Garamond (Bodoni)
+   HUE — CREATIVE MARKETING STUDIO — DESIGN SYSTEM
+   Avenir Next + Bauer Bodoni Pro + Proxima Nova
    White-on-white. Apple Store clean. B2B premium.
    ================================================================ */
 
 :root {
-  --font: 'DM Sans', 'Avenir Next', 'Avenir', 'Helvetica Neue', sans-serif;
-  --font-editorial: 'Cormorant Garamond', 'Bauer Bodoni', 'Didot', Georgia, serif;
+  --font: 'Avenir Next', 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-editorial: 'Bauer Bodoni', 'Cormorant Garamond', 'Didot', Georgia, serif;
+  --font-body: 'Proxima Nova', 'Avenir Next', 'DM Sans', sans-serif;
+  --font-handwriting: 'Gaegu', cursive;
 
+  /* ── Accent palette ─────────────────────────────────
+     Change --accent to swap the entire site's accent color.
+     All derived values (tint, hover, dark) update automatically.
+     ──────────────────────────────────────────────────── */
+  --accent-muted-gold:  #C4973B;
+  --accent-copper:      #B87333;
+  --accent-antique-gold:#D4A853;
+  --accent-hue-gold:    #ffcc00;
+  --accent-ember:       #e8430a;
+
+  /* Active accent — change this one line to retheme */
+  --accent:             var(--accent-muted-gold);
+  --accent-tint:        #F8F3EB;   /* light bg tint derived from muted gold */
+  --accent-hover:       #B08830;   /* slightly darker for hover states */
+  --accent-on-dark:     #D4AD55;   /* brighter variant for dark backgrounds */
+
+  /* ── Neutrals ──────────────────────────────────────── */
   --white:      #ffffff;
   --snow:       #fafafa;
   --cloud:      #f5f5f5;
@@ -26,6 +45,10 @@
   --color-text-inverse:   var(--white);
   --color-border:         var(--cloud);
   --color-border-light:   var(--silk);
+  --color-accent:         var(--accent);
+  --color-accent-tint:    var(--accent-tint);
+  --color-accent-hover:   var(--accent-hover);
+  --color-accent-on-dark: var(--accent-on-dark);
 
   --ease:         cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
@@ -35,7 +58,7 @@
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
-  --radius: 0.625rem;
+  --radius: 2px;  /* Sleek, straight edges — luxury editorial feel */
 }
 
 html {
@@ -164,9 +187,11 @@ body {
   gap: 0.4rem;
   font-family: var(--font);
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 0.7rem 1.75rem;
+  padding: 0.75rem 1.75rem;
   background: var(--near-black);
   color: var(--white);
   border: none;
@@ -182,9 +207,11 @@ body {
   gap: 0.4rem;
   font-family: var(--font);
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 0.7rem 1.75rem;
+  padding: 0.75rem 1.75rem;
   color: var(--white);
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 980px;
@@ -200,9 +227,11 @@ body {
   gap: 0.4rem;
   font-family: var(--font);
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 0.7rem 1.75rem;
+  padding: 0.75rem 1.75rem;
   color: var(--color-text);
   border: 1px solid var(--color-border-light);
   border-radius: 980px;
@@ -216,8 +245,10 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--color-text);
   text-decoration: none;
   transition: gap var(--duration) var(--ease), opacity var(--duration) var(--ease);

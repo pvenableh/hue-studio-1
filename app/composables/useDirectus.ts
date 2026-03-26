@@ -86,11 +86,15 @@ export interface DirectusPortfolioItem {
   synopsis: string | null
   challenge: string | null
   creation: string | null
+  results: string | null
   caption: string | null
   slug: string | null
   url: string
   featured_image: string | null
+  featured: boolean | null
   parent_id: string | null
+  project_year: string | null
+  project_duration: string | null
   date_created: string | null
   date_updated: string | null
   client: DirectusOrganization | null
@@ -98,6 +102,7 @@ export interface DirectusPortfolioItem {
   industries: DirectusPortfolioIndustry[]
   images: DirectusPortfolioFile[]
   before_and_afters: DirectusPortfolioBeforeAndAfter[]
+  projects: DirectusPortfolioItem[]
 }
 
 export interface DirectusCaseStudy {
@@ -150,6 +155,48 @@ export interface DirectusRequestPayload {
   contact_preference?: string
 }
 
+export interface SubmitContactPayload {
+  first_name?: string
+  last_name?: string
+  email: string
+  phone?: string
+  company?: string
+  title?: string
+  project?: string
+  explanation?: string
+  budget?: string
+  contact_preference?: string
+}
+
+export interface SubmitAuditPayload {
+  first_name?: string
+  last_name?: string
+  email: string
+  phone?: string
+  company?: string
+  explanation?: string
+  audit_answers?: Record<string, string>
+}
+
+export interface SubmitSubscribePayload {
+  email: string
+  first_name?: string
+  list_id?: number
+}
+
+export interface SubmitMeetingPayload {
+  first_name?: string
+  last_name?: string
+  email: string
+  phone?: string
+  company?: string
+  meeting_type?: string
+  preferred_date?: string
+  preferred_time?: string
+  duration?: number
+  explanation?: string
+}
+
 export function useDirectus() {
   const config  = useRuntimeConfig()
   const baseUrl = (config.public.directusUrl as string).replace(/\/$/, '')
@@ -164,8 +211,10 @@ export function useDirectus() {
 
   const PORTFOLIO_FIELDS = [
     'id', 'name', 'slug', 'url', 'status', 'sort',
-    'caption', 'description', 'synopsis', 'challenge', 'creation',
-    'featured_image', 'parent_id', 'date_created', 'date_updated',
+    'caption', 'description', 'synopsis', 'challenge', 'creation', 'results',
+    'featured_image', 'featured', 'parent_id',
+    'project_year', 'project_duration',
+    'date_created', 'date_updated',
     'client.id', 'client.name', 'client.short_name', 'client.code',
     'client.website', 'client.description', 'client.logo',
     'client.icon', 'client.brand_color',
@@ -182,6 +231,10 @@ export function useDirectus() {
     'before_and_afters.before_and_afters_id.caption',
     'before_and_afters.before_and_afters_id.before_image',
     'before_and_afters.before_and_afters_id.after_image',
+    'projects.id', 'projects.name', 'projects.slug', 'projects.url',
+    'projects.caption', 'projects.featured_image',
+    'projects.service.id', 'projects.service.name', 'projects.service.url',
+    'projects.images.directus_files_id', 'projects.images.sort',
   ].join(',')
 
   async function fetchPortfolio(options: { limit?: number; parentOnly?: boolean } = {}): Promise<DirectusPortfolioItem[]> {
@@ -218,6 +271,20 @@ export function useDirectus() {
     const res = await $fetch<{ data: DirectusService[] }>(
       `${baseUrl}/items/services?filter[status][_eq]=published&sort=sort&fields=id,name,title,url,color,class,caption,word,description,sort,status,featured_image`
     )
+    return res.data ?? []
+  }
+
+  /** Fetch portfolio items that are case studies (parent items with narrative content) */
+  async function fetchFeaturedPortfolio(options: { limit?: number } = {}): Promise<DirectusPortfolioItem[]> {
+    const params = new URLSearchParams({
+      fields: PORTFOLIO_FIELDS,
+      'filter[status][_eq]': 'published',
+      'filter[featured][_eq]': 'true',
+      'filter[parent_id][_null]': 'true',
+      limit: String(options.limit ?? 10),
+      sort: 'sort',
+    })
+    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`)
     return res.data ?? []
   }
 
@@ -271,18 +338,66 @@ export function useDirectus() {
     return res.data ?? []
   }
 
-  /** Submit a contact/enquiry form — writes to the `requests` collection */
-  async function submitRequest(payload: DirectusRequestPayload): Promise<boolean> {
+  /** Submit a strategy session / contact form → creates contact + lead + request */
+  async function submitContact(payload: SubmitContactPayload): Promise<{ success: boolean; leadId?: string; contactId?: string }> {
     try {
-      await $fetch(`${baseUrl}/items/requests`, {
+      const res = await $fetch<{ success: boolean; leadId: string; contactId: string }>('/api/submit', {
         method: 'POST',
-        body: { ...payload, status: 'published', date_submitted: new Date().toISOString() },
+        body: { type: 'contact', ...payload },
       })
-      return true
+      return res
     } catch (e) {
-      console.error('[useDirectus] submitRequest failed:', e)
-      return false
+      console.error('[useDirectus] submitContact failed:', e)
+      return { success: false }
     }
+  }
+
+  /** Submit a brand audit form → creates contact + lead + request (mid-funnel) */
+  async function submitAudit(payload: SubmitAuditPayload): Promise<{ success: boolean; leadId?: string; contactId?: string }> {
+    try {
+      const res = await $fetch<{ success: boolean; leadId: string; contactId: string }>('/api/submit', {
+        method: 'POST',
+        body: { type: 'audit', ...payload },
+      })
+      return res
+    } catch (e) {
+      console.error('[useDirectus] submitAudit failed:', e)
+      return { success: false }
+    }
+  }
+
+  /** Subscribe to the newsletter → creates/upserts contact + mailing list entry */
+  async function submitSubscribe(payload: SubmitSubscribePayload): Promise<{ success: boolean }> {
+    try {
+      const res = await $fetch<{ success: boolean }>('/api/submit', {
+        method: 'POST',
+        body: { type: 'subscribe', ...payload },
+      })
+      return res
+    } catch (e) {
+      console.error('[useDirectus] submitSubscribe failed:', e)
+      return { success: false }
+    }
+  }
+
+  /** Request a meeting — creates contact + lead + meeting_request (highest-intent) */
+  async function submitMeeting(payload: SubmitMeetingPayload): Promise<{ success: boolean; leadId?: string; contactId?: string }> {
+    try {
+      const res = await $fetch<{ success: boolean; leadId: string; contactId: string }>('/api/submit', {
+        method: 'POST',
+        body: { type: 'meeting', ...payload },
+      })
+      return res
+    } catch (e) {
+      console.error('[useDirectus] submitMeeting failed:', e)
+      return { success: false }
+    }
+  }
+
+  /** @deprecated Use submitContact, submitAudit, submitMeeting, or submitSubscribe instead */
+  async function submitRequest(payload: DirectusRequestPayload): Promise<boolean> {
+    const result = await submitContact({ ...payload, email: payload.email ?? '' })
+    return result.success
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -316,11 +431,16 @@ export function useDirectus() {
     assetUrl,
     fetchPortfolio,
     fetchPortfolioItem,
+    fetchFeaturedPortfolio,
     fetchIndustries,
     fetchServices,
     fetchCaseStudies,
     fetchCaseStudyByUrl,
     fetchTestimonials,
+    submitContact,
+    submitAudit,
+    submitMeeting,
+    submitSubscribe,
     submitRequest,
     primaryImageId,
     resolvedBeforeAfters,

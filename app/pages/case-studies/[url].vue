@@ -75,7 +75,7 @@
             <span class="hue-label-sm text-[var(--silver)]">03</span>
             <p class="hue-label mt-1">The Results</p>
           </div>
-          <div class="rounded-xl border border-[var(--silk)] bg-[var(--snow)] p-8">
+          <div class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] p-8">
             <div class="hue-body-lg max-w-2xl" v-html="cs.results" />
           </div>
         </div>
@@ -87,7 +87,7 @@
       <div class="hue-container">
         <p class="hue-label mb-8">Gallery</p>
         <div
-          class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)]"
+          class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]"
           :class="cs.gallery.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'"
         >
           <img

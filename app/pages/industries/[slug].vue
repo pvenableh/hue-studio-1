@@ -78,11 +78,11 @@
           </NuxtLink>
         </div>
 
-        <div v-if="pending" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+        <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
           <div v-for="i in 3" :key="i" class="h-64 animate-pulse bg-[var(--cloud)]" />
         </div>
 
-        <div v-else-if="industryProjects.length" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div v-else-if="industryProjects.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
             v-for="item in industryProjects"
             :key="item.id"
@@ -109,7 +109,7 @@
           </NuxtLink>
         </div>
 
-        <div v-else class="rounded-xl border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
+        <div v-else class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
           <p class="hue-editorial-md">Portfolio for this industry coming soon.</p>
           <NuxtLink to="/portfolio" class="hue-link mt-4 inline-flex">Browse all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>
@@ -130,6 +130,15 @@
         </div>
       </div>
     </section>
+
+    <!-- Inline capture -->
+    <InlineCapture
+      :dark="true"
+      label="Quick Start"
+      :headline="`Need creative marketing for ${industry.name.split('/')[0].trim().toLowerCase()}?`"
+      button-text="Send"
+      :context="`Industry: ${industry.name}`"
+    />
 
     <!-- CTA -->
     <div class="px-6 pb-0">

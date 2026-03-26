@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    directusStaticToken: process.env.DIRECTUS_STATIC_TOKEN || '',
     public: {
       directusUrl: process.env.NUXT_PUBLIC_DIRECTUS_URL || 'https://admin.huestudios.company',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://huestudios.com',
@@ -39,8 +40,8 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://huestudios.com',
-    name: 'Hue Creative Agency',
-    description: 'Strategic brand positioning, lead generation, and creative execution for growth-stage B2B companies.',
+    name: 'Hue — Creative Marketing Studio',
+    description: 'Full-service creative marketing for growth-stage companies. Brand strategy, digital experience, and lead generation that drives real business outcomes.',
     defaultLocale: 'en',
   },
 
@@ -50,6 +51,8 @@ export default defineNuxtConfig({
   },
 
   fonts: {
+    // Self-hosted fonts loaded via fonts.css — Avenir Next, Bauer Bodoni, Proxima Nova, Gaegu
+    // DM Sans + Cormorant Garamond kept as Google Font fallbacks
     families: [
       { name: 'DM Sans', weights: [200, 300, 400, 500] },
       { name: 'Cormorant Garamond', weights: [400, 500], styles: ['normal', 'italic'] },

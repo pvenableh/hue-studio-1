@@ -1,24 +1,27 @@
 <template>
   <div>
     <!-- Audit announcement bar -->
-    <div class="border-b border-[var(--color-border)] bg-[var(--white)] px-4 py-2.5">
+    <div class="px-4 py-2.5" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
       <div class="hue-container flex items-center justify-between gap-4">
         <div class="flex items-center gap-2.5">
-          <span class="inline-flex items-center rounded-full bg-[var(--near-black)] px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
-          <p class="text-[0.78rem] text-[var(--color-text-secondary)]">
-            <strong class="font-medium text-[var(--color-text)]">Brand Perception Audit</strong>
+          <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
+          <p class="text-[0.78rem] text-white/80">
+            <strong class="font-medium text-white">Brand Perception Audit</strong>
             — 8 questions. 15 minutes. Custom presentation in 5 days.
           </p>
         </div>
-        <NuxtLink to="/brand-audit" class="hue-link shrink-0 text-[0.78rem]">
+        <NuxtLink to="/brand-audit" class="flex shrink-0 items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-wider text-white transition-opacity hover:opacity-80">
           Start Free Audit
           <Icon name="lucide:arrow-right" class="size-3" />
         </NuxtLink>
       </div>
     </div>
 
-    <!-- Main nav -->
-    <nav class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white/90 backdrop-blur-md">
+    <!-- Main nav — hides on scroll down, shows on scroll up -->
+    <nav
+      class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white/95 backdrop-blur-md transition-transform duration-300"
+      :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
+    >
       <div class="hue-container flex h-14 items-center justify-between">
         <LayoutHueLogo size="18px" />
 
@@ -28,21 +31,18 @@
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-[0.8125rem] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
-            active-class="!text-[var(--near-black)] font-medium"
+            class="text-[0.6875rem] font-medium uppercase tracking-wider text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
+            active-class="!text-[var(--near-black)]"
           >
             {{ link.label }}
           </NuxtLink>
         </div>
 
         <div class="flex items-center gap-3">
-          <NuxtLink to="/contact" class="hue-btn hidden text-[0.8125rem] sm:inline-flex">
-            Book a Call
-            <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
+          <MeetingRequest class="hidden sm:inline-flex" />
           <!-- Mobile menu toggle -->
           <button
-            class="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--silk)] md:hidden"
+            class="flex h-9 w-9 items-center justify-center rounded-sm border border-[var(--silk)] md:hidden"
             @click="mobileOpen = !mobileOpen"
             aria-label="Toggle menu"
           >
@@ -59,14 +59,12 @@
               v-for="link in navLinks"
               :key="link.to"
               :to="link.to"
-              class="text-[0.9375rem] text-[var(--color-text-secondary)]"
+              class="text-[0.8125rem] uppercase tracking-wider text-[var(--color-text-secondary)]"
               @click="mobileOpen = false"
             >
               {{ link.label }}
             </NuxtLink>
-            <NuxtLink to="/contact" class="hue-btn self-start" @click="mobileOpen = false">
-              Book a Call
-            </NuxtLink>
+            <MeetingRequest class="self-start" />
           </div>
         </div>
       </Transition>
@@ -76,6 +74,7 @@
 
 <script setup lang="ts">
 const mobileOpen = ref(false)
+const navHidden = ref(false)
 
 const navLinks = [
   { label: 'Services',      to: '/creative-services' },
@@ -89,6 +88,28 @@ const navLinks = [
 // Close mobile menu on route change
 const route = useRoute()
 watch(() => route.path, () => { mobileOpen.value = false })
+
+// Hide nav on scroll down, show on scroll up
+onMounted(() => {
+  let lastY = 0
+  const threshold = 60
+
+  const onScroll = () => {
+    const y = window.scrollY
+    if (y < threshold) {
+      navHidden.value = false
+    } else if (y > lastY + 5) {
+      navHidden.value = true
+      mobileOpen.value = false
+    } else if (y < lastY - 5) {
+      navHidden.value = false
+    }
+    lastY = y
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onUnmounted(() => window.removeEventListener('scroll', onScroll))
+})
 </script>
 
 <style scoped>

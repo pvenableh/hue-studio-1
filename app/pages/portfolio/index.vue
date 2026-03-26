@@ -3,11 +3,11 @@
     <!-- Hero -->
     <section class="hue-section px-6 pb-12 pt-20 md:pt-28">
       <div class="hue-container">
-        <p class="hue-label mb-4">Portfolio</p>
+        <p class="hue-label mb-4">Our Work</p>
         <h1 class="hue-display-xl mb-5">
           Work that <span style="font-family:var(--font-editorial);font-style:italic;">performs</span><br>as well as it looks.
         </h1>
-        <p class="hue-body max-w-lg">Every project starts with understanding why. Browse by service or industry below.</p>
+        <p class="hue-body max-w-lg">Every project starts with a business problem. Here's how we solved them.</p>
       </div>
     </section>
 
@@ -22,70 +22,117 @@
       @update:industry="activeIndustry = $event"
     />
 
-    <!-- Grid -->
-    <section class="hue-section px-6 pb-24 pt-8">
+    <!-- Featured Case Studies -->
+    <section v-if="activeService === 'All' && activeIndustry === 'All' && featuredItems.length" class="px-6 pt-12">
       <div class="hue-container">
+        <p class="hue-label mb-8">Featured Case Studies</p>
+        <div class="space-y-px">
+          <NuxtLink
+            v-for="(item, i) in featuredItems"
+            :key="item.id"
+            :to="`/portfolio/${item.slug || item.url}`"
+            class="group grid overflow-hidden border border-[var(--silk)] md:grid-cols-2"
+            :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
+          >
+            <!-- Image -->
+            <div class="relative overflow-hidden" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
+              <img
+                v-if="imgUrl(item, true)"
+                :src="imgUrl(item, true)"
+                :alt="item.name"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+              <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
+                <span class="hue-label">{{ item.client?.short_name || item.name }}</span>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="flex flex-col justify-between p-10 md:[direction:ltr]" :class="i % 2 === 1 ? 'bg-[var(--near-black)]' : 'bg-white'">
+              <div>
+                <p class="mb-2 text-[0.625rem] tracking-widest" :class="i % 2 === 1 ? 'text-white/20' : 'text-[var(--silver)]'">{{ String(i + 1).padStart(2, '0') }} / Featured</p>
+                <p class="hue-label-sm mb-3" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
+                <h2 class="mb-4 text-[1.75rem] font-light leading-tight" :class="i % 2 === 1 ? 'text-white' : ''">{{ item.name }}</h2>
+                <p
+                  v-if="item.synopsis"
+                  class="mb-6 line-clamp-3 text-[0.875rem] leading-relaxed"
+                  :class="i % 2 === 1 ? 'text-white/40' : 'text-[var(--grey)]'"
+                  v-html="stripTags(item.synopsis)"
+                />
+                <!-- Result callout -->
+                <div v-if="item.results" class="mb-6 border-l-2 border-[var(--color-accent)] py-2 pl-4" :class="i % 2 === 1 ? 'bg-[var(--color-accent-tint)]' : 'bg-[var(--snow)]'">
+                  <p class="mb-1 text-[0.5625rem] font-medium uppercase tracking-widest" style="color: var(--color-accent);">Business Outcome</p>
+                  <p class="line-clamp-2 text-[0.9375rem] italic leading-snug" :class="i % 2 === 1 ? 'text-white/80' : ''" style="font-family:var(--font-editorial);" v-html="stripTags(item.results)" />
+                </div>
+              </div>
+              <div class="flex items-end justify-between">
+                <div class="flex gap-6">
+                  <div>
+                    <p class="hue-label-sm mb-1 text-[var(--silver)]">Services</p>
+                    <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.service?.name }}</p>
+                  </div>
+                  <div v-if="item.project_year">
+                    <p class="hue-label-sm mb-1 text-[var(--silver)]">Year</p>
+                    <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.project_year }}</p>
+                  </div>
+                </div>
+                <span class="text-[0.6875rem] uppercase tracking-wider" style="color: var(--color-accent);">View Case Study →</span>
+              </div>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section class="hue-section px-6 pb-24 pt-12">
+      <div class="hue-container">
+        <p v-if="featuredItems.length && activeService === 'All' && activeIndustry === 'All'" class="hue-label mb-8">More Work</p>
+
         <!-- Loading -->
-        <div v-if="pending" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <div v-for="i in 6" :key="i" class="h-80 animate-pulse bg-[var(--cloud)]" />
         </div>
 
         <!-- Empty -->
-        <div v-else-if="!filtered.length" class="py-20 text-center">
+        <div v-else-if="!gridItems.length" class="py-20 text-center">
           <p class="hue-editorial-md">No projects match this combination.</p>
           <button class="hue-link mt-4" @click="activeService = 'All'; activeIndustry = 'All'">Clear filters</button>
         </div>
 
         <!-- Projects -->
-        <div v-else class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div v-else class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
-            v-for="(item, i) in filtered"
+            v-for="item in gridItems"
             :key="item.id"
             :to="`/portfolio/${item.slug || item.url}`"
-            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
-            :class="{ 'md:col-span-2 lg:col-span-1': i === 0 }"
+            class="group relative block overflow-hidden bg-white transition-colors hover:bg-[var(--snow)]"
           >
             <!-- Image -->
-            <div class="relative overflow-hidden" :style="i === 0 ? 'aspect-ratio: 16/9' : 'aspect-ratio: 4/3'">
+            <div class="relative overflow-hidden" style="aspect-ratio: 3/2">
               <img
                 v-if="imgUrl(item)"
-                :src="imgUrl(item, i === 0)"
+                :src="imgUrl(item)"
                 :alt="item.name"
                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                :loading="i < 3 ? 'eager' : 'lazy'"
+                loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
-                <span class="hue-label-sm">{{ item.client?.short_name }}</span>
+                <span class="hue-label-sm">{{ item.client?.short_name || item.name }}</span>
+              </div>
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 flex flex-col justify-center bg-[var(--color-accent)]/90 p-7 opacity-0 transition-opacity duration-250 group-hover:opacity-100">
+                <p class="mb-3 text-lg italic text-white" style="font-family:var(--font-editorial);">{{ item.name }}</p>
+                <p v-if="item.synopsis" class="mb-4 line-clamp-3 text-[0.8125rem] leading-relaxed text-white/80" v-html="stripTags(item.synopsis)" />
+                <span class="inline-block border-b border-white/40 pb-0.5 text-[0.625rem] uppercase tracking-widest text-white">View Case Study →</span>
               </div>
             </div>
 
             <!-- Info -->
-            <div class="p-7">
-              <div class="mb-2.5 flex items-center justify-between gap-2">
-                <span class="hue-label-sm">{{ item.service?.name }}</span>
-                <button
-                  v-if="industryName(item)"
-                  class="rounded-full border border-[var(--silk)] px-2.5 py-0.5 text-[0.7rem] text-[var(--silver)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
-                  @click.prevent="activeIndustry = industryRaw(item)"
-                >
-                  {{ industryName(item) }}
-                </button>
-              </div>
-              <h2 class="text-[1.05rem] font-light leading-snug transition-transform duration-300 group-hover:translate-x-1">
-                {{ item.name }}
-              </h2>
-              <p v-if="item.client" class="mt-1 text-[0.8125rem] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
-              <p
-                v-if="item.caption"
-                class="mt-3 line-clamp-2 text-[0.8125rem] italic leading-relaxed text-[var(--dark-grey)]"
-                v-html="stripTags(item.caption)"
-              />
-              <div class="mt-5 flex items-center justify-between">
-                <span class="text-[0.75rem] text-[var(--silver)]">{{ item.slug || item.url }}</span>
-                <div class="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--silk)] transition-all duration-200 group-hover:border-[var(--near-black)] group-hover:bg-[var(--near-black)]">
-                  <Icon name="lucide:arrow-right" class="size-3 text-[var(--silver)] transition-colors group-hover:text-white" />
-                </div>
-              </div>
+            <div class="p-5">
+              <p class="hue-label-sm mb-1.5" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
+              <h2 class="text-[1rem] font-light leading-snug">{{ item.name }}</h2>
+              <p v-if="item.client" class="mt-1 text-[0.75rem] text-[var(--grey)]">{{ item.client.name }}</p>
             </div>
           </NuxtLink>
         </div>
@@ -112,7 +159,7 @@
     <!-- CTA -->
     <section class="hue-section-dark px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
-        <h2 class="hue-display-lg mb-5 text-white">Your brand could be<br>the next case study.</h2>
+        <h2 class="hue-display-lg mb-5 text-white">Your brand could be<br>the next case study<br>we're <span style="font-family:var(--font-editorial);font-style:italic;color:var(--color-accent-on-dark);">proud to show.</span></h2>
         <p class="mb-8 text-[0.9375rem] text-white/40">30-minute strategy session. No pitch decks. Just conversation.</p>
         <NuxtLink to="/contact" class="hue-btn-ghost">
           Book a Strategy Session
@@ -128,13 +175,16 @@ import type { DirectusPortfolioItem } from '~/composables/useDirectus'
 import { industries as staticIndustries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Portfolio | B2B Creative Work | Hue Creative Agency',
-  description: 'Browse our portfolio of brand strategy, web design, print, and corporate design work for B2B companies across construction, real estate, professional services, and more.',
+  title: 'Portfolio | Creative Marketing Work | Hue',
+  description: 'Browse our portfolio of brand strategy, web design, print, and creative marketing work for growth-stage companies.',
 })
 
-const { fetchPortfolio, assetUrl, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
+const { fetchPortfolio, fetchFeaturedPortfolio, assetUrl, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
-const { data: allItems, pending } = await useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100 }))
+const [{ data: allItems, pending }, { data: featured }] = await Promise.all([
+  useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100, parentOnly: true })),
+  useAsyncData('portfolio-featured', () => fetchFeaturedPortfolio({ limit: 3 })),
+])
 
 const activeService  = ref('All')
 const activeIndustry = ref('All')
@@ -162,13 +212,18 @@ const filtered = computed(() => {
   })
 })
 
+const featuredItems = computed(() => featured.value ?? [])
+const featuredIds = computed(() => new Set(featuredItems.value.map((f) => f.id)))
+
+// Grid shows filtered items minus featured (when unfiltered)
+const gridItems = computed(() => {
+  if (activeService.value !== 'All' || activeIndustry.value !== 'All') return filtered.value
+  return filtered.value.filter((p) => !featuredIds.value.has(p.id))
+})
+
 function imgUrl(item: DirectusPortfolioItem, wide = false) {
   const id = primaryImageId(item)
-  return id ? assetUrl(id, { width: wide ? 800 : 600, height: wide ? 450 : 400, fit: 'cover', quality: 80 }) : null
-}
-
-function industryRaw(item: DirectusPortfolioItem) {
-  return item.industries?.[0]?.industries_id?.name ?? 'All'
+  return id ? assetUrl(id, { width: wide ? 800 : 600, height: wide ? 500 : 400, fit: 'cover', quality: 80 }) : null
 }
 
 function industryName(item: DirectusPortfolioItem) {

@@ -21,7 +21,7 @@
     <!-- Industry grid -->
     <section class="hue-section px-6 py-16">
       <div class="hue-container">
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
             v-for="(ind, i) in industries"
             :key="ind.slug"
@@ -55,7 +55,7 @@
     <section class="hue-section-dark px-6 py-24">
       <div class="hue-container">
         <p class="hue-label mb-10 text-white/40">Why it matters</p>
-        <div class="grid gap-px overflow-hidden rounded-xl bg-white/5 md:grid-cols-3">
+        <div class="grid gap-px overflow-hidden rounded-sm bg-white/5 md:grid-cols-3">
           <div v-for="point in whyPoints" :key="point.num" class="bg-[var(--near-black)] p-10">
             <span class="hue-label-sm text-white/20">{{ point.num }}</span>
             <h3 class="mt-4 mb-3 text-[1.1rem] font-light text-white">{{ point.title }}</h3>

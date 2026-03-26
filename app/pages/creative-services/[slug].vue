@@ -44,7 +44,7 @@
     <section class="hue-section px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-10">What's included</p>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-3">
           <div v-for="(group, i) in svc.deliverables" :key="group.label" class="bg-white p-8">
             <span class="hue-label-sm text-[var(--silver)]">{{ String.fromCharCode(65 + i) }}</span>
             <h3 class="mt-3 mb-4 text-[1rem] font-medium">{{ group.label }}</h3>
@@ -81,7 +81,7 @@
     <section class="hue-section px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-10">The process</p>
-        <div class="space-y-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)]">
+        <div class="space-y-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]">
           <div v-for="step in svc.process" :key="step.num" class="grid bg-white px-8 py-7 lg:grid-cols-[60px_200px_1fr]">
             <span class="font-light text-[1.75rem] text-[var(--silk)]">{{ step.num }}</span>
             <div>

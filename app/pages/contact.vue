@@ -133,34 +133,22 @@ const submitting = ref(false)
 const submitted  = ref(false)
 const submitError = ref(false)
 
-const { submitRequest } = useDirectus()
-
-// Map goal labels to the Request.project enum values in the schema
-const goalToProjectMap: Record<string, string> = {
-  'Rebrand / New Brand Identity':    'Branding / Strategy',
-  'Website Design & Development':    'Digital / Web',
-  'Lead Generation System':          'Digital / Web',
-  'Trade Show / Events':             'Print / Graphic Design',
-  'Print & Collateral':              'Print / Graphic Design',
-  'Corporate Presentations':         'Corporate / Data Design',
-  'Monthly Retainer':                'Other',
-  'Not sure yet':                    'Other',
-}
+const { submitContact } = useDirectus()
 
 async function submitForm() {
   submitting.value = true
   submitError.value = false
-  const ok = await submitRequest({
+  const result = await submitContact({
     first_name: form.firstName,
     last_name:  form.lastName,
     email:      form.email,
     company:    form.company,
-    project:    goalToProjectMap[form.goal] ?? 'Other',
+    project:    form.goal || 'General Inquiry',
     explanation: form.message,
     budget:     form.budget,
     contact_preference: 'email',
   })
   submitting.value = false
-  if (ok) { submitted.value = true } else { submitError.value = true }
+  if (result.success) { submitted.value = true } else { submitError.value = true }
 }
 </script>

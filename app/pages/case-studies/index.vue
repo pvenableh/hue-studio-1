@@ -31,12 +31,12 @@
     <section class="hue-section px-6 pb-24 pt-10">
       <div class="hue-container">
         <!-- Loading -->
-        <div v-if="pending" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
+        <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
           <div v-for="i in 4" :key="i" class="h-80 animate-pulse bg-[var(--cloud)]" />
         </div>
 
         <!-- Case studies from dedicated collection -->
-        <div v-else-if="caseStudies.length" class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
+        <div v-else-if="caseStudies.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
           <NuxtLink
             v-for="(cs, i) in filtered"
             :key="cs.id"
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Fallback: portfolio items if no case_studies exist yet -->
-        <div v-else-if="!pending" class="rounded-xl border border-[var(--silk)] bg-[var(--snow)] py-20 text-center">
+        <div v-else-if="!pending" class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-20 text-center">
           <p class="hue-editorial-md mb-4">Case studies coming soon.</p>
           <NuxtLink to="/portfolio" class="hue-link inline-flex">Browse the full portfolio <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>

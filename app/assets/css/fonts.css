@@ -1,0 +1,103 @@
+/* =============================================================================
+   HUE — SELF-HOSTED FONTS (WOFF2 only)
+   Avenir Next  — Primary sans-serif (headlines, UI)
+   Bauer Bodoni — Editorial serif (accents, pullquotes)
+   Proxima Nova — Body sans-serif (paragraphs, descriptions)
+   Gaegu        — Handwriting (signature moments)
+   ============================================================================= */
+
+/* ── Avenir Next ─────────────────────────────────── */
+
+@font-face {
+  font-family: "Avenir Next";
+  src: url("fonts/AvenirNextLTW01-UltraLight.woff2") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Avenir Next";
+  src: url("fonts/AvenirNextLTW01-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Avenir Next";
+  src: url("fonts/AvenirNextLTW01-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Bauer Bodoni Pro ────────────────────────────── */
+
+@font-face {
+  font-family: "Bauer Bodoni";
+  src: url("fonts/BauerBodoniPro1W01-Roman.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Bauer Bodoni";
+  src: url("fonts/BauerBodoniStd1-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Proxima Nova ────────────────────────────────── */
+
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("fonts/ad4a2691-471a-4c43-b88f-0d144d680661.woff2") format("woff2");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("fonts/122f8a1b-fa6b-4246-8d37-911edb4ac556.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("fonts/b38b8bd9-d96f-4bf9-add1-adbd2b08b802.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Gaegu (Handwriting) ─────────────────────────── */
+
+@font-face {
+  font-family: "Gaegu";
+  src: url("fonts/Gaegu-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gaegu";
+  src: url("fonts/Gaegu-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gaegu";
+  src: url("fonts/Gaegu-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

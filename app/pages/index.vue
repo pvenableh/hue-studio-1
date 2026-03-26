@@ -101,7 +101,7 @@
             We believe great design comes from deep understanding. Our four-stage process ensures every detail serves a defined purpose — from analysis through to the big idea.
           </p>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
           <div v-for="step in processSteps" :key="step.number" class="group bg-white p-9 transition-colors hover:bg-[var(--snow)]">
             <span class="hue-label-sm text-[var(--silver)]">{{ step.number }}</span>
             <h3 class="mt-4 mb-2 text-[1.1rem] font-light">{{ step.title }}</h3>
@@ -148,7 +148,7 @@
             We specialize in sectors where credibility, trust, and professional presence drive business decisions.
           </p>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
           <NuxtLink
             v-for="(ind, i) in featuredIndustries"
             :key="ind.slug"
@@ -188,7 +188,7 @@
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
-        <div class="grid grid-cols-2 content-center gap-px overflow-hidden rounded-xl bg-white/5">
+        <div class="grid grid-cols-2 content-center gap-px overflow-hidden rounded-sm bg-white/5">
           <div v-for="stat in agencyStats" :key="stat.label" class="bg-[var(--near-black)] p-10 text-center">
             <p class="hue-editorial-xl text-white">{{ stat.value }}</p>
             <p class="hue-label-sm mt-2 text-white/30">{{ stat.label }}</p>

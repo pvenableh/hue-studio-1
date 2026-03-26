@@ -15,6 +15,32 @@
       </div>
     </div>
 
+    <!-- Newsletter strip -->
+    <div class="border-b border-white/10 px-6 py-12">
+      <div class="hue-container flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div>
+          <p class="hue-label mb-2 text-white/50">Stay in the loop</p>
+          <p class="text-[0.9375rem] text-white/30">Brand insights, case studies, and studio updates. No spam.</p>
+        </div>
+        <form v-if="!subscribed" @submit.prevent="handleSubscribe" class="flex w-full max-w-md gap-2">
+          <input
+            v-model="subscribeEmail"
+            type="email"
+            required
+            placeholder="your@email.com"
+            class="flex-1 rounded-sm border border-white/10 bg-white/5 px-4 py-2.5 text-[0.875rem] text-white placeholder-white/25 outline-none transition focus:border-white/25"
+          />
+          <button type="submit" class="hue-btn shrink-0 text-[0.6875rem]" :disabled="subscribing">
+            <span v-if="subscribing">…</span>
+            <span v-else>Subscribe</span>
+          </button>
+        </form>
+        <p v-else class="text-[0.875rem] text-white/50">
+          <Icon name="lucide:check" class="mr-1.5 inline size-3.5" />You're in. Welcome.
+        </p>
+      </div>
+    </div>
+
     <!-- Footer grid -->
     <div class="hue-container px-6 py-16">
       <div class="grid gap-12 md:grid-cols-4">
@@ -35,6 +61,7 @@
             <li><NuxtLink to="/creative-services" class="footer-link">Service Packages</NuxtLink></li>
             <li><NuxtLink to="/creative-services#retainers" class="footer-link">Monthly Retainers</NuxtLink></li>
             <li><NuxtLink to="/creative-services#alacarte" class="footer-link">À La Carte</NuxtLink></li>
+            <li><NuxtLink to="/scope" class="footer-link">Scope Builder</NuxtLink></li>
             <li><NuxtLink to="/brand-audit" class="footer-link">Free Brand Audit</NuxtLink></li>
           </ul>
         </div>
@@ -77,3 +104,18 @@
     </div>
   </footer>
 </template>
+
+<script setup lang="ts">
+const { submitSubscribe } = useDirectus()
+
+const subscribeEmail = ref('')
+const subscribing = ref(false)
+const subscribed = ref(false)
+
+async function handleSubscribe() {
+  subscribing.value = true
+  const result = await submitSubscribe({ email: subscribeEmail.value })
+  subscribing.value = false
+  if (result.success) subscribed.value = true
+}
+</script>

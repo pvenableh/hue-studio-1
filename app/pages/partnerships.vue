@@ -14,7 +14,7 @@
     </section>
 
     <section class="hue-section-alt px-6 py-20">
-      <div class="hue-container grid gap-px overflow-hidden rounded-xl border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+      <div class="hue-container grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
         <div v-for="type in partnerTypes" :key="type.title" class="bg-white p-10">
           <Icon :name="type.icon" class="mb-6 size-6 text-[var(--grey)]" />
           <h3 class="mb-3 text-[1.05rem] font-medium">{{ type.title }}</h3>
@@ -41,7 +41,7 @@
           </NuxtLink>
         </div>
         <div class="space-y-4">
-          <div v-for="item in offerings" :key="item.title" class="rounded-xl border border-[var(--silk)] p-7">
+          <div v-for="item in offerings" :key="item.title" class="rounded-sm border border-[var(--silk)] p-7">
             <h3 class="mb-2 text-[1rem] font-medium">{{ item.title }}</h3>
             <p class="hue-body-sm">{{ item.description }}</p>
           </div>
