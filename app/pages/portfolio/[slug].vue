@@ -40,7 +40,8 @@
             </template>
           </div>
         </div>
-        <div v-if="item.project_year || item.project_duration" class="flex gap-8">
+        <!-- Year and duration hidden until data is updated -->
+        <!-- <div v-if="item.project_year || item.project_duration" class="flex gap-8">
           <div v-if="item.project_year">
             <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Year</p>
             <p class="text-[0.875rem]">{{ item.project_year }}</p>
@@ -49,7 +50,7 @@
             <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Duration</p>
             <p class="text-[0.875rem]">{{ item.project_duration }}</p>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -106,7 +107,7 @@
               <div class="h-2 w-2 rounded-full bg-[var(--silver)]" />
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
-            <div class="flex items-center justify-center" style="aspect-ratio: 4/3; background: #e8e4dc;">
+            <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
             </div>
             <p v-if="ba.caption" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
@@ -116,7 +117,7 @@
               <div class="h-2 w-2 rounded-full" style="background: var(--color-accent);" />
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
-            <div class="flex items-center justify-center bg-[var(--near-black)]" style="aspect-ratio: 4/3;">
+            <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
             </div>
             <p v-if="ba.title" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>

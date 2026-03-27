@@ -71,10 +71,11 @@
                     <p class="hue-label-sm mb-1 text-[var(--silver)]">Services</p>
                     <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.service?.name }}</p>
                   </div>
-                  <div v-if="item.project_year">
+                  <!-- Year hidden until data is updated -->
+                  <!-- <div v-if="item.project_year">
                     <p class="hue-label-sm mb-1 text-[var(--silver)]">Year</p>
                     <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.project_year }}</p>
-                  </div>
+                  </div> -->
                 </div>
                 <span class="text-[0.6875rem] uppercase tracking-wider" style="color: var(--color-accent);">View Case Study →</span>
               </div>

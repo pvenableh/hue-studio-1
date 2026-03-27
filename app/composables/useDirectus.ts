@@ -105,6 +105,10 @@ export interface DirectusPortfolioItem {
   projects: DirectusPortfolioItem[]
 }
 
+export interface DirectusCaseStudyPortfolioItem {
+  portfolio_id: DirectusPortfolioItem | null
+}
+
 export interface DirectusCaseStudy {
   id: string
   status: string
@@ -125,6 +129,7 @@ export interface DirectusCaseStudy {
   organization: DirectusOrganization | null
   gallery: { directus_files_id: string }[]
   services: { services_id: DirectusService | null }[]
+  portfolio_items: DirectusCaseStudyPortfolioItem[]
 }
 
 export interface DirectusTestimonial {
@@ -202,6 +207,12 @@ export function useDirectus() {
   const baseUrl = (config.public.directusUrl as string).replace(/\/$/, '')
   const assetsBase = `${baseUrl}/assets`
 
+  // Auth headers for server-side fetches (token only available server-side via runtimeConfig)
+  const fetchHeaders: Record<string, string> = {}
+  if (import.meta.server && config.directusStaticToken) {
+    fetchHeaders['Authorization'] = `Bearer ${config.directusStaticToken}`
+  }
+
   function assetUrl(id: string, params?: Record<string, string | number>): string {
     if (!id) return ''
     const url = new URL(`${assetsBase}/${id}`)
@@ -231,10 +242,12 @@ export function useDirectus() {
     'before_and_afters.before_and_afters_id.caption',
     'before_and_afters.before_and_afters_id.before_image',
     'before_and_afters.before_and_afters_id.after_image',
-    'projects.id', 'projects.name', 'projects.slug', 'projects.url',
+    'projects.id', 'projects.name', 'projects.slug', 'projects.url', 'projects.status',
     'projects.caption', 'projects.featured_image',
     'projects.service.id', 'projects.service.name', 'projects.service.url',
     'projects.images.directus_files_id', 'projects.images.sort',
+    'videos.id', 'videos.platform', 'videos.link', 'videos.title', 'videos.description',
+    'hero',
   ].join(',')
 
   async function fetchPortfolio(options: { limit?: number; parentOnly?: boolean } = {}): Promise<DirectusPortfolioItem[]> {
@@ -245,7 +258,7 @@ export function useDirectus() {
       sort: 'sort',
     })
     if (options.parentOnly) params.set('filter[parent_id][_null]', 'true')
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`)
+    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
     return res.data ?? []
   }
 
@@ -256,7 +269,7 @@ export function useDirectus() {
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`)
+    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
     return res.data?.[0] ?? null
   }
 
@@ -284,9 +297,31 @@ export function useDirectus() {
       limit: String(options.limit ?? 10),
       sort: 'sort',
     })
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`)
+    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
     return res.data ?? []
   }
+
+  const CASE_STUDY_PORTFOLIO_FIELDS = [
+    'portfolio_items.portfolio_id.id',
+    'portfolio_items.portfolio_id.name',
+    'portfolio_items.portfolio_id.slug',
+    'portfolio_items.portfolio_id.url',
+    'portfolio_items.portfolio_id.featured_image',
+    'portfolio_items.portfolio_id.service.id',
+    'portfolio_items.portfolio_id.service.name',
+    'portfolio_items.portfolio_id.images.directus_files_id',
+    'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.id',
+    'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.title',
+    'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.caption',
+    'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.before_image',
+    'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.after_image',
+    'portfolio_items.portfolio_id.videos.id',
+    'portfolio_items.portfolio_id.videos.platform',
+    'portfolio_items.portfolio_id.videos.link',
+    'portfolio_items.portfolio_id.videos.title',
+    'portfolio_items.portfolio_id.videos.description',
+    'portfolio_items.portfolio_id.hero',
+  ]
 
   async function fetchCaseStudies(options: { limit?: number; featured?: boolean } = {}): Promise<DirectusCaseStudy[]> {
     const params = new URLSearchParams({
@@ -298,13 +333,14 @@ export function useDirectus() {
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
         'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        ...CASE_STUDY_PORTFOLIO_FIELDS,
       ].join(','),
       'filter[status][_eq]': 'published',
       limit: String(options.limit ?? 50),
       sort: 'sort,-date_created',
     })
     if (options.featured) params.set('filter[featured][_eq]', 'true')
-    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`)
+    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`, { headers: fetchHeaders })
     return res.data ?? []
   }
 
@@ -318,12 +354,13 @@ export function useDirectus() {
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
         'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        ...CASE_STUDY_PORTFOLIO_FIELDS,
       ].join(','),
       'filter[url][_eq]': url,
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`)
+    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`, { headers: fetchHeaders })
     return res.data?.[0] ?? null
   }
 

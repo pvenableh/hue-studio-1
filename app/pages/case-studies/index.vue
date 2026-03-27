@@ -11,23 +11,6 @@
       </div>
     </section>
 
-    <!-- Service filter -->
-    <div class="sticky top-[112px] z-40 border-b border-[var(--silk)] bg-white/90 px-6 backdrop-blur-md">
-      <div class="hue-container overflow-x-auto py-3">
-        <div class="flex min-w-max gap-1.5">
-          <button
-            v-for="f in serviceFilters"
-            :key="f"
-            class="rounded-full border px-3.5 py-1.5 text-[0.75rem] transition-all"
-            :class="activeFilter === f
-              ? 'border-[var(--near-black)] bg-[var(--near-black)] text-white'
-              : 'border-[var(--silk)] text-[var(--grey)] hover:border-[var(--silver)] hover:text-[var(--near-black)]'"
-            @click="activeFilter = f"
-          >{{ f }}</button>
-        </div>
-      </div>
-    </div>
-
     <section class="hue-section px-6 pb-24 pt-10">
       <div class="hue-container">
         <!-- Loading -->
@@ -35,10 +18,10 @@
           <div v-for="i in 4" :key="i" class="h-80 animate-pulse bg-[var(--cloud)]" />
         </div>
 
-        <!-- Case studies from dedicated collection -->
-        <div v-else-if="caseStudies.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
+        <!-- Case studies -->
+        <div v-else-if="caseStudyList.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
           <NuxtLink
-            v-for="(cs, i) in filtered"
+            v-for="(cs, i) in caseStudyList"
             :key="cs.id"
             :to="`/case-studies/${cs.url}`"
             class="group flex flex-col justify-between bg-white p-8 transition-colors hover:bg-[var(--snow)] md:p-10 reveal"
@@ -53,13 +36,13 @@
                     class="hue-label-sm"
                   >{{ svc.services_id?.name }}</span>
                 </div>
-                <span class="hue-label-sm text-[var(--silver)]">{{ cs.project_year }}</span>
+                <!-- <span class="hue-label-sm text-[var(--silver)]">{{ cs.project_year }}</span> -->
               </div>
 
-              <!-- Featured image thumbnail -->
-              <div v-if="cs.featured_image" class="mb-5 overflow-hidden rounded-lg bg-white" style="aspect-ratio:16/9;">
+              <!-- Image: featured_image → logo portfolio item → first portfolio item image -->
+              <div v-if="cardImage(cs)" class="mb-5 overflow-hidden rounded-lg bg-white" style="aspect-ratio:16/9;">
                 <img
-                  :src="assetUrl(cs.featured_image, { width: 700, quality: 80 })"
+                  :src="cardImage(cs)!"
                   :alt="cs.title ?? ''"
                   class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.02]"
                   :loading="i < 2 ? 'eager' : 'lazy'"
@@ -88,7 +71,7 @@
           </NuxtLink>
         </div>
 
-        <!-- Fallback: portfolio items if no case_studies exist yet -->
+        <!-- Fallback -->
         <div v-else-if="!pending" class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-20 text-center">
           <p class="hue-editorial-md mb-4">Case studies coming soon.</p>
           <NuxtLink to="/portfolio" class="hue-link inline-flex">Browse the full portfolio <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
@@ -113,7 +96,7 @@
               <span class="inline-flex items-center rounded-full bg-[var(--near-black)] px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
               <p class="hue-label-sm">Brand Perception Audit</p>
             </div>
-            <p class="max-w-md hue-body">See where your brand stands before your next project. 8 questions, a custom presentation in 5 days.</p>
+            <p class="max-w-md hue-body">See where your brand stands before your next project. 10 questions, a custom presentation in 5 days.</p>
           </div>
           <NuxtLink to="/brand-audit" class="hue-link shrink-0">Start Free Audit <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>
@@ -131,9 +114,11 @@
 </template>
 
 <script setup lang="ts">
+import type { DirectusCaseStudy } from '~/composables/useDirectus'
+
 useSeoMeta({
   title: 'Case Studies | B2B Branding & Lead Generation | Hue Creative Agency',
-  description: 'Explore our B2B case studies in brand strategy, website design, and lead generation for architecture, real estate, technology, and professional services.',
+  description: 'Explore our case studies in brand strategy, website design, and lead generation for government, architecture, real estate, technology, and professional services.',
 })
 
 defineOgImage({ component: 'HueOg', props: { title: 'Case Studies', description: 'Deep dives into strategy, execution, and measurable outcomes.', label: 'Case Studies' } })
@@ -142,22 +127,36 @@ const { fetchCaseStudies, assetUrl } = useDirectus()
 
 const { data: caseStudies, pending } = await useAsyncData('case-studies', () => fetchCaseStudies({ limit: 50 }))
 
-const serviceFilters = computed(() => {
-  const s = new Set(['All'])
-  ;(caseStudies.value ?? []).forEach((cs) =>
-    cs.services?.forEach((sv) => { if (sv.services_id?.name) s.add(sv.services_id.name) })
-  )
-  return [...s]
-})
+const caseStudyList = computed(() => caseStudies.value ?? [])
 
-const activeFilter = ref('All')
+/** Smart image fallback: featured_image → logo portfolio item → first portfolio item image */
+function cardImage(cs: DirectusCaseStudy): string | null {
+  // 1. Case study's own featured image
+  if (cs.featured_image) return assetUrl(cs.featured_image, { width: 700, quality: 80 })
 
-const filtered = computed(() => {
-  if (activeFilter.value === 'All') return caseStudies.value ?? []
-  return (caseStudies.value ?? []).filter((cs) =>
-    cs.services?.some((sv) => sv.services_id?.name === activeFilter.value)
+  // 2. Find the logo/branding portfolio item's featured image
+  const portfolioItems = cs.portfolio_items ?? []
+  const logoItem = portfolioItems.find((pi) =>
+    pi.portfolio_id?.service?.name?.toLowerCase().includes('brand') && pi.portfolio_id?.featured_image
   )
-})
+  if (logoItem?.portfolio_id?.featured_image) {
+    return assetUrl(logoItem.portfolio_id.featured_image, { width: 700, quality: 80 })
+  }
+
+  // 3. Any portfolio item with a featured image
+  const anyWithImage = portfolioItems.find((pi) => pi.portfolio_id?.featured_image)
+  if (anyWithImage?.portfolio_id?.featured_image) {
+    return assetUrl(anyWithImage.portfolio_id.featured_image, { width: 700, quality: 80 })
+  }
+
+  // 4. First portfolio item's first gallery image
+  const anyWithGallery = portfolioItems.find((pi) => pi.portfolio_id?.images?.length)
+  if (anyWithGallery?.portfolio_id?.images?.[0]?.directus_files_id) {
+    return assetUrl(anyWithGallery.portfolio_id.images[0].directus_files_id, { width: 700, quality: 80 })
+  }
+
+  return null
+}
 
 useScrollReveal()
 </script>

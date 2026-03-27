@@ -23,13 +23,18 @@
       <div class="bg-[var(--near-black)] px-10 py-16 lg:px-12">
         <p class="hue-label-sm mb-5 text-white/30">Project details</p>
         <div class="space-y-3">
-          <div v-if="cs.project_year" class="flex justify-between border-b border-white/5 pb-3">
+          <!-- Year and duration hidden until data is updated -->
+          <!-- <div v-if="cs.project_year" class="flex justify-between border-b border-white/5 pb-3">
             <span class="hue-label-sm text-white/30">Year</span>
             <span class="text-[0.8125rem] text-white/60">{{ cs.project_year }}</span>
           </div>
           <div v-if="cs.project_duration" class="flex justify-between border-b border-white/5 pb-3">
             <span class="hue-label-sm text-white/30">Duration</span>
             <span class="text-[0.8125rem] text-white/60">{{ cs.project_duration }}</span>
+          </div> -->
+          <div v-if="allServices.length" class="flex justify-between border-b border-white/5 pb-3">
+            <span class="hue-label-sm text-white/30">Disciplines</span>
+            <span class="text-[0.8125rem] text-white/60">{{ allServices.join(', ') }}</span>
           </div>
           <div v-if="cs.tags?.length" class="pt-2">
             <span class="hue-label-sm text-white/30 mb-3 block">Tags</span>
@@ -42,9 +47,9 @@
     </section>
 
     <!-- Featured image -->
-    <section v-if="cs.featured_image" class="border-b border-[var(--silk)]">
+    <section v-if="heroImage" class="border-b border-[var(--silk)]">
       <img
-        :src="assetUrl(cs.featured_image, { width: 1400, height: 700, fit: 'cover', quality: 85 })"
+        :src="heroImage"
         :alt="cs.title ?? ''"
         class="w-full object-cover"
         style="max-height: 60vh;"
@@ -75,14 +80,109 @@
             <span class="hue-label-sm text-[var(--silver)]">03</span>
             <p class="hue-label mt-1">The Results</p>
           </div>
-          <div class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] p-8">
-            <div class="hue-body-lg max-w-2xl" v-html="cs.results" />
+          <div class="hue-body-lg max-w-2xl" v-html="cs.results" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Connected Portfolio Items — "The Work" -->
+    <section v-if="childProjects.length" class="border-t border-[var(--silk)] px-6 py-20">
+      <div class="hue-container">
+        <p class="hue-label mb-8">The Work</p>
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+          <NuxtLink
+            v-for="item in childProjects"
+            :key="item.id"
+            :to="`/portfolio/${item.slug || item.url}`"
+            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
+          >
+            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+              <img
+                v-if="portfolioImgUrl(item)"
+                :src="portfolioImgUrl(item)!"
+                :alt="item.name"
+                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+              <div v-else class="flex h-full w-full items-center justify-center bg-white">
+                <span class="hue-label-sm">{{ item.name }}</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <span class="hue-label-sm" style="color: var(--color-accent);">{{ item.service?.name }}</span>
+              <h3 class="mt-2 text-[1rem] font-light transition-transform duration-300 group-hover:translate-x-1">{{ item.name }}</h3>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Before & Afters (aggregated from connected portfolio items) -->
+    <section v-if="beforeAfters.length" class="border-t border-[var(--silk)] px-6 py-20">
+      <div class="hue-container">
+        <div class="mb-8 flex items-end justify-between">
+          <p class="text-[1.75rem] font-light" style="font-family:var(--font-editorial);">Before &amp; After</p>
+          <p class="text-[0.8125rem] italic text-[var(--silver)]">Brand identity — logo system</p>
+        </div>
+        <div
+          v-for="ba in beforeAfters"
+          :key="ba.id"
+          class="mb-4 grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2"
+        >
+          <div v-if="ba.before_image" class="bg-white">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+              <div class="h-2 w-2 rounded-full bg-[var(--silver)]" />
+              <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
+            </div>
+            <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
+              <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
+            </div>
+            <p v-if="ba.caption" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
+          </div>
+          <div v-if="ba.after_image" class="bg-white">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+              <div class="h-2 w-2 rounded-full" style="background: var(--color-accent);" />
+              <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
+            </div>
+            <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
+              <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
+            </div>
+            <p v-if="ba.title" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Gallery -->
+    <!-- Videos (aggregated from connected portfolio items) -->
+    <section v-if="videos.length" class="border-t border-[var(--silk)] px-6 py-20">
+      <div class="hue-container">
+        <p class="hue-label mb-8">Video</p>
+        <div class="space-y-8">
+          <div v-for="video in videos" :key="video.id">
+            <div class="overflow-hidden rounded-sm" style="aspect-ratio: 16/9;">
+              <iframe
+                v-if="video.platform === 'youtube'"
+                :src="`https://www.youtube.com/embed/${extractYouTubeId(video.link)}`"
+                class="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+              <iframe
+                v-else-if="video.platform === 'vimeo'"
+                :src="`https://player.vimeo.com/video/${extractVimeoId(video.link)}`"
+                class="h-full w-full"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+            <p v-if="video.title" class="mt-3 text-[0.875rem] font-medium">{{ video.title }}</p>
+            <p v-if="video.description" class="mt-1 text-[0.8125rem] text-[var(--grey)]">{{ video.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery (from case_studies collection itself) -->
     <section v-if="cs.gallery?.length" class="border-t border-[var(--silk)] px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Gallery</p>
@@ -93,7 +193,7 @@
           <img
             v-for="(img, i) in cs.gallery"
             :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, { width: 700, height: 500, fit: 'cover', quality: 80 })"
+            :src="assetUrl(img.directus_files_id, { width: 700, quality: 80 })"
             :alt="`${cs.title} — image ${i + 1}`"
             class="w-full object-cover"
             loading="lazy"
@@ -102,26 +202,22 @@
       </div>
     </section>
 
-    <!-- Related portfolio cross-link -->
-    <section class="hue-section-alt px-6 py-16">
-      <div class="hue-container flex flex-col items-center justify-between gap-6 sm:flex-row">
-        <div>
-          <p class="hue-label mb-2">See the full work</p>
-          <p class="hue-body max-w-md">Browse all portfolio items including visual work, project images, and process shots.</p>
-        </div>
-        <NuxtLink to="/portfolio" class="hue-btn-outline shrink-0">
-          View Portfolio <Icon name="lucide:arrow-right" class="size-3.5" />
-        </NuxtLink>
-      </div>
-    </section>
-
     <!-- CTA -->
-    <section class="hue-section-dark px-6 py-24 text-center">
-      <div class="mx-auto max-w-md">
-        <h2 class="hue-display-lg mb-5 text-white">Start your project.</h2>
-        <p class="mb-8 text-[0.9375rem] text-white/40">30-minute discovery call. No obligations.</p>
-        <NuxtLink to="/contact" class="hue-btn-ghost">
-          Schedule a Call <Icon name="lucide:arrow-right" class="size-3.5" />
+    <InlineCapture
+      :dark="true"
+      label="Start a Conversation"
+      headline="Interested in similar results for your brand?"
+      button-text="Send"
+      :context="cs.title ?? 'Case Study'"
+    />
+
+    <section class="px-6 py-20" style="background: var(--color-accent);">
+      <div class="hue-container flex flex-col items-center justify-between gap-8 md:flex-row">
+        <h2 class="text-[1.75rem] font-light text-white" style="font-family:var(--font-editorial);">
+          Ready for your own<br><em>before &amp; after?</em>
+        </h2>
+        <NuxtLink to="/contact" class="inline-block rounded-sm border-[1.5px] border-white px-7 py-3.5 text-[0.6875rem] uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
+          Book a Strategy Session →
         </NuxtLink>
       </div>
     </section>
@@ -136,13 +232,107 @@
 </template>
 
 <script setup lang="ts">
+import type { DirectusPortfolioItem } from '~/composables/useDirectus'
+
 const route = useRoute()
 const url = route.params.url as string
-const { fetchCaseStudyByUrl, assetUrl } = useDirectus()
+const { fetchCaseStudyByUrl, fetchPortfolioItem, assetUrl, resolvedBeforeAfters } = useDirectus()
 
 const { data: cs } = await useAsyncData(`case-study-${url}`, () => fetchCaseStudyByUrl(url))
 
 if (!cs.value) throw createError({ statusCode: 404, statusMessage: 'Case study not found' })
+
+/** Get linked portfolio item slugs from the junction — deduplicated */
+const linkedSlugs = computed(() => {
+  const slugs = new Set<string>()
+  ;(cs.value?.portfolio_items ?? []).forEach((pi) => {
+    const slug = pi.portfolio_id?.slug || pi.portfolio_id?.url
+    if (slug) slugs.add(slug)
+  })
+  return [...slugs]
+})
+
+/** Fetch full portfolio items separately — this resolves before_and_afters, videos, projects (children) properly */
+const { data: fullPortfolioItems } = await useAsyncData(
+  `case-study-portfolio-${url}`,
+  async () => {
+    const items = await Promise.all(
+      linkedSlugs.value.map((slug) => fetchPortfolioItem(slug))
+    )
+    return items.filter(Boolean) as DirectusPortfolioItem[]
+  },
+)
+
+/** The linked parent portfolio items */
+const parentPortfolioItems = computed(() => fullPortfolioItems.value ?? [])
+
+/** All child project deliverables from parent portfolio items (logo, web, print, etc.) */
+const childProjects = computed(() => {
+  const children: DirectusPortfolioItem[] = []
+  parentPortfolioItems.value.forEach((p) => {
+    ;(p.projects ?? []).forEach((child: DirectusPortfolioItem) => {
+      children.push(child)
+    })
+  })
+  // If no children, show the parents themselves as "The Work"
+  return children.length ? children : parentPortfolioItems.value
+})
+
+/** Collect all unique service names across everything */
+const allServices = computed(() => {
+  const names = new Set<string>()
+  cs.value?.services?.forEach((s) => { if (s.services_id?.name) names.add(s.services_id.name) })
+  parentPortfolioItems.value.forEach((p) => { if (p.service?.name) names.add(p.service.name) })
+  childProjects.value.forEach((p) => { if (p.service?.name) names.add(p.service.name) })
+  return [...names]
+})
+
+/** Hero image: case study featured_image → parent portfolio item featured_image */
+const heroImage = computed(() => {
+  if (cs.value?.featured_image) return assetUrl(cs.value.featured_image, { width: 1400, quality: 85 })
+  const withImage = parentPortfolioItems.value.find((p) => p.featured_image)
+  if (withImage?.featured_image) return assetUrl(withImage.featured_image, { width: 1400, quality: 85 })
+  return null
+})
+
+/** Aggregate before & afters from parent portfolio items */
+const beforeAfters = computed(() => {
+  const all: any[] = []
+  parentPortfolioItems.value.forEach((p) => {
+    const resolved = resolvedBeforeAfters(p)
+    all.push(...resolved)
+  })
+  return all
+})
+
+/** Aggregate videos from parent portfolio items */
+const videos = computed(() => {
+  const all: any[] = []
+  parentPortfolioItems.value.forEach((p) => {
+    (p.videos ?? []).forEach((v: any) => {
+      if (v.id) all.push(v)
+    })
+  })
+  return all
+})
+
+/** Portfolio item image URL */
+function portfolioImgUrl(item: DirectusPortfolioItem): string | null {
+  const id = item.featured_image ?? item.images?.[0]?.directus_files_id
+  return id ? assetUrl(id, { width: 600, quality: 80 }) : null
+}
+
+/** Extract YouTube video ID from various URL formats */
+function extractYouTubeId(url: string): string {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([^?&\s]+)/)
+  return match?.[1] ?? ''
+}
+
+/** Extract Vimeo video ID */
+function extractVimeoId(url: string): string {
+  const match = url.match(/vimeo\.com\/(\d+)/)
+  return match?.[1] ?? ''
+}
 
 useSeoMeta({
   title: `${cs.value?.title ?? 'Case Study'} | Hue Creative Agency`,
