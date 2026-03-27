@@ -247,6 +247,8 @@ useSeoMeta({
   description: 'Strategic brand positioning and creative execution for growth-stage companies, government agencies, and mission-driven organizations. Woman-owned. Founded 2005. Miami Beach & New York.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'Hue — Creative Marketing Studio', description: 'Brand strategy, digital experience, and creative execution for growth-stage companies.' } })
+
 const featuredIndustries = industries.slice(0, 4)
 
 const agencyStats = [

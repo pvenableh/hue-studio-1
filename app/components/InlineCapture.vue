@@ -83,6 +83,7 @@ const props = withDefaults(defineProps<{
 })
 
 const { submitContact, submitSubscribe } = useDirectus()
+const { trackFormSubmit } = useAnalytics()
 
 const form = reactive({ name: '', email: '' })
 const submitting = ref(false)
@@ -102,5 +103,6 @@ async function handleSubmit() {
   }
   submitting.value = false
   submitted.value = true
+  trackFormSubmit(props.type === 'subscribe' ? 'inline_subscribe' : 'inline_capture', { context: props.context })
 }
 </script>

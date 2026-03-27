@@ -35,14 +35,14 @@
             :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
           >
             <!-- Image -->
-            <div class="relative overflow-hidden" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
+            <div class="relative overflow-hidden bg-white" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
               <img
                 v-if="imgUrl(item, true)"
                 :src="imgUrl(item, true)"
                 :alt="item.name"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
               />
-              <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
+              <div v-else class="flex h-full w-full items-center justify-center bg-white">
                 <span class="hue-label">{{ item.client?.short_name || item.name }}</span>
               </div>
             </div>
@@ -109,15 +109,15 @@
             class="group relative block overflow-hidden bg-white transition-colors hover:bg-[var(--snow)]"
           >
             <!-- Image -->
-            <div class="relative overflow-hidden" style="aspect-ratio: 3/2">
+            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 3/2">
               <img
                 v-if="imgUrl(item)"
                 :src="imgUrl(item)"
                 :alt="item.name"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
-              <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
+              <div v-else class="flex h-full w-full items-center justify-center bg-white">
                 <span class="hue-label-sm">{{ item.client?.short_name || item.name }}</span>
               </div>
               <!-- Hover overlay -->
@@ -179,6 +179,8 @@ useSeoMeta({
   description: 'Browse our portfolio of brand strategy, web design, print, and creative marketing work for growth-stage companies.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'Portfolio', description: 'Selected work across brand, digital, print, and video.', label: 'Portfolio' } })
+
 const { fetchPortfolio, fetchFeaturedPortfolio, assetUrl, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
 const [{ data: allItems, pending }, { data: featured }] = await Promise.all([
@@ -223,7 +225,7 @@ const gridItems = computed(() => {
 
 function imgUrl(item: DirectusPortfolioItem, wide = false) {
   const id = primaryImageId(item)
-  return id ? assetUrl(id, { width: wide ? 800 : 600, height: wide ? 500 : 400, fit: 'cover', quality: 80 }) : null
+  return id ? assetUrl(id, { width: wide ? 800 : 600, quality: 80 }) : null
 }
 
 function industryName(item: DirectusPortfolioItem) {

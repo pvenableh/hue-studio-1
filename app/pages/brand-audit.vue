@@ -6,7 +6,7 @@
           <span class="mb-5 inline-flex items-center rounded-full bg-[var(--near-black)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-white">Free</span>
           <h1 class="hue-display-lg mt-4 mb-5">Brand Perception<br>Audit</h1>
           <p class="hue-body-lg mb-8 max-w-md">
-            Not sure where your brand stands? In 8 questions and 15 minutes, we'll assess your current positioning and deliver a custom Brand Perception Presentation in 5 business days. Free. Confidential. No obligation.
+            Not sure where your brand stands? In 10 questions and 15 minutes, we'll assess your current positioning and deliver a custom Brand Perception Presentation in 5 business days. Free. Confidential. No obligation.
           </p>
           <div class="mb-10 grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             <div v-for="s in stats" :key="s.label" class="text-center rounded-sm border border-[var(--silk)] p-5">
@@ -56,15 +56,64 @@
               <label class="hue-label-field">What's your biggest brand challenge?</label>
               <textarea v-model="form.challenge" class="hue-input" rows="3" placeholder="e.g. We look dated compared to our competitors..." />
             </div>
+
+            <!-- Brand Perception Questions — inspired by Hue Brand Study -->
+            <div class="border-t border-[var(--silk)] pt-5">
+              <p class="hue-label-sm mb-1">Brand Perception</p>
+              <p class="mb-5 text-[0.75rem] text-[var(--color-text-muted)]">These help us understand how you see your brand today.</p>
+
+              <div class="space-y-5">
+                <div>
+                  <label class="hue-label-field">What words describe your brand?</label>
+                  <input v-model="form.brandWords" type="text" class="hue-input" placeholder="e.g. sophisticated, approachable, bold" />
+                </div>
+                <div>
+                  <label class="hue-label-field">What brands or logos inspire you — and why?</label>
+                  <input v-model="form.brandInspiration" type="text" class="hue-input" placeholder="e.g. Apple — clean, purposeful design" />
+                </div>
+                <div>
+                  <label class="hue-label-field">If your brand were a car, what would it be?</label>
+                  <select v-model="form.brandCar" class="hue-input">
+                    <option value="">Select one</option>
+                    <option value="bmw">BMW — performance, precision</option>
+                    <option value="porsche">Porsche — design-driven luxury</option>
+                    <option value="volvo">Volvo — trustworthy, safe, Scandinavian</option>
+                    <option value="tesla">Tesla — innovative, disruptive</option>
+                    <option value="classic">1960s Cadillac — timeless, commanding</option>
+                    <option value="honda">Honda — reliable, accessible, well-made</option>
+                    <option value="other">Other (tell us below)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="hue-label-field">If your brand were a color, what would it be — and why?</label>
+                  <input v-model="form.brandColor" type="text" class="hue-input" placeholder="e.g. Deep navy — authoritative but not aggressive" />
+                </div>
+                <div>
+                  <label class="hue-label-field">If your brand were a season, which would it be?</label>
+                  <select v-model="form.brandSeason" class="hue-input">
+                    <option value="">Select one</option>
+                    <option value="spring">Spring — fresh, new, optimistic</option>
+                    <option value="summer">Summer — bold, energetic, confident</option>
+                    <option value="autumn">Autumn — warm, established, sophisticated</option>
+                    <option value="winter">Winter — clean, minimal, authoritative</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="hue-label-field">Who is your ideal client?</label>
+                  <input v-model="form.idealClient" type="text" class="hue-input" placeholder="e.g. C-suite executives at mid-market firms looking for a rebrand" />
+                </div>
+              </div>
+            </div>
+
             <div>
               <label class="hue-label-field">Annual revenue (optional — helps us calibrate)</label>
               <select v-model="form.revenue" class="hue-input">
                 <option value="">Prefer not to say</option>
-                <option value="under-1m">Under $1M</option>
+                <option value="under-500k">Under $500K</option>
+                <option value="500k-1m">$500K – $1M</option>
                 <option value="1m-5m">$1M – $5M</option>
                 <option value="5m-25m">$5M – $25M</option>
-                <option value="25m-100m">$25M – $100M</option>
-                <option value="over-100m">Over $100M</option>
+                <option value="25m-plus">$25M+</option>
               </select>
             </div>
             <button type="submit" class="hue-btn w-full justify-center" :disabled="submitting">
@@ -100,8 +149,10 @@ useSeoMeta({
   description: '8 questions. 15 minutes. A custom Brand Perception Presentation delivered in 5 business days. Free, confidential, no obligation.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'Free Brand Perception Audit', description: '8 questions. 15 minutes. Custom presentation in 5 days.', label: 'Free Audit' } })
+
 const stats = [
-  { value: '8', label: 'Questions' },
+  { value: '10', label: 'Questions' },
   { value: '15', label: 'Minutes' },
   { value: '5', label: 'Day Delivery' },
   { value: '$0', label: 'Cost' },
@@ -120,9 +171,12 @@ const industryOptions = industries.map((i) => i.name)
 const form = reactive({
   firstName: '', lastName: '', email: '', company: '',
   industry: '', challenge: '', revenue: '',
+  // Brand perception questions
+  brandWords: '', brandInspiration: '', brandCar: '', brandColor: '', brandSeason: '', idealClient: '',
 })
 
 const { submitAudit } = useDirectus()
+const { trackFormSubmit } = useAnalytics()
 const submitting = ref(false)
 const submitted  = ref(false)
 const submitError = ref(false)
@@ -130,20 +184,38 @@ const submitError = ref(false)
 async function submitForm() {
   submitting.value = true
   submitError.value = false
+  // Build a rich explanation that includes all brand perception answers
+  const parts = [form.challenge]
+  if (form.brandWords) parts.push(`Brand words: ${form.brandWords}`)
+  if (form.brandInspiration) parts.push(`Brand inspiration: ${form.brandInspiration}`)
+  if (form.brandCar) parts.push(`Brand as car: ${form.brandCar}`)
+  if (form.brandColor) parts.push(`Brand as color: ${form.brandColor}`)
+  if (form.brandSeason) parts.push(`Brand as season: ${form.brandSeason}`)
+  if (form.idealClient) parts.push(`Ideal client: ${form.idealClient}`)
+
   const result = await submitAudit({
     first_name:  form.firstName,
     last_name:   form.lastName,
     email:       form.email,
     company:     form.company,
-    explanation: form.challenge,
+    explanation: parts.join('\n\n'),
     audit_answers: {
       industry: form.industry,
       revenue: form.revenue,
       challenge: form.challenge,
+      brand_words: form.brandWords,
+      brand_inspiration: form.brandInspiration,
+      brand_as_car: form.brandCar,
+      brand_as_color: form.brandColor,
+      brand_as_season: form.brandSeason,
+      ideal_client: form.idealClient,
     },
   })
   submitting.value = false
-  if (result.success) { submitted.value = true } else { submitError.value = true }
+  if (result.success) {
+    submitted.value = true
+    trackFormSubmit('brand_audit', { industry: form.industry })
+  } else { submitError.value = true }
 }
 
 useScrollReveal()

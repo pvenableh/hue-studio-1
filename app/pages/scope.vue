@@ -46,7 +46,7 @@
             :key="svc.id"
             class="flex flex-col bg-white p-7 text-left transition-all"
             :class="isSelected(svc.id) ? 'ring-2 ring-inset ring-[var(--color-accent)] bg-[var(--color-accent-tint)]' : 'hover:bg-[var(--snow)]'"
-            @click="toggleService(svc.id)"
+            @click="toggleServiceTracked(svc.id)"
           >
             <div class="mb-4 flex items-center justify-between">
               <span class="hue-label-sm" :style="isSelected(svc.id) ? 'color: var(--color-accent)' : ''">{{ svc.track }}</span>
@@ -152,7 +152,7 @@
     <!-- Proposal request modal -->
     <Teleport to="body">
       <Transition name="fade">
-        <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6" @click.self="showForm = false">
+        <div v-if="showForm" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-6" @click.self="showForm = false">
           <div class="w-full max-w-lg rounded-sm bg-white p-8 shadow-lg">
             <div class="mb-6 flex items-center justify-between">
               <p class="hue-label">Request Custom Proposal</p>
@@ -211,6 +211,8 @@ useSeoMeta({
   title: 'Project Scope Builder | Get a Custom Proposal | Hue',
   description: 'Select the services you need, see timeline and investment estimates, and request a custom proposal. No obligation.',
 })
+
+defineOgImage({ component: 'HueOg', props: { title: 'Project Scope Builder', description: 'Select services, see timeline and investment range, request a custom proposal.', label: 'Scope Builder' } })
 
 interface ScopeService {
   id: string
@@ -390,6 +392,14 @@ const alwaysIncluded = [
 ]
 
 const { submitContact } = useDirectus()
+const { trackFormSubmit, trackScopeServiceSelected, trackScopeProposalRequested } = useAnalytics()
+
+function toggleServiceTracked(id: string) {
+  const wasSelected = selected.value.has(id)
+  toggleService(id)
+  const svc = scopeServices.find(s => s.id === id)
+  if (svc) trackScopeServiceSelected(svc.name, !wasSelected)
+}
 
 async function submitProposal() {
   submitting.value = true
@@ -405,6 +415,8 @@ async function submitProposal() {
   })
   submitting.value = false
   submitted.value = true
+  trackScopeProposalRequested(estimateRange.value, selectedServices.value.length)
+  trackFormSubmit('scope_proposal', { estimate: estimateRange.value, services: serviceNames })
 }
 </script>
 

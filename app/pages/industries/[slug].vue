@@ -89,12 +89,12 @@
             :to="`/portfolio/${item.slug || item.url}`"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div class="relative overflow-hidden" style="aspect-ratio: 4/3;">
+            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
               <img
                 v-if="imgUrl(item)"
                 :src="imgUrl(item)"
                 :alt="item.name"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
@@ -135,26 +135,10 @@
     <InlineCapture
       :dark="true"
       label="Quick Start"
-      :headline="`Need creative marketing for ${industry.name.split('/')[0].trim().toLowerCase()}?`"
+      :headline="`In ${industry.shortName}? Let's talk about your brand.`"
       button-text="Send"
       :context="`Industry: ${industry.name}`"
     />
-
-    <!-- CTA -->
-    <div class="px-6 pb-0">
-      <div class="hue-container">
-        <div class="overflow-hidden rounded-t-2xl bg-[var(--near-black)] px-10 py-16 text-center">
-          <h2 class="hue-display-lg mb-4 text-white">
-            In {{ industry.shortName }}?<br>Let's talk about
-            <span style="font-family:var(--font-editorial);font-style:italic;">your brand.</span>
-          </h2>
-          <p class="mb-8 text-[0.9375rem] text-white/40">30-minute strategy session. No obligations.</p>
-          <NuxtLink to="/contact" class="hue-btn-ghost">
-            Book a Strategy Session <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -177,8 +161,13 @@ const { data: allItems, pending } = await useAsyncData(
 const industryProjects = computed(() =>
   (allItems.value ?? []).filter((p) =>
     p.industries?.some((i) => {
-      const name = i.industries_id?.name ?? ''
-      return industry.name.split('/').some((part) => name.includes(part.trim()))
+      const directusName = (i.industries_id?.name ?? '').toLowerCase()
+      const staticName = industry.name.toLowerCase()
+      // Match bidirectionally: split both names on delimiters and check for overlap
+      const staticKeywords = staticName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
+      const directusKeywords = directusName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
+      return staticKeywords.some((kw) => directusName.includes(kw)) ||
+             directusKeywords.some((kw) => staticName.includes(kw))
     })
   ).slice(0, 6)
 )
@@ -189,7 +178,7 @@ const otherIndustries = computed(() =>
 
 function imgUrl(item: DirectusPortfolioItem) {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: 600, height: 400, fit: 'cover', quality: 80 }) : null
+  return id ? assetUrl(id, { width: 600, quality: 80 }) : null
 }
 
 function svcSlug(name: string) {
@@ -200,4 +189,6 @@ useSeoMeta({
   title: `${industry.name} | Industries | Hue Creative Agency`,
   description: industry.description,
 })
+
+defineOgImage({ component: 'HueOg', props: { title: industry.name, description: industry.description, label: 'Industries' } })
 </script>

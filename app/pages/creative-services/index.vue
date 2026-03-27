@@ -372,6 +372,13 @@ useSeoMeta({
   description: 'Full-service creative marketing packages for growth-stage companies. Brand strategy, digital experience, print, video. Packages from $15,000. Retainers from $3,500/mo.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'Creative Services & Packages', description: 'Full-service creative marketing packages. Brand strategy, digital, print, video.', label: 'Services' } })
+
+useSchemaOrg([
+  defineService({ name: 'Brand Strategy & Identity', provider: { name: 'Hue Creative Agency' }, serviceType: 'Brand Strategy' }),
+  defineService({ name: 'Digital & Web Design', provider: { name: 'Hue Creative Agency' }, serviceType: 'Web Design' }),
+])
+
 const open = ref(-1)
 
 const stats = [

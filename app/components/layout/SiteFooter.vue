@@ -8,7 +8,7 @@
         <p class="mb-8 text-[0.9375rem] leading-relaxed text-white/35">
           Ready to invest in a brand that performs? Let's talk about your business, your market, and what winning looks like.
         </p>
-        <NuxtLink to="/contact" class="hue-btn-ghost">
+        <NuxtLink to="/contact" class="hue-btn-ghost" @click="trackCtaClick('Schedule a Discovery Call', 'footer')">
           Schedule a Discovery Call
           <Icon name="lucide:arrow-right" class="size-3.5" />
         </NuxtLink>
@@ -109,6 +109,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const { submitSubscribe } = useDirectus()
+const { trackFormSubmit, trackCtaClick } = useAnalytics()
 
 // Pages that have their own CTA sections — hide the footer CTA to avoid doubling
 const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-audit', '/contact']
@@ -118,7 +119,8 @@ const showCta = computed(() => {
   return !pagesWithOwnCta.some(p => path === p) &&
     !path.startsWith('/creative-services/') &&
     !path.startsWith('/case-studies/') &&
-    !path.startsWith('/portfolio/')
+    !path.startsWith('/portfolio/') &&
+    !path.startsWith('/industries/')
 })
 
 const subscribeEmail = ref('')
@@ -129,6 +131,9 @@ async function handleSubscribe() {
   subscribing.value = true
   const result = await submitSubscribe({ email: subscribeEmail.value })
   subscribing.value = false
-  if (result.success) subscribed.value = true
+  if (result.success) {
+    subscribed.value = true
+    trackFormSubmit('newsletter', { location: 'footer' })
+  }
 }
 </script>

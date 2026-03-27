@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <header
+    class="sticky top-0 z-50 transition-transform duration-300"
+    :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
+  >
     <!-- Audit announcement bar -->
     <NuxtLink to="/brand-audit" class="block px-4 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
       <div class="hue-container flex items-center justify-between gap-4">
@@ -7,7 +10,7 @@
           <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
           <p class="text-[0.78rem] text-white/80">
             <strong class="font-medium text-white">Brand Perception Audit</strong>
-            <span class="hidden sm:inline"> — 8 questions. 15 minutes. Custom presentation in 5 days.</span>
+            <span class="hidden sm:inline"> — 10 questions. 15 minutes. Custom presentation in 5 days.</span>
           </p>
         </div>
         <span class="flex shrink-0 items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-wider text-white">
@@ -17,11 +20,8 @@
       </div>
     </NuxtLink>
 
-    <!-- Main nav — hides on scroll down, shows on scroll up -->
-    <nav
-      class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white/95 backdrop-blur-md transition-transform duration-300"
-      :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
-    >
+    <!-- Main nav -->
+    <nav class="border-b border-[var(--color-border)] bg-white/95 backdrop-blur-md">
       <div class="hue-container flex h-14 items-center justify-between">
         <NuxtLink to="/">
           <LayoutLogo size="18px" class="shrink-0 w-20" />
@@ -73,7 +73,7 @@
         </div>
       </Transition>
     </nav>
-  </div>
+  </header>
 </template>
 
 <script setup lang="ts">

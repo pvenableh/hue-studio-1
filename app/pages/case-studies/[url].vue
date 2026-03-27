@@ -148,4 +148,6 @@ useSeoMeta({
   title: `${cs.value?.title ?? 'Case Study'} | Hue Creative Agency`,
   description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.',
 })
+
+defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.', label: 'Case Study' } })
 </script>

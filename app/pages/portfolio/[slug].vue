@@ -155,8 +155,8 @@
             :to="`/portfolio/${child.slug || child.url}`"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div v-if="childImgUrl(child)" class="overflow-hidden" style="aspect-ratio: 4/3;">
-              <img :src="childImgUrl(child)!" :alt="child.name" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+            <div v-if="childImgUrl(child)" class="overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+              <img :src="childImgUrl(child)!" :alt="child.name" class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
             </div>
             <div class="p-5">
               <p v-if="child.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ child.service.name }}</p>
@@ -264,4 +264,6 @@ useSeoMeta({
   title: `${item.value?.name ?? 'Project'} | Portfolio | Hue`,
   description: item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`,
 })
+
+defineOgImage({ component: 'HueOg', props: { title: item.value?.name ?? 'Project', description: item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`, label: 'Portfolio' } })
 </script>

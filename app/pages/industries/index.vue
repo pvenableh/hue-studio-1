@@ -103,6 +103,8 @@ useSeoMeta({
   description: 'We serve architecture, construction, real estate, professional services, fashion, technology, and nonprofit sectors with strategic brand and creative work.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'Industries We Serve', description: 'Government, architecture, real estate, professional services, technology.', label: 'Industries' } })
+
 const whyPoints = [
   { num: '01', title: 'We know your buyers.', body: 'A general contractor\'s client is not a fashion buyer. We design for the actual decision-maker in your world — not a generic business audience.' },
   { num: '02', title: 'We know the conventions.', body: 'Every industry has visual norms. We know when to follow them for credibility — and when to break them to stand out.' },

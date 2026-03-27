@@ -11,15 +11,15 @@
         :to="`/portfolio/${item.slug || item.url}`"
         class="group block bg-white transition-colors hover:bg-[var(--snow)]"
       >
-        <div class="relative overflow-hidden" style="aspect-ratio: 4/3;">
+        <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
           <img
             v-if="imgUrl(item)"
             :src="imgUrl(item)"
             :alt="item.name"
-            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
             :loading="i === 0 ? 'eager' : 'lazy'"
           />
-          <div v-else class="h-full w-full bg-[var(--cloud)] flex items-center justify-center">
+          <div v-else class="h-full w-full bg-white flex items-center justify-center">
             <span class="hue-label-sm">{{ item.client?.short_name }}</span>
           </div>
         </div>

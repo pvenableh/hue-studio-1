@@ -231,6 +231,13 @@ useSeoMeta({
   description: 'Full-service creative marketing studio founded in 2005 by Camila Hoffman (former A|X Armani Exchange Art Director) and Peter Hoffman. Miami Beach & New York.',
 })
 
+defineOgImage({ component: 'HueOg', props: { title: 'About Hue', description: 'Woman-owned, full-service. Every engagement led by senior principals.', label: 'About' } })
+
+useSchemaOrg([
+  definePerson({ name: 'Camila Hoffman', jobTitle: 'Creative Director & Brand Strategist', worksFor: { name: 'Hue Creative Agency' } }),
+  definePerson({ name: 'Peter Hoffman', jobTitle: 'Web Director & Development Lead', worksFor: { name: 'Hue Creative Agency' } }),
+])
+
 const techCaps = [
   { label: 'Frontend', items: 'Nuxt, Vue, React, GSAP' },
   { label: 'Backend / CMS', items: 'Directus, Node.js, API design' },

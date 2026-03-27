@@ -1,6 +1,6 @@
 <template>
   <!-- Trigger button -->
-  <button v-if="!isOpen" @click="isOpen = true" class="hue-btn" v-bind="$attrs">
+  <button v-if="!isOpen" @click="isOpen = true; trackMeetingModalOpen()" class="hue-btn" v-bind="$attrs">
     <slot>
       Book a Call
       <Icon name="lucide:arrow-right" class="size-3.5" />
@@ -10,8 +10,8 @@
   <!-- Modal -->
   <Teleport to="body">
     <Transition name="fade">
-      <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" @click.self="isOpen = false">
-        <div class="w-full max-w-md rounded-sm bg-white shadow-xl">
+      <div v-if="isOpen" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4" @click.self="isOpen = false">
+        <div class="w-full max-w-md lg:max-w-lg rounded-sm bg-white shadow-xl">
 
           <!-- Header -->
           <div class="flex items-center justify-between border-b border-[var(--silk)] px-6 py-4">
@@ -37,13 +37,15 @@
                   <input v-model="form.lastName" type="text" class="hue-input" placeholder="Smith" />
                 </div>
               </div>
-              <div>
-                <label class="hue-label-field">Work email</label>
-                <input v-model="form.email" type="email" class="hue-input" required placeholder="jane@company.com" />
-              </div>
-              <div>
-                <label class="hue-label-field">Company</label>
-                <input v-model="form.company" type="text" class="hue-input" placeholder="Acme Corp" />
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label class="hue-label-field">Work email</label>
+                  <input v-model="form.email" type="email" class="hue-input" required placeholder="jane@company.com" />
+                </div>
+                <div>
+                  <label class="hue-label-field">Company</label>
+                  <input v-model="form.company" type="text" class="hue-input" placeholder="Acme Corp" />
+                </div>
               </div>
 
               <!-- Meeting type -->
@@ -129,6 +131,8 @@
 <script setup lang="ts">
 defineOptions({ inheritAttrs: false })
 
+const { trackMeetingModalOpen, trackFormSubmit } = useAnalytics()
+
 const isOpen = ref(false)
 const submitting = ref(false)
 const submitted = ref(false)
@@ -182,6 +186,7 @@ async function handleSubmit() {
   })
   submitting.value = false
   submitted.value = true
+  trackFormSubmit('meeting', { meeting_type: form.meetingType, duration: form.duration })
 }
 </script>
 

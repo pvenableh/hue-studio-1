@@ -116,7 +116,42 @@
           <p class="hue-label">Related work</p>
           <NuxtLink to="/portfolio" class="hue-link text-[0.8125rem]">All portfolio <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>
-        <HomePortfolioPreview />
+
+        <div v-if="relatedPending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+          <div v-for="i in 3" :key="i" class="h-64 animate-pulse bg-[var(--cloud)]" />
+        </div>
+
+        <div v-else-if="relatedProjects.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
+          <NuxtLink
+            v-for="item in relatedProjects"
+            :key="item.id"
+            :to="`/portfolio/${item.slug || item.url}`"
+            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
+          >
+            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+              <img
+                v-if="relatedImgUrl(item)"
+                :src="relatedImgUrl(item)"
+                :alt="item.name"
+                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+              <div v-else class="flex h-full w-full items-center justify-center bg-white">
+                <span class="hue-label-sm">{{ item.client?.short_name || item.name }}</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <span class="hue-label-sm" style="color: var(--color-accent);">{{ item.service?.name }}</span>
+              <h3 class="mt-2 text-[1rem] font-light transition-transform duration-300 group-hover:translate-x-1">{{ item.name }}</h3>
+              <p v-if="item.client" class="mt-1 text-[0.8125rem] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
+            </div>
+          </NuxtLink>
+        </div>
+
+        <div v-else class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
+          <p class="hue-editorial-md">Portfolio for this service coming soon.</p>
+          <NuxtLink to="/portfolio" class="hue-link mt-4 inline-flex">Browse all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
+        </div>
       </div>
     </section>
 
@@ -137,6 +172,7 @@
 </template>
 
 <script setup lang="ts">
+import type { DirectusPortfolioItem } from '~/composables/useDirectus'
 import { getServiceBySlug } from '~/data/services'
 import { industries } from '~/data/industries'
 
@@ -144,6 +180,31 @@ const route = useRoute()
 const svc = getServiceBySlug(route.params.slug as string)
 
 if (!svc) throw createError({ statusCode: 404, statusMessage: 'Service not found' })
+
+const { fetchPortfolio, assetUrl } = useDirectus()
+
+// Fetch portfolio items and filter to this service
+const { data: allItems, pending: relatedPending } = await useAsyncData(
+  `service-portfolio-${svc.slug}`,
+  () => fetchPortfolio({ limit: 100 })
+)
+
+const relatedProjects = computed(() => {
+  const svcName = svc!.name.toLowerCase()
+  // Extract individual significant words (3+ chars) for loose matching
+  const svcWords = svcName.split(/[\s,/&]+/).map(w => w.trim()).filter(w => w.length >= 3)
+  return (allItems.value ?? []).filter((p) => {
+    const portfolioSvc = (p.service?.name ?? '').toLowerCase()
+    const portfolioWords = portfolioSvc.split(/[\s,/&]+/).map(w => w.trim()).filter(w => w.length >= 3)
+    // Match if any significant word from either side shares a common root (startsWith check handles brand/branding, event/events)
+    return svcWords.some((sw) => portfolioWords.some((pw) => sw.startsWith(pw) || pw.startsWith(sw)))
+  }).slice(0, 6)
+})
+
+function relatedImgUrl(item: DirectusPortfolioItem) {
+  const id = item.featured_image ?? item.images?.[0]?.directus_files_id
+  return id ? assetUrl(id, { width: 600, quality: 80 }) : null
+}
 
 function indSlug(name: string) {
   return industries.find((i) => i.name.includes(name.split('&')[0].trim()))?.slug ?? ''
@@ -153,4 +214,6 @@ useSeoMeta({
   title: `${svc.name} | Creative Services | Hue Creative Agency`,
   description: svc.intro,
 })
+
+defineOgImage({ component: 'HueOg', props: { title: svc.name, description: svc.tagline, label: 'Services' } })
 </script>

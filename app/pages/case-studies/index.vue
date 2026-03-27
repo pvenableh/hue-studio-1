@@ -57,11 +57,11 @@
               </div>
 
               <!-- Featured image thumbnail -->
-              <div v-if="cs.featured_image" class="mb-5 overflow-hidden rounded-lg" style="aspect-ratio:16/9;">
+              <div v-if="cs.featured_image" class="mb-5 overflow-hidden rounded-lg bg-white" style="aspect-ratio:16/9;">
                 <img
-                  :src="assetUrl(cs.featured_image, { width: 700, height: 394, fit: 'cover', quality: 80 })"
+                  :src="assetUrl(cs.featured_image, { width: 700, quality: 80 })"
                   :alt="cs.title ?? ''"
-                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.02]"
                   :loading="i < 2 ? 'eager' : 'lazy'"
                 />
               </div>
@@ -135,6 +135,8 @@ useSeoMeta({
   title: 'Case Studies | B2B Branding & Lead Generation | Hue Creative Agency',
   description: 'Explore our B2B case studies in brand strategy, website design, and lead generation for architecture, real estate, technology, and professional services.',
 })
+
+defineOgImage({ component: 'HueOg', props: { title: 'Case Studies', description: 'Deep dives into strategy, execution, and measurable outcomes.', label: 'Case Studies' } })
 
 const { fetchCaseStudies, assetUrl } = useDirectus()
 

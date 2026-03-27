@@ -11,7 +11,17 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       htmlAttrs: { lang: 'en' },
-      meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover' }],
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover' },
+        { name: 'theme-color', content: '#1d1d1f' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      ],
+      link: [
+        { rel: 'manifest', href: '/manifest.webmanifest' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+      ],
     },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
@@ -31,6 +41,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'shadcn-nuxt',
     '@nuxtjs/seo',
+    'nuxt-gtag',
   ],
 
   shadcn: {
@@ -43,6 +54,32 @@ export default defineNuxtConfig({
     name: 'Hue — Creative Marketing Studio',
     description: 'Full-service creative marketing for growth-stage companies. Brand strategy, digital experience, and lead generation that drives real business outcomes.',
     defaultLocale: 'en',
+  },
+
+  // Google Analytics 4
+  gtag: {
+    id: process.env.NUXT_PUBLIC_GTAG_ID || '',
+    initialConsent: false,
+  },
+
+  // OG Image generation
+  ogImage: {
+    defaults: {
+      component: 'HueOg',
+      width: 1200,
+      height: 630,
+    },
+    fonts: ['Cormorant+Garamond:600', 'DM+Sans:400'],
+  },
+
+  // Sitemap — dynamic routes from Directus
+  sitemap: {
+    sources: ['/api/__sitemap'],
+  },
+
+  // Robots.txt
+  robots: {
+    disallow: ['/api/', '/_nuxt/'],
   },
 
   image: {
