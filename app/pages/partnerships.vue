@@ -34,7 +34,7 @@
           <p class="hue-label mb-5">What we bring</p>
           <h2 class="hue-display-lg mb-6">20 years of craft,<br>available to your clients.</h2>
           <p class="hue-body-lg mb-8 max-w-lg">
-            Partners get access to the same senior creative team that has delivered for A|X Armani Exchange, Pepsi, and dozens of growth-stage B2B companies. White-label or co-branded — your call.
+            Partners get access to the same senior creative team that has delivered for A|X Armani Exchange, government agencies, and dozens of growth-stage companies. Co-branded collaboration built on trust.
           </p>
           <NuxtLink to="/contact" class="hue-btn">
             Start a Conversation <Icon name="lucide:arrow-right" class="size-3.5" />
@@ -64,15 +64,15 @@
 <script setup lang="ts">
 useSeoMeta({
   title: 'Partnerships | Hue Creative Agency',
-  description: 'Partner with Hue Creative Agency. White-label creative services, agency partnerships, developer collaborations, and referral programs.',
+  description: 'Partner with Hue Creative Agency. Co-branded creative services, agency partnerships, developer collaborations, and referral programs.',
 })
 
 const partnerTypes = [
   {
     icon: 'lucide:building-2',
     title: 'Agency Partners',
-    description: 'Extend your creative capabilities without growing your headcount. We work seamlessly as your white-label creative studio.',
-    items: ['White-label brand & design work', 'Overflow capacity for peak periods', 'Co-branded creative collaboration', 'NDA-protected engagements'],
+    description: 'Extend your creative capabilities without growing your headcount. We work seamlessly as a co-branded creative partner.',
+    items: ['Co-branded creative collaboration', 'Overflow capacity for peak periods', 'Joint project teams with senior creatives', 'NDA-protected engagements'],
   },
   {
     icon: 'lucide:code-2',
@@ -89,7 +89,7 @@ const partnerTypes = [
 ]
 
 const offerings = [
-  { title: 'White-label creative services', description: 'Brand identity, web design, print, and corporate design delivered under your brand or ours.' },
+  { title: 'Co-branded creative services', description: 'Brand identity, web design, print, and corporate design — collaborative engagements built on shared credit and trust.' },
   { title: 'Overflow & surge capacity', description: 'Senior creative support when your internal team is at capacity — seamlessly integrated.' },
   { title: 'Joint go-to-market', description: 'Co-branded service offerings for markets where our capabilities are complementary.' },
 ]

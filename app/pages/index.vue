@@ -1,27 +1,29 @@
 <template>
   <div>
     <!-- ═══ HERO ═══ -->
-    <section class="hue-section-dark relative overflow-hidden px-6 py-36 text-center md:py-48 lg:py-56">
-      <div class="hue-container relative z-10">
-        <p ref="heroLabel" class="hue-label mb-6 tracking-[0.15em] text-white/40 opacity-0">
-          B2B Creative Agency · Miami Beach &amp; New York
-        </p>
-        <h1 ref="heroTitle" class="hue-display-xl mx-auto max-w-4xl text-white opacity-0">
-          Design with
-          <span style="font-family: var(--font-editorial); font-style: italic;">Purpose.</span>
-        </h1>
-        <p ref="heroSub" class="mx-auto mt-7 max-w-lg text-[1.0625rem] leading-relaxed text-white/45 opacity-0">
-          Strategic brand positioning and creative execution for growth-stage companies. Built on 20 years of experience shaping brands that command attention and generate results.
-        </p>
-        <div ref="heroCta" class="mt-12 flex flex-col items-center gap-4 opacity-0 sm:flex-row sm:justify-center">
-          <NuxtLink to="/contact" class="hue-btn-ghost">
-            Schedule a Discovery Call
-            <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-          <NuxtLink to="/creative-services" class="hue-link text-white/50">
-            View Packages &amp; Pricing
-            <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
+    <section class="hue-section-dark relative overflow-hidden px-6 py-28 md:py-36">
+      <div class="hue-container relative z-10 grid gap-16 lg:grid-cols-2">
+        <div>
+          <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">
+            Brand Strategy &amp; Creative Agency · Miami Beach &amp; New York
+          </p>
+          <h1 ref="heroTitle" class="hue-display-xl text-white opacity-0">
+            Design with
+            <span style="font-family: var(--font-editorial); font-style: italic;">Purpose.</span>
+          </h1>
+          <p ref="heroSub" class="mt-7 max-w-lg text-[1.0625rem] leading-relaxed text-white/45 opacity-0">
+            Strategic brand positioning and creative execution for growth-stage companies. Built on 20 years of experience shaping brands that command attention and generate results.
+          </p>
+          <div ref="heroCta" class="mt-12 flex flex-col gap-4 opacity-0 sm:flex-row">
+            <NuxtLink to="/contact" class="hue-btn-ghost">
+              Schedule a Discovery Call
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </NuxtLink>
+            <NuxtLink to="/creative-services" class="inline-flex items-center gap-1.5 text-[0.75rem] font-medium uppercase tracking-wider text-white/50 transition-all hover:gap-2 hover:text-white/70">
+              View Packages &amp; Pricing
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </NuxtLink>
+          </div>
         </div>
       </div>
       <div class="pointer-events-none absolute inset-0 overflow-hidden">
@@ -41,7 +43,7 @@
           It ensures every creative deliverable is purposeful, aligned, and built to perform.
         </p>
         <p class="hue-body-sm reveal reveal-delay-2">
-          Founded in 2005. Boutique by design. From New York to Miami Beach — built for B2B.
+          Woman-owned. Founded in 2005. Boutique by design. From New York to Miami Beach.
         </p>
       </div>
     </section>
@@ -132,9 +134,6 @@
           </NuxtLink>
         </div>
         <HomePortfolioPreview />
-        <div class="mt-8 text-center sm:hidden">
-          <NuxtLink to="/portfolio" class="hue-link">View all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
-        </div>
       </div>
     </section>
 
@@ -143,9 +142,9 @@
       <div class="hue-container">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Industries</p>
-          <h2 class="hue-display-lg">Built for B2B</h2>
+          <h2 class="hue-display-lg">Industries We Serve</h2>
           <p class="mx-auto mt-4 max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
-            We specialize in sectors where credibility, trust, and professional presence drive business decisions.
+            We specialize in sectors where credibility, trust, and professional presence drive decisions — from B2B growth companies to government and community organizations.
           </p>
         </div>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
@@ -183,7 +182,7 @@
           <p class="mb-8 text-[1.0625rem] leading-relaxed text-white/45">
             From our roots in New York City to our home in Miami Beach, we craft brand experiences that resonate. Founded by Camila Hoffman — Art Director at A|X Armani Exchange for over 8 years, Parsons BFA — and Peter Hoffman, our boutique approach ensures every project receives the attention and creative excellence it deserves.
           </p>
-          <NuxtLink to="/about" class="hue-link text-white/60">
+          <NuxtLink to="/about" class="hue-link">
             Learn more about us
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
@@ -244,8 +243,8 @@ import { packages, processSteps } from '~/data/services'
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Hue Creative Agency — B2B Brand Strategy & Creative Execution | Miami Beach & New York',
-  description: 'Strategic brand positioning and creative execution for growth-stage B2B companies. Founded 2005. Packages starting at $15,000. Miami Beach & New York.',
+  title: 'Hue Creative Agency — Brand Strategy & Creative Execution | Miami Beach & New York',
+  description: 'Strategic brand positioning and creative execution for growth-stage companies, government agencies, and mission-driven organizations. Woman-owned. Founded 2005. Miami Beach & New York.',
 })
 
 const featuredIndustries = industries.slice(0, 4)
@@ -269,6 +268,8 @@ const heroTitle = ref<HTMLElement | null>(null)
 const heroSub   = ref<HTMLElement | null>(null)
 const heroCta   = ref<HTMLElement | null>(null)
 
+useScrollReveal()
+
 onMounted(async () => {
   await nextTick()
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
@@ -276,7 +277,5 @@ onMounted(async () => {
     .fromTo(heroTitle.value, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, '-=0.4')
     .fromTo(heroSub.value,   { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
     .fromTo(heroCta.value,   { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-
-  useScrollReveal()
 })
 </script>

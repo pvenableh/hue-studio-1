@@ -1,21 +1,21 @@
 <template>
   <div>
     <!-- Audit announcement bar -->
-    <div class="px-4 py-2.5" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
+    <NuxtLink to="/brand-audit" class="block px-4 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
       <div class="hue-container flex items-center justify-between gap-4">
         <div class="flex items-center gap-2.5">
           <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
           <p class="text-[0.78rem] text-white/80">
             <strong class="font-medium text-white">Brand Perception Audit</strong>
-            — 8 questions. 15 minutes. Custom presentation in 5 days.
+            <span class="hidden sm:inline"> — 8 questions. 15 minutes. Custom presentation in 5 days.</span>
           </p>
         </div>
-        <NuxtLink to="/brand-audit" class="flex shrink-0 items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-wider text-white transition-opacity hover:opacity-80">
-          Start Free Audit
+        <span class="flex shrink-0 items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-wider text-white">
+          Start Free
           <Icon name="lucide:arrow-right" class="size-3" />
-        </NuxtLink>
+        </span>
       </div>
-    </div>
+    </NuxtLink>
 
     <!-- Main nav — hides on scroll down, shows on scroll up -->
     <nav
@@ -23,7 +23,9 @@
       :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
     >
       <div class="hue-container flex h-14 items-center justify-between">
-        <LayoutHueLogo size="18px" />
+        <NuxtLink to="/">
+          <LayoutLogo size="18px" class="shrink-0 w-20" />
+        </NuxtLink>
 
         <!-- Desktop links -->
         <div class="hidden items-center gap-7 md:flex">
@@ -39,7 +41,9 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <MeetingRequest class="hidden sm:inline-flex" />
+          <div class="hidden sm:block">
+            <MeetingRequest />
+          </div>
           <!-- Mobile menu toggle -->
           <button
             class="flex h-9 w-9 items-center justify-center rounded-sm border border-[var(--silk)] md:hidden"

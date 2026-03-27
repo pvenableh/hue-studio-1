@@ -332,13 +332,14 @@ const heroLabel = ref<HTMLElement | null>(null)
 const heroTitle = ref<HTMLElement | null>(null)
 const heroSub   = ref<HTMLElement | null>(null)
 
+useScrollReveal()
+
 onMounted(async () => {
   await nextTick()
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
   tl.fromTo(heroLabel.value, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 })
     .fromTo(heroTitle.value, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 1.0 }, '-=0.4')
     .fromTo(heroSub.value,   { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
-  useScrollReveal()
 })
 </script>
 

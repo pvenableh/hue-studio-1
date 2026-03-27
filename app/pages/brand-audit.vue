@@ -146,5 +146,5 @@ async function submitForm() {
   if (result.success) { submitted.value = true } else { submitError.value = true }
 }
 
-onMounted(() => useScrollReveal())
+useScrollReveal()
 </script>

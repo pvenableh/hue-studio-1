@@ -157,5 +157,5 @@ const filtered = computed(() => {
   )
 })
 
-onMounted(() => useScrollReveal())
+useScrollReveal()
 </script>

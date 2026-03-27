@@ -12,7 +12,7 @@
         </div>
         <div class="flex items-end">
           <p class="text-[1.0625rem] leading-relaxed text-white/45">
-            Hue is a full-service creative agency. We are boutique on purpose — because we love a hands-on, holistic approach to design. Our process and vision is what separates us from the rest. We create custom design experiences that are unique to every project we touch.
+            Hue is a woman-owned, full-service brand strategy and digital experience firm headquartered in New York State, with offices in Miami Beach. We are boutique on purpose — every discipline is in-house, and every engagement is led directly by our senior principals. No junior handoffs. No offshore subcontractors.
           </p>
         </div>
       </div>
@@ -104,17 +104,17 @@
                 loading="lazy"
               />
             </div>
-            <p class="hue-label mb-1">Creative Director / CEO</p>
+            <p class="hue-label mb-1">Creative Director &amp; Brand Strategist</p>
             <h2 class="mb-4 text-[1.75rem] font-light">Camila Hoffman</h2>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
-                Camila was the Art Director for A|X Armani Exchange across Advertising, Public Relations, and Marketing for over 8 years — participating in the worldwide repositioning of the brand and creating a hand-crafted custom font for the corporate logo redesign.
+                Before founding Hue, Camila served as Art Director at A|X Armani Exchange headquarters in New York City, where she participated in the worldwide repositioning of the brand — including the redesign of the corporate logo. She created the design concepts for every seasonal campaign and managed their deployment across every medium: print, web, in-store, and global events. She held that position from 2000 until 2008, when she founded Hue.
               </p>
               <p class="hue-body">
-                A Parsons School of Design BFA graduate who studied under world-renowned art director Henry Wolf, Camila brings 24 years of experience in branding, art direction, print design, media buying, campaign development, and production. Her approach: <em>"Create something that has purpose — not just a product without meaning."</em>
+                That foundation in high-stakes, multi-market brand repositioning is the same strategic discipline she brings to every Hue engagement. As Creative Director, Camila has worked with organizations at both global and local scale — developing and repositioning brands, creating distinct voices that speak directly to target audiences, and overseeing every dimension of creative output from strategy through production.
               </p>
               <p class="hue-body">
-                Born in Rio de Janeiro, raised in Connecticut, educated at Parsons in New York — and now creating from Miami Beach. Camila co-founded hue in 2005 after carving her own path alongside Peter.
+                Camila holds a BFA in Communications Design from Parsons School of Design, New York City. In her words, good design is about <em>"creating something that has purpose, not just a product without meaning."</em> Hue is a woman-owned business, and Camila leads every client engagement as its principal and creative director.
               </p>
             </div>
           </div>
@@ -129,17 +129,17 @@
                 loading="lazy"
               />
             </div>
-            <p class="hue-label mb-1">Web Director & Development Lead</p>
+            <p class="hue-label mb-1">Web Director &amp; Development Lead</p>
             <h2 class="mb-4 text-[1.75rem] font-light">Peter Hoffman</h2>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
-                Peter joined Hue in 2006 and has since led every digital experience the firm has produced — from complex CMS builds and interactive data platforms to native apps, SaaS programs, and full digital campaign infrastructure. To call him a web developer would be to undersell what he actually does. Peter is a builder of digital ecosystems.
+                Peter joined Hue in 2006 and has since led every digital experience the firm has produced — from complex CMS builds and interactive data platforms to native apps, SaaS programs, and full digital campaign infrastructure. To call him a web developer would be to undersell what he actually does. Peter is a builder of digital ecosystems — someone who thinks in systems, works across the full modern stack, and consistently delivers platforms that function as genuine operational tools rather than polished marketing surfaces.
               </p>
               <p class="hue-body">
-                What sets Peter apart is his active integration of emerging technologies into real client work. He is building platforms that incorporate AI-powered connection mapping, automated data workflows, and realtime collaboration — turning static information hubs into dynamic, responsive environments.
+                What sets Peter apart is his active integration of emerging technologies into real client work. He is not watching AI from the sidelines — he is building with it, designing platforms that incorporate intelligent connection mapping, AI-assisted content discovery, and automated data workflows that turn static information hubs into dynamic, responsive environments. His technical range spans component-based frontend frameworks, headless CMS architecture, API and data pipeline design, progressive web apps, and SaaS platform development — all kept current through 10 to 15 hours of structured learning every month.
               </p>
               <p class="hue-body">
-                Peter holds a BA from Hobart College in Geneva, New York. His background in literature and design gives him the ability to see the relationship between content, architecture, and human experience — and build accordingly. He averages 10–15 hours per month in structured technical learning.
+                Peter holds a BA from Hobart College in Geneva, New York. His background in literature and design gives him the ability to see the relationship between content, architecture, and human experience — and build accordingly.
               </p>
               <!-- Tech capabilities -->
               <div class="mt-6 rounded-lg border border-[var(--silk)] p-5">
@@ -214,7 +214,7 @@
           <NuxtLink to="/brand-audit" class="hue-btn-ghost">
             Free Brand Audit <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
-          <NuxtLink to="/contact" class="hue-link text-white/50">
+          <NuxtLink to="/contact" class="hue-link">
             Book a Call <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
@@ -270,5 +270,5 @@ const principles = [
   },
 ]
 
-onMounted(() => useScrollReveal())
+useScrollReveal()
 </script>

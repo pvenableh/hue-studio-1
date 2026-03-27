@@ -14,6 +14,29 @@ export interface Industry {
 
 export const industries: Industry[] = [
   {
+    slug: 'government-ngo-community',
+    name: 'Government, NGO & Community Development',
+    shortName: 'Government & NGO',
+    color: '#1B2A3D',
+    headline: 'Mission-driven brands for the organizations shaping communities.',
+    description: 'Government agencies, IDAs, regional boards, and community development organizations need brands that project credibility to external audiences while maintaining buy-in from complex internal governance structures. Hue has over thirteen years of continuous experience building brands and digital platforms for New York State economic development entities — from full agency rebrands to live data portals and sector-specific investment attraction campaigns.',
+    challenges: [
+      'Government acronym that communicates function but not mission or identity',
+      'Multi-stakeholder governance that complicates brand decisions',
+      'Digital platforms that don\'t match the sophistication of private-sector peers',
+      'No system for sector-specific investment attraction or talent campaigns',
+    ],
+    solutions: [
+      'Full rebrand from institutional acronym to authoritative, plain-language identity',
+      'Brand and digital strategy that aligns diverse stakeholders under one voice',
+      'Data-rich digital platforms with live mapping and sector visualization',
+      'Campaign development across TV, radio, digital, print, and event experiences',
+    ],
+    services: ['Brand Strategy & Identity', 'Digital & Web Design', 'Corporate & Data Design', 'Audio & Video Production'],
+    clients: ['The Agency · Broome County IDA/LDC', 'Southern Tier 8 Regional Board', 'Better Connection', 'So-Tier Regional Portal'],
+    quote: { text: "We're walking into rooms we couldn't get into before.", author: 'Principal, The Agency — Broome County IDA' },
+  },
+  {
     slug: 'architecture-engineering',
     name: 'Architecture & Engineering',
     shortName: 'Architecture',
