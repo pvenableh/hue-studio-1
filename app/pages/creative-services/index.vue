@@ -82,6 +82,22 @@
       </div>
     </section>
 
+    <!-- Custom Scope CTA -->
+    <section class="border-t border-[var(--silk)] bg-[var(--snow)] px-6 py-14">
+      <div class="hue-container flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div>
+          <p class="hue-label mb-2">Need something custom?</p>
+          <p class="max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
+            Select exactly the services you need, see a visual scope with timeline and investment range — then request a tailored proposal.
+          </p>
+        </div>
+        <NuxtLink to="/scope" class="hue-btn shrink-0">
+          Build Your Custom Scope
+          <Icon name="lucide:arrow-right" class="size-3.5" />
+        </NuxtLink>
+      </div>
+    </section>
+
     <!-- Service detail list -->
     <section class="hue-section-alt px-6 py-24 md:py-32">
       <div class="hue-container">
@@ -242,6 +258,47 @@
       </div>
     </section>
 
+    <!-- How We Build — Tech Stack -->
+    <section class="hue-section px-6 py-24 md:py-32">
+      <div class="hue-container">
+        <div class="mb-14">
+          <p class="hue-label mb-3">How We Build</p>
+          <h2 class="hue-display-lg">Modern stack.<br>Serious infrastructure.</h2>
+          <p class="mt-4 max-w-lg hue-body">
+            Every Hue project is engineered on Nuxt.js and Directus — a headless architecture purpose-built for performance, security, and long-term flexibility.
+          </p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div v-for="cap in techCapabilities" :key="cap.title" class="hue-card reveal p-7">
+            <Icon :name="cap.icon" class="mb-4 size-5 text-[var(--silver)]" />
+            <h3 class="mb-2 text-[1rem] font-medium">{{ cap.title }}</h3>
+            <p class="text-[0.8125rem] leading-relaxed text-[var(--color-text-muted)]">{{ cap.description }}</p>
+          </div>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="mt-12 overflow-hidden rounded-sm border border-[var(--silk)]">
+          <table class="w-full text-left text-[0.8125rem]">
+            <thead>
+              <tr class="border-b border-[var(--silk)] bg-[var(--snow)]">
+                <th class="px-6 py-4 font-medium text-[var(--grey)]">Capability</th>
+                <th class="px-6 py-4 font-medium text-[var(--silver)]">WordPress / Drupal</th>
+                <th class="px-6 py-4 font-medium text-[var(--near-black)]">Nuxt + Directus</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in comparisonRows" :key="row.capability" class="border-b border-[var(--silk)] last:border-0">
+                <td class="px-6 py-4 font-medium">{{ row.capability }}</td>
+                <td class="px-6 py-4 text-[var(--silver)]">{{ row.legacy }}</td>
+                <td class="px-6 py-4 text-[var(--near-black)]">{{ row.modern }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- Why Hue -->
     <WhyHue variant="services" headline="Why clients choose Hue for their most important work." :show-cta="false" />
 
@@ -327,6 +384,48 @@ const stats = [
 function indSlug(name: string) {
   return industries.find((i) => i.name.includes(name.split('&')[0].trim()))?.slug ?? 'industries'
 }
+
+const techCapabilities = [
+  {
+    icon: 'lucide:zap',
+    title: 'Edge-Rendered Performance',
+    description: 'Pre-rendered pages served from a global CDN. Sub-2.5s load times worldwide — not server-rendered, not cached. Natively fast.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Minimal Attack Surface',
+    description: 'No public application layer, no plugin vulnerabilities. Your content lives behind a secured, authenticated API. SOC 2-equivalent posture built in.',
+  },
+  {
+    icon: 'lucide:radio',
+    title: 'Realtime Content Updates',
+    description: 'Native WebSocket subscriptions push content live the moment it\'s published. No cache-flush workflows, no stale pages.',
+  },
+  {
+    icon: 'lucide:bot',
+    title: 'AI & MCP-Ready',
+    description: 'Directus exposes a native Model Context Protocol endpoint — your content is queryable by AI tools out of the box, not as a future roadmap item.',
+  },
+  {
+    icon: 'lucide:layout-dashboard',
+    title: 'No-Code Content Management',
+    description: 'Directus gives your team an intuitive, role-based editing interface. Manage every page, post, and asset without touching code.',
+  },
+  {
+    icon: 'lucide:puzzle',
+    title: 'Future-Proof Architecture',
+    description: 'Headless means your content powers any frontend — web, mobile app, digital signage. Redesign without disrupting your data.',
+  },
+]
+
+const comparisonRows = [
+  { capability: 'Global Performance', legacy: 'Server-rendered, CDN-assisted', modern: 'Edge-rendered, CDN-native' },
+  { capability: 'Security Surface', legacy: 'High (plugin dependencies, DB exposure)', modern: 'Minimal (API-only, no public app layer)' },
+  { capability: 'Realtime Content', legacy: 'Plugin-dependent', modern: 'Native WebSocket subscriptions' },
+  { capability: 'AI / MCP Integration', legacy: 'Not available natively', modern: 'Native MCP endpoint — live' },
+  { capability: 'Editor Experience', legacy: 'Complex at scale', modern: 'No-code, role-based' },
+  { capability: 'Extensibility', legacy: 'Constrained by monolithic architecture', modern: 'Headless — any frontend, any channel' },
+]
 
 const heroLabel = ref<HTMLElement | null>(null)
 const heroTitle = ref<HTMLElement | null>(null)
