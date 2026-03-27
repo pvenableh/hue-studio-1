@@ -375,8 +375,18 @@ useSeoMeta({
 defineOgImage({ component: 'HueOg', props: { title: 'Creative Services & Packages', description: 'Full-service creative marketing packages. Brand strategy, digital, print, video.', label: 'Services' } })
 
 useSchemaOrg([
-  defineService({ name: 'Brand Strategy & Identity', provider: { name: 'Hue Creative Agency' }, serviceType: 'Brand Strategy' }),
-  defineService({ name: 'Digital & Web Design', provider: { name: 'Hue Creative Agency' }, serviceType: 'Web Design' }),
+  {
+    '@type': 'Service',
+    name: 'Brand Strategy & Identity',
+    provider: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    serviceType: 'Brand Strategy',
+  },
+  {
+    '@type': 'Service',
+    name: 'Digital & Web Design',
+    provider: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    serviceType: 'Web Design',
+  },
 ])
 
 const open = ref(-1)

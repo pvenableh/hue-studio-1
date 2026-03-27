@@ -234,8 +234,18 @@ useSeoMeta({
 defineOgImage({ component: 'HueOg', props: { title: 'About Hue', description: 'Woman-owned, full-service. Every engagement led by senior principals.', label: 'About' } })
 
 useSchemaOrg([
-  definePerson({ name: 'Camila Hoffman', jobTitle: 'Creative Director & Brand Strategist', worksFor: { name: 'Hue Creative Agency' } }),
-  definePerson({ name: 'Peter Hoffman', jobTitle: 'Web Director & Development Lead', worksFor: { name: 'Hue Creative Agency' } }),
+  {
+    '@type': 'Person',
+    name: 'Camila Hoffman',
+    jobTitle: 'Creative Director & Brand Strategist',
+    worksFor: { '@type': 'Organization', name: 'Hue Creative Agency' },
+  },
+  {
+    '@type': 'Person',
+    name: 'Peter Hoffman',
+    jobTitle: 'Web Director & Development Lead',
+    worksFor: { '@type': 'Organization', name: 'Hue Creative Agency' },
+  },
 ])
 
 const techCaps = [
