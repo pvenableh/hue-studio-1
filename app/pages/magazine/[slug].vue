@@ -150,7 +150,7 @@ const seo = post.value?.seo
 
 useSeoMeta({
   title: seo?.title || `${post.value?.title} | hue: magazine`,
-  description: seo?.description || post.value?.excerpt ?? undefined,
+  description: seo?.description || (post.value?.excerpt ?? undefined),
   ogType: 'article',
   ogImage: ogImageUrl.value ?? undefined,
   articlePublishedTime: post.value?.date_published ?? undefined,
