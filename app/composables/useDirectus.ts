@@ -129,6 +129,7 @@ export interface DirectusCaseStudy {
   organization: DirectusOrganization | null
   gallery: { directus_files_id: string }[]
   services: { services_id: DirectusService | null }[]
+  industries: { industries_id: DirectusIndustry | null }[]
   portfolio_items: DirectusCaseStudyPortfolioItem[]
 }
 
@@ -333,6 +334,7 @@ export function useDirectus() {
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
         'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        'industries.industries_id.id', 'industries.industries_id.name', 'industries.industries_id.url',
         ...CASE_STUDY_PORTFOLIO_FIELDS,
       ].join(','),
       'filter[status][_eq]': 'published',
@@ -354,6 +356,7 @@ export function useDirectus() {
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
         'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        'industries.industries_id.id', 'industries.industries_id.name', 'industries.industries_id.url',
         ...CASE_STUDY_PORTFOLIO_FIELDS,
       ].join(','),
       'filter[url][_eq]': url,

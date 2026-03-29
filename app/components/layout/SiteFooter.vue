@@ -74,8 +74,8 @@
         <div>
           <h3 class="hue-label mb-5 text-white/50">Industries</h3>
           <ul class="space-y-3">
-            <li><NuxtLink to="/industries/government-ngo-community" class="footer-link">Government & NGO</NuxtLink></li>
-            <li><NuxtLink to="/industries/architecture-engineering" class="footer-link">Architecture & Engineering</NuxtLink></li>
+            <li><NuxtLink to="/industries/government-community-development" class="footer-link">Government & Community</NuxtLink></li>
+            <li><NuxtLink to="/industries/architecture-construction" class="footer-link">Architecture & Construction</NuxtLink></li>
             <li><NuxtLink to="/industries/real-estate-development" class="footer-link">Real Estate</NuxtLink></li>
             <li><NuxtLink to="/industries/professional-services" class="footer-link">Professional Services</NuxtLink></li>
             <li><NuxtLink to="/industries/technology-saas" class="footer-link">Technology & SaaS</NuxtLink></li>

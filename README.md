@@ -32,8 +32,8 @@ pnpm dev
 | `/creative-services/[slug]` | Service detail — deliverables, who it's for, process steps, related work |
 | `/industries` | Industries hub with sector positioning |
 | `/industries/[slug]` | Industry detail — challenges, solutions, filtered portfolio |
-| `/case-studies` | Case studies from `case_studies` collection (legacy — migrating to portfolio) |
-| `/case-studies/[url]` | Case study detail from legacy collection |
+| `/case-studies` | Case studies — narrative client stories linked to portfolio deliverables |
+| `/case-studies/[url]` | Case study detail — challenge, solution, results, linked portfolio work |
 | `/brand-audit` | Free Brand Perception Audit → creates lead + contact in CRM |
 | `/about` | Team bios, founding story, process, principles |
 | `/partnerships` | Agency / developer / referral partnerships |
@@ -51,18 +51,57 @@ All website forms flow through a single server API route (`/api/submit`) that us
 
 Leads are auto-scored by budget, auto-prioritized, and assigned follow-up dates. They appear immediately in the Earnest CRM dashboard.
 
-## Portfolio as Case Studies
+## Content Architecture: Case Studies + Portfolio
 
-Portfolio items with `parent_id` children serve as case studies. The parent tells the story (`synopsis`, `challenge`, `creation`, `results`), and child items in `projects` are the individual deliverables. Key fields:
+Two separate collections serve distinct purposes:
 
-- `synopsis` — overview / brief
-- `challenge` — the business problem
-- `creation` — how we solved it
-- `results` — business outcomes (new field)
-- `featured` — flag for homepage/featured placement (new field)
-- `project_year` / `project_duration` — meta card details (new fields)
-- `before_and_afters` — visual transformation pairs
-- `projects` — child portfolio items (O2M self-reference)
+### Case Studies (`case_studies`) — The Story
+Client-facing narratives with challenge/solution/results structure.
+- `organization` — M2O to `organizations`
+- `services` — M2M to `services`
+- `portfolio_items` — M2M to `portfolio` (links deliverables to the narrative)
+- `gallery` — M2M to `directus_files`
+- `project_year` / `project_duration` — meta details
+
+### Portfolio (`portfolio`) — The Work
+Individual deliverables (logos, websites, brand guides, etc.).
+- `service` — M2O to `services` (primary service category)
+- `industries` — M2M to `industries` (multi-tag)
+- `images` — M2M to `directus_files`
+- `before_and_afters` — M2M to `before_and_afters`
+- `videos` — O2M to `videos`
+- `projects` — O2M self-reference via `parent_id` (child deliverables)
+
+### Relationships
+
+```
+case_studies ──M2M──► portfolio ──M2M──► industries
+     │                    │
+     ├──M2M──► services   ├──M2O──► services
+     ├──M2O──► organizations  ├──M2M──► directus_files
+     └──M2M──► directus_files └──M2M──► before_and_afters
+```
+
+### Industries (7 unified categories)
+
+| # | Name | Slug |
+|---|---|---|
+| 1 | Government & Community Development | `government-community-development` |
+| 2 | Architecture & Construction | `architecture-construction` |
+| 3 | Real Estate & Development | `real-estate-development` |
+| 4 | Technology & SaaS | `technology-saas` |
+| 5 | Fashion & Retail | `fashion-retail` |
+| 6 | Professional Services | `professional-services` |
+| 7 | Arts, Culture & Nonprofit | `arts-nonprofit` |
+
+Industry detail content (headlines, challenges, solutions, quotes) lives in `app/data/industries.ts`. Slugs must match the Directus `url` field.
+
+### Planned Improvements
+
+- [ ] Add `industries` M2M to `case_studies` for direct industry tagging
+- [ ] Simplify portfolio to pure deliverables (move narrative fields to case_studies only)
+- [ ] Remove portfolio self-referencing `parent_id` in favor of case_studies grouping
+- [ ] Drive homepage featured section from case_studies instead of portfolio
 
 ## Directus API
 
@@ -70,7 +109,9 @@ The `useDirectus` composable handles all reads. Key methods:
 
 - `fetchPortfolio()` — all published portfolio items with full nested relations
 - `fetchPortfolioItem(slug)` — single item by slug
-- `fetchFeaturedPortfolio()` — featured case studies (parent items, `featured: true`)
+- `fetchFeaturedPortfolio()` — featured portfolio items (`featured: true`, top-level)
+- `fetchCaseStudies()` — all case studies with linked portfolio items
+- `fetchCaseStudyByUrl(url)` — single case study by URL slug
 - `submitContact()` / `submitAudit()` / `submitSubscribe()` — form submissions via `/api/submit`
 
 Assets: `https://admin.huestudios.company/assets/{uuid}?width=600&fit=cover&quality=80`
