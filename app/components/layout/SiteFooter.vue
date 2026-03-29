@@ -88,6 +88,7 @@
           <ul class="space-y-3">
             <li><NuxtLink to="/case-studies" class="footer-link">Case Studies</NuxtLink></li>
             <li><NuxtLink to="/portfolio" class="footer-link">Portfolio</NuxtLink></li>
+            <li><NuxtLink to="/magazine" class="footer-link">Magazine</NuxtLink></li>
             <li><NuxtLink to="/partnerships" class="footer-link">Partnerships</NuxtLink></li>
             <li><NuxtLink to="/about" class="footer-link">About Hue</NuxtLink></li>
             <li><NuxtLink to="/contact" class="footer-link">Contact</NuxtLink></li>

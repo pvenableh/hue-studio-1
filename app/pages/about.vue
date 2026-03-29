@@ -105,7 +105,9 @@
               />
             </div>
             <p class="hue-label mb-1">Creative Director &amp; Brand Strategist</p>
-            <h2 class="mb-4 text-[1.75rem] font-light">Camila Hoffman</h2>
+            <NuxtLink to="/team/camila-hoffman" class="group">
+              <h2 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Camila Hoffman</h2>
+            </NuxtLink>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
                 Before founding Hue, Camila served as Art Director at A|X Armani Exchange headquarters in New York City, where she participated in the worldwide repositioning of the brand — including the redesign of the corporate logo. She created the design concepts for every seasonal campaign and managed their deployment across every medium: print, web, in-store, and global events. She held that position from 2000 until 2008, when she founded Hue.
@@ -130,7 +132,9 @@
               />
             </div>
             <p class="hue-label mb-1">Web Director &amp; Development Lead</p>
-            <h2 class="mb-4 text-[1.75rem] font-light">Peter Hoffman</h2>
+            <NuxtLink to="/team/peter-hoffman" class="group">
+              <h2 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Peter Hoffman</h2>
+            </NuxtLink>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
                 Peter joined Hue in 2006 and has since led every digital experience the firm has produced — from complex CMS builds and interactive data platforms to native apps, SaaS programs, and full digital campaign infrastructure. To call him a web developer would be to undersell what he actually does. Peter is a builder of digital ecosystems — someone who thinks in systems, works across the full modern stack, and consistently delivers platforms that function as genuine operational tools rather than polished marketing surfaces.

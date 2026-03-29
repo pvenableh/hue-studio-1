@@ -21,6 +21,7 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: '/manifest.webmanifest' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'alternate', type: 'application/rss+xml', title: 'hue: magazine', href: '/feed.xml' },
       ],
     },
     pageTransition: { name: 'page', mode: 'out-in' },

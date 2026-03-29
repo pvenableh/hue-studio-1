@@ -133,6 +133,52 @@ export interface DirectusCaseStudy {
   portfolio_items: DirectusCaseStudyPortfolioItem[]
 }
 
+export interface DirectusBlogCategory {
+  id: string
+  name: string | null
+  slug: string | null
+  description: string | null
+  color: string | null
+}
+
+export interface DirectusBlogAuthor {
+  id: number
+  first_name: string | null
+  last_name: string | null
+  title: string | null
+  bio: string | null
+  image: string | null
+  photo: string | null
+  url: string | null
+  linkedin_url: string | null
+  headline: string | null
+  extended_bio: string | null
+  resume_highlights: { year: string; role: string; company: string; description: string }[] | null
+  education: { degree: string; school: string; year: string }[] | null
+  specialties: string[] | null
+  is_team_member: boolean | null
+}
+
+export interface DirectusBlogPost {
+  id: number
+  status: string
+  title: string | null
+  slug: string | null
+  excerpt: string | null
+  body: string | null
+  featured_image: string | null
+  date_published: string | null
+  date_created: string | null
+  date_updated: string | null
+  reading_time: number | null
+  featured: boolean | null
+  author: DirectusBlogAuthor | null
+  categories: { blog_categories_id: DirectusBlogCategory | null }[]
+  services: { services_id: DirectusService | null }[]
+  industries: { industries_id: DirectusIndustry | null }[]
+  images: { directus_files_id: string }[]
+}
+
 export interface DirectusTestimonial {
   id: number
   quote: string
@@ -465,6 +511,93 @@ export function useDirectus() {
     return html?.replace(/<[^>]+>/g, '') ?? ''
   }
 
+  // ── Blog / Magazine ────────────────────────────────────────────
+
+  const BLOG_FIELDS = [
+    'id', 'status', 'title', 'slug', 'excerpt', 'body', 'featured_image',
+    'date_published', 'date_created', 'date_updated', 'reading_time', 'featured',
+    'author.id', 'author.first_name', 'author.last_name', 'author.title',
+    'author.image', 'author.photo', 'author.url',
+    'categories.blog_categories_id.id', 'categories.blog_categories_id.name',
+    'categories.blog_categories_id.slug', 'categories.blog_categories_id.color',
+    'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+    'industries.industries_id.id', 'industries.industries_id.name', 'industries.industries_id.url',
+    'images.directus_files_id',
+  ]
+
+  async function fetchBlogPosts(options: {
+    limit?: number
+    offset?: number
+    category?: string
+    featured?: boolean
+  } = {}): Promise<DirectusBlogPost[]> {
+    const params = new URLSearchParams({
+      fields: BLOG_FIELDS.join(','),
+      'filter[status][_eq]': 'published',
+      limit: String(options.limit ?? 20),
+      sort: '-date_published,-date_created',
+    })
+    if (options.offset) params.set('offset', String(options.offset))
+    if (options.featured) params.set('filter[featured][_eq]', 'true')
+    if (options.category) params.set('filter[categories][blog_categories_id][slug][_eq]', options.category)
+    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    return res.data ?? []
+  }
+
+  async function fetchBlogPost(slug: string): Promise<DirectusBlogPost | null> {
+    const params = new URLSearchParams({
+      fields: BLOG_FIELDS.join(','),
+      'filter[slug][_eq]': slug,
+      'filter[status][_eq]': 'published',
+      limit: '1',
+    })
+    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    return res.data?.[0] ?? null
+  }
+
+  async function fetchBlogCategories(): Promise<DirectusBlogCategory[]> {
+    const params = new URLSearchParams({
+      fields: 'id,name,slug,description,color',
+      'filter[status][_eq]': 'published',
+      sort: 'sort,name',
+      limit: '50',
+    })
+    const res = await $fetch<{ data: DirectusBlogCategory[] }>(`${baseUrl}/items/blog_categories?${params}`, { headers: fetchHeaders })
+    return res.data ?? []
+  }
+
+  // ── Team / People ──────────────────────────────────────────────
+
+  const TEAM_MEMBER_FIELDS = [
+    'id', 'first_name', 'last_name', 'title', 'headline', 'bio', 'extended_bio',
+    'image', 'photo', 'url', 'email', 'linkedin_url', 'instagram_handle',
+    'resume_highlights', 'education', 'specialties', 'is_team_member',
+  ]
+
+  async function fetchTeamMember(url: string): Promise<DirectusBlogAuthor | null> {
+    const params = new URLSearchParams({
+      fields: TEAM_MEMBER_FIELDS.join(','),
+      'filter[url][_eq]': url,
+      'filter[is_team_member][_eq]': 'true',
+      'filter[status][_eq]': 'published',
+      limit: '1',
+    })
+    const res = await $fetch<{ data: DirectusBlogAuthor[] }>(`${baseUrl}/items/people?${params}`, { headers: fetchHeaders })
+    return res.data?.[0] ?? null
+  }
+
+  async function fetchTeamMemberPosts(authorId: number, limit = 6): Promise<DirectusBlogPost[]> {
+    const params = new URLSearchParams({
+      fields: BLOG_FIELDS.join(','),
+      'filter[status][_eq]': 'published',
+      'filter[author][_eq]': String(authorId),
+      sort: '-date_published,-date_created',
+      limit: String(limit),
+    })
+    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    return res.data ?? []
+  }
+
   return {
     baseUrl,
     assetsBase,
@@ -487,5 +620,10 @@ export function useDirectus() {
     primaryIndustryName,
     primaryIndustryUrl,
     stripHtml,
+    fetchBlogPosts,
+    fetchBlogPost,
+    fetchBlogCategories,
+    fetchTeamMember,
+    fetchTeamMemberPosts,
   }
 }

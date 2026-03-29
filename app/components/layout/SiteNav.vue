@@ -85,6 +85,7 @@ const navLinks = [
   { label: 'Portfolio',     to: '/portfolio' },
   { label: 'Industries',    to: '/industries' },
   { label: 'Case Studies',  to: '/case-studies' },
+  { label: 'Magazine',      to: '/magazine' },
   { label: 'Partnerships',  to: '/partnerships' },
   { label: 'About',         to: '/about' },
 ]
