@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section px-6 pb-12 pt-20 md:pt-28">
-      <div class="hue-container">
+    <section class="hue-section relative overflow-hidden px-2 md:px-6 pb-12 pt-20 md:pt-28">
+      <SectionWatermark word="Work" top="1rem" />
+      <div class="hue-container relative">
         <p class="hue-label mb-4">Our Work</p>
         <h1 class="hue-display-xl mb-5">
           Work that <span style="font-family:var(--font-editorial);font-style:italic;">performs</span><br>as well as it looks.
@@ -23,15 +24,15 @@
     />
 
     <!-- Featured Case Studies -->
-    <section v-if="activeService === 'All' && activeIndustry === 'All' && featuredItems.length" class="px-6 pt-12">
+    <section v-if="activeService === 'All' && activeIndustry === 'All' && featuredItems.length" class="px-2 md:px-6 pt-12">
       <div class="hue-container">
         <p class="hue-label mb-8">Featured Case Studies</p>
-        <div class="space-y-px">
+        <div class="space-y-12">
           <NuxtLink
             v-for="(item, i) in featuredItems"
             :key="item.id"
             :to="`/portfolio/${item.slug || item.url}`"
-            class="group grid overflow-hidden border border-[var(--silk)] md:grid-cols-2"
+            class="group grid overflow-hidden md:grid-cols-2"
             :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
           >
             <!-- Image -->
@@ -48,28 +49,27 @@
             </div>
 
             <!-- Content -->
-            <div class="flex flex-col justify-between p-10 md:[direction:ltr]" :class="i % 2 === 1 ? 'bg-[var(--near-black)]' : 'bg-white'">
+            <div class="flex flex-col justify-between p-10 md:[direction:ltr]">
               <div>
-                <p class="mb-2 text-[0.625rem] tracking-widest" :class="i % 2 === 1 ? 'text-white/20' : 'text-[var(--silver)]'">{{ String(i + 1).padStart(2, '0') }} / Featured</p>
+                <p class="mb-2 text-[0.625rem] tracking-widest text-[var(--silver)]">{{ String(i + 1).padStart(2, '0') }} / Featured</p>
                 <p class="hue-label-sm mb-3" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
-                <h2 class="mb-4 text-[1.75rem] font-light leading-tight" :class="i % 2 === 1 ? 'text-white' : ''">{{ item.name }}</h2>
+                <h2 class="mb-4 text-[1.75rem] font-light leading-tight">{{ item.name }}</h2>
                 <p
                   v-if="item.synopsis"
-                  class="mb-6 line-clamp-3 text-[0.875rem] leading-relaxed"
-                  :class="i % 2 === 1 ? 'text-white/40' : 'text-[var(--grey)]'"
+                  class="mb-6 line-clamp-3 text-[0.875rem] leading-relaxed text-[var(--grey)]"
                   v-html="stripTags(item.synopsis)"
                 />
                 <!-- Result callout -->
-                <div v-if="item.results" class="mb-6 border-l-2 border-[var(--color-accent)] py-2 pl-4" :class="i % 2 === 1 ? 'bg-[var(--color-accent-tint)]' : 'bg-[var(--snow)]'">
+                <div v-if="item.results" class="mb-6 border-l-2 border-[var(--color-accent)] bg-[var(--snow)] py-2 pl-4">
                   <p class="mb-1 text-[0.5625rem] font-medium uppercase tracking-widest" style="color: var(--color-accent);">Business Outcome</p>
-                  <p class="line-clamp-2 text-[0.9375rem] italic leading-snug" :class="i % 2 === 1 ? 'text-white/80' : ''" style="font-family:var(--font-editorial);" v-html="stripTags(item.results)" />
+                  <p class="line-clamp-2 text-[0.9375rem] italic leading-snug" style="font-family:var(--font-editorial);" v-html="stripTags(item.results)" />
                 </div>
               </div>
               <div class="flex items-end justify-between">
                 <div class="flex gap-6">
                   <div>
                     <p class="hue-label-sm mb-1 text-[var(--silver)]">Services</p>
-                    <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.service?.name }}</p>
+                    <p class="text-[0.75rem] text-[var(--grey)]">{{ item.service?.name }}</p>
                   </div>
                   <!-- Year hidden until data is updated -->
                   <!-- <div v-if="item.project_year">
@@ -86,13 +86,13 @@
     </section>
 
     <!-- Grid -->
-    <section class="hue-section px-6 pb-24 pt-12">
+    <section class="hue-section px-2 md:px-6 pb-24 pt-12">
       <div class="hue-container">
         <p v-if="featuredItems.length && activeService === 'All' && activeIndustry === 'All'" class="hue-label mb-8">More Work</p>
 
         <!-- Loading -->
-        <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
-          <div v-for="i in 6" :key="i" class="h-80 animate-pulse bg-[var(--cloud)]" />
+        <div v-if="pending" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div v-for="i in 6" :key="i" class="h-80 animate-pulse rounded-sm bg-[var(--cloud)]" />
         </div>
 
         <!-- Empty -->
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Projects -->
-        <div v-else class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div v-else class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
             v-for="item in gridItems"
             :key="item.id"
@@ -141,7 +141,7 @@
     </section>
 
     <!-- Industry cross-links -->
-    <section class="hue-section-alt px-6 py-16">
+    <section class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">Browse by industry</p>
@@ -149,7 +149,7 @@
             v-for="ind in staticIndustries"
             :key="ind.slug"
             :to="`/industries/${ind.slug}`"
-            class="rounded-full border border-[var(--silk)] px-4 py-2 text-[0.8125rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+            class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >
             {{ ind.name }}
           </NuxtLink>
@@ -158,7 +158,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="hue-section-dark px-6 py-24 text-center">
+    <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
         <h2 class="hue-display-lg mb-5 text-white">Your brand could be<br>the next case study<br>we're <span style="font-family:var(--font-editorial);font-style:italic;color:var(--color-accent-on-dark);">proud to show.</span></h2>
         <p class="mb-8 text-[0.9375rem] text-white/40">30-minute strategy session. No pitch decks. Just conversation.</p>

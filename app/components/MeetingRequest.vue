@@ -14,7 +14,7 @@
         <div class="w-full max-w-md lg:max-w-lg rounded-sm bg-white shadow-xl">
 
           <!-- Header -->
-          <div class="flex items-center justify-between border-b border-[var(--silk)] px-6 py-4">
+          <div class="flex items-center justify-between border-b border-[var(--silk)] px-2 md:px-6 py-4">
             <div>
               <p class="text-[0.625rem] font-medium uppercase tracking-[0.2em] text-[var(--silver)]">Schedule</p>
               <p class="text-[1.125rem] font-light" style="font-family: var(--font-editorial);">Strategy Session</p>
@@ -25,7 +25,7 @@
           </div>
 
           <!-- Form -->
-          <div v-if="!submitted" class="px-6 py-5">
+          <div v-if="!submitted" class="px-2 md:px-6 py-5">
             <div class="space-y-4">
               <div class="grid gap-3 sm:grid-cols-2">
                 <div>
@@ -107,7 +107,7 @@
           </div>
 
           <!-- Success -->
-          <div v-else class="px-6 py-10 text-center">
+          <div v-else class="px-2 md:px-6 py-10 text-center">
             <Icon name="lucide:calendar-check" class="mx-auto mb-4 size-10" style="color: var(--color-accent);" />
             <p class="text-[1.125rem] font-light" style="font-family: var(--font-editorial);">Meeting request received.</p>
             <p class="mt-2 text-[0.875rem] text-[var(--grey)]">
@@ -117,7 +117,7 @@
           </div>
 
           <!-- Option B: Direct booking link (hidden until ready) -->
-          <!-- <div class="border-t border-[var(--silk)] px-6 py-3 text-center">
+          <!-- <div class="border-t border-[var(--silk)] px-2 md:px-6 py-3 text-center">
             <a :href="earnestBookingUrl" target="_blank" class="text-[0.6875rem] text-[var(--grey)] hover:text-[var(--near-black)]">
               Or book directly from our calendar →
             </a>

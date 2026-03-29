@@ -1,5 +1,5 @@
 <template>
-  <section class="px-6 py-16" :class="dark ? 'bg-[var(--near-black)]' : 'border-y border-[var(--silk)]'">
+  <section class="px-2 md:px-6 py-16" :class="dark ? 'bg-[var(--near-black)]' : 'border-y border-[var(--silk)]'">
     <div class="hue-container">
       <div class="mx-auto max-w-2xl text-center">
         <p class="mb-2 text-[0.625rem] font-medium uppercase tracking-[0.25em]" :class="dark ? 'text-white/25' : 'text-[var(--silver)]'">
@@ -15,20 +15,20 @@
             type="text"
             required
             placeholder="First name"
-            class="w-28 shrink-0 rounded-sm border px-3.5 py-2.5 text-[0.8125rem] outline-none transition-colors"
+            class="w-28 shrink-0 rounded-none border-0 border-b bg-transparent px-1 py-2 text-[0.8125rem] outline-none transition-colors"
             :class="dark
-              ? 'border-white/10 bg-white/5 text-white placeholder-white/25 focus:border-white/25'
-              : 'border-[var(--silk)] bg-white text-[var(--near-black)] placeholder-[var(--silver)] focus:border-[var(--silver)]'"
+              ? 'border-white/20 text-white placeholder-white/25 focus:border-white/40'
+              : 'border-[var(--silver)] text-[var(--near-black)] placeholder-[var(--silver)] focus:border-[var(--near-black)]'"
           />
           <input
             v-model="form.email"
             type="email"
             required
             placeholder="your@email.com"
-            class="min-w-0 flex-1 rounded-sm border px-3.5 py-2.5 text-[0.8125rem] outline-none transition-colors"
+            class="min-w-0 flex-1 rounded-none border-0 border-b bg-transparent px-1 py-2 text-[0.8125rem] outline-none transition-colors"
             :class="dark
-              ? 'border-white/10 bg-white/5 text-white placeholder-white/25 focus:border-white/25'
-              : 'border-[var(--silk)] bg-white text-[var(--near-black)] placeholder-[var(--silver)] focus:border-[var(--silver)]'"
+              ? 'border-white/20 text-white placeholder-white/25 focus:border-white/40'
+              : 'border-[var(--silver)] text-[var(--near-black)] placeholder-[var(--silver)] focus:border-[var(--near-black)]'"
           />
           <button
             type="submit"

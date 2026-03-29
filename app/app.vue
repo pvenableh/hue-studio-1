@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <LayoutSiteNav />
-    <main>
-      <NuxtPage />
-    </main>
-    <LayoutSiteFooter />
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 <template>
   <div v-if="cs">
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" /> All Case Studies
@@ -57,7 +57,7 @@
     </section>
 
     <!-- Challenge / Solution / Results -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container space-y-16">
         <div v-if="cs.challenge" class="grid gap-10 lg:grid-cols-[220px_1fr]">
           <div>
@@ -86,7 +86,7 @@
     </section>
 
     <!-- Connected Portfolio Items — "The Work" -->
-    <section v-if="childProjects.length" class="border-t border-[var(--silk)] px-6 py-20">
+    <section v-if="childProjects.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-8">The Work</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
@@ -118,7 +118,7 @@
     </section>
 
     <!-- Before & Afters (aggregated from connected portfolio items) -->
-    <section v-if="beforeAfters.length" class="border-t border-[var(--silk)] px-6 py-20">
+    <section v-if="beforeAfters.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-8 flex items-end justify-between">
           <p class="text-[1.75rem] font-light" style="font-family:var(--font-editorial);">Before &amp; After</p>
@@ -130,31 +130,31 @@
           class="mb-4 grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2"
         >
           <div v-if="ba.before_image" class="bg-white">
-            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-2 md:px-6 py-3">
               <div class="h-2 w-2 rounded-full bg-[var(--silver)]" />
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
             </div>
-            <p v-if="ba.caption" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
+            <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
           <div v-if="ba.after_image" class="bg-white">
-            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-2 md:px-6 py-3">
               <div class="h-2 w-2 rounded-full" style="background: var(--color-accent);" />
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
             </div>
-            <p v-if="ba.title" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
+            <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Videos (aggregated from connected portfolio items) -->
-    <section v-if="videos.length" class="border-t border-[var(--silk)] px-6 py-20">
+    <section v-if="videos.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-8">Video</p>
         <div class="space-y-8">
@@ -183,7 +183,7 @@
     </section>
 
     <!-- Gallery (from case_studies collection itself) -->
-    <section v-if="cs.gallery?.length" class="border-t border-[var(--silk)] px-6 py-16">
+    <section v-if="cs.gallery?.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Gallery</p>
         <div
@@ -211,7 +211,7 @@
       :context="cs.title ?? 'Case Study'"
     />
 
-    <section class="px-6 py-20" style="background: var(--color-accent);">
+    <section class="px-2 md:px-6 py-20" style="background: var(--color-accent);">
       <div class="hue-container flex flex-col items-center justify-between gap-8 md:flex-row">
         <h2 class="text-[1.75rem] font-light text-white" style="font-family:var(--font-editorial);">
           Ready for your own<br><em>before &amp; after?</em>
@@ -334,10 +334,21 @@ function extractVimeoId(url: string): string {
   return match?.[1] ?? ''
 }
 
+const csOgImg = computed(() => {
+  const id = cs.value?.featured_image
+    ?? cs.value?.gallery?.[0]?.directus_files_id
+    ?? portfolioItems.value?.[0]?.featured_image
+    ?? portfolioItems.value?.[0]?.images?.[0]?.directus_files_id
+  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+})
+
 useSeoMeta({
   title: `${cs.value?.title ?? 'Case Study'} | Hue Creative Agency`,
   description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.',
+  ogImage: csOgImg.value ?? undefined,
 })
 
-defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.', label: 'Case Study' } })
+if (!csOgImg.value) {
+  defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.', label: 'Case Study' } })
+}
 </script>

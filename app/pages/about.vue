@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark px-6 py-28 md:py-36">
-      <div class="hue-container grid gap-16 lg:grid-cols-2">
+    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="About" :dark="true" top="2rem" />
+      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">About Hue</p>
           <h1 class="hue-display-xl text-white">
@@ -19,7 +20,7 @@
     </section>
 
     <!-- Why Hue -->
-    <section class="hue-section px-6 py-24">
+    <section class="hue-section px-2 md:px-6 py-24">
       <div class="hue-container grid gap-16 lg:grid-cols-[1fr_400px]">
         <div>
           <p class="hue-label mb-8">Why Hue</p>
@@ -61,7 +62,7 @@
     </section>
 
     <!-- Our Process — the real 4-stage framework -->
-    <section class="hue-section-alt px-6 py-24">
+    <section class="hue-section-alt px-2 md:px-6 py-24">
       <div class="hue-container">
         <div class="mb-14">
           <p class="hue-label mb-3">Our Process</p>
@@ -89,8 +90,9 @@
     </section>
 
     <!-- Team — Camila & Peter -->
-    <section class="hue-section px-6 py-24">
-      <div class="hue-container">
+    <section class="hue-section relative overflow-hidden px-2 md:px-6 py-24">
+      <SectionWatermark word="Team" top="1rem" />
+      <div class="hue-container relative">
         <p class="hue-label mb-14">The Team</p>
         <div class="grid gap-16 lg:grid-cols-2">
 
@@ -162,7 +164,7 @@
     </section>
 
     <!-- Our Story -->
-    <section class="hue-section-alt px-6 py-24">
+    <section class="hue-section-alt px-2 md:px-6 py-24">
       <div class="hue-container grid gap-16 lg:grid-cols-[220px_1fr]">
         <div>
           <p class="hue-label">Our Story</p>
@@ -185,7 +187,7 @@
     </section>
 
     <!-- Principles -->
-    <section class="hue-section px-6 py-24">
+    <section class="hue-section px-2 md:px-6 py-24">
       <div class="hue-container">
         <p class="hue-label mb-12">Our Principles</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
@@ -202,7 +204,7 @@
     <WhyHue headline="Three things that set us apart from every other agency." />
 
     <!-- Quote -->
-    <section class="hue-section px-6 py-20 text-center">
+    <section class="hue-section px-2 md:px-6 py-20 text-center">
       <div class="hue-container-sm">
         <p class="hue-pullquote reveal">"Know thyself."</p>
         <p class="mt-4 hue-body-sm">— Plato</p>
@@ -210,7 +212,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="hue-section-dark px-6 py-24 text-center">
+    <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
         <h2 class="hue-display-lg mb-5 text-white">Ready to work together?</h2>
         <p class="mb-8 text-[0.9375rem] text-white/40">Start with a free brand audit or book a discovery call.</p>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hue-section px-6 pb-16 pt-24 md:pt-32">
+    <section class="hue-section px-2 md:px-6 pb-16 pt-24 md:pt-32">
       <div class="hue-container grid gap-16 lg:grid-cols-2">
         <div>
           <span class="mb-5 inline-flex items-center rounded-full bg-[var(--near-black)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-white">Free</span>
@@ -133,7 +133,7 @@
       </div>
     </section>
 
-    <section class="hue-section-dark px-6 py-20 text-center">
+    <section class="hue-section-dark px-2 md:px-6 py-20 text-center">
       <div class="hue-container-sm">
         <p class="hue-pullquote text-white reveal">"Know where you stand before you decide where to go."</p>
       </div>

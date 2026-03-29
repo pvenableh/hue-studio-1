@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section px-6 pb-12 pt-24 md:pt-32">
+    <section class="hue-section px-2 md:px-6 pb-12 pt-24 md:pt-32">
       <div class="hue-container grid gap-12 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5">Project Scope Builder</p>
@@ -37,7 +37,7 @@
     </section>
 
     <!-- Service Selection -->
-    <section class="border-t border-[var(--silk)] px-6 py-16">
+    <section class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Select your services</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
@@ -69,7 +69,7 @@
     </section>
 
     <!-- Visual Scope Outline -->
-    <section v-if="selectedServices.length" class="border-t border-[var(--silk)] px-6 py-16">
+    <section v-if="selectedServices.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Your scope at a glance</p>
 
@@ -116,7 +116,7 @@
     </section>
 
     <!-- What's Included in Every Engagement -->
-    <section class="border-t border-[var(--silk)] px-6 py-16">
+    <section class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <p class="hue-label">Always included</p>
@@ -135,7 +135,7 @@
     <WhyHue variant="services" headline="Why clients choose Hue for their most important work." />
 
     <!-- CTA -->
-    <section class="px-6 py-20" style="background: var(--color-accent);">
+    <section class="px-2 md:px-6 py-20" style="background: var(--color-accent);">
       <div class="hue-container flex flex-col items-center justify-between gap-8 md:flex-row">
         <div>
           <h2 class="text-[1.75rem] font-light text-white" style="font-family: var(--font-editorial);">

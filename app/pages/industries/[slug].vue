@@ -1,6 +1,6 @@
 <template>
   <div v-if="industry">
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/industries" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" /> All Industries
@@ -30,7 +30,7 @@
     </section>
 
     <!-- Challenges & Solutions -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container grid gap-12 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-8">Common challenges</p>
@@ -54,7 +54,7 @@
     </section>
 
     <!-- Services for this industry -->
-    <section class="hue-section-alt px-6 py-20">
+    <section class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-8">Services we provide</p>
         <div class="flex flex-wrap gap-3">
@@ -62,14 +62,14 @@
             v-for="svc in industry.services"
             :key="svc"
             :to="`/creative-services/${svcSlug(svc)}`"
-            class="rounded-full border border-[var(--silk)] bg-white px-5 py-2.5 text-[0.875rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+            class="rounded-full border border-[var(--silk)] bg-white px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >{{ svc }}</NuxtLink>
         </div>
       </div>
     </section>
 
     <!-- Portfolio for this industry (live Directus) -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Work in this industry</p>
@@ -117,7 +117,7 @@
     </section>
 
     <!-- Other industries -->
-    <section class="hue-section-alt px-6 py-16">
+    <section class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">Explore other industries</p>
@@ -125,7 +125,7 @@
             v-for="ind in otherIndustries"
             :key="ind.slug"
             :to="`/industries/${ind.slug}`"
-            class="rounded-full border border-[var(--silk)] px-4 py-2 text-[0.8125rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+            class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >{{ ind.shortName }}</NuxtLink>
         </div>
       </div>

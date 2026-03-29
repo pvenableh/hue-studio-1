@@ -1,6 +1,6 @@
 <template>
   <div v-if="svc">
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/creative-services" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" /> All Services
@@ -41,7 +41,7 @@
     </section>
 
     <!-- Deliverables -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-10">What's included</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-3">
@@ -59,7 +59,7 @@
     </section>
 
     <!-- Who it's for -->
-    <section class="hue-section-alt px-6 py-20">
+    <section class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-10">Who it's for</p>
         <div class="grid gap-5 md:grid-cols-3">
@@ -78,7 +78,7 @@
     </section>
 
     <!-- Process -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-10">The process</p>
         <div class="space-y-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]">
@@ -95,7 +95,7 @@
     </section>
 
     <!-- Industries cross-link -->
-    <section class="hue-section-alt px-6 py-16">
+    <section class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">We deliver this for</p>
@@ -103,14 +103,14 @@
             v-for="ind in svc.industries"
             :key="ind"
             :to="`/industries/${indSlug(ind)}`"
-            class="rounded-full border border-[var(--silk)] px-4 py-2 text-[0.8125rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+            class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >{{ ind }}</NuxtLink>
         </div>
       </div>
     </section>
 
     <!-- Related portfolio -->
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Related work</p>
@@ -156,7 +156,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="hue-section-dark px-6 py-24 text-center">
+    <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
         <h2 class="hue-display-lg mb-5 text-white">
           Ready to build a brand that

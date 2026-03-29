@@ -1,5 +1,5 @@
 <template>
-  <section class="px-6 py-20" :class="dark ? 'bg-[var(--near-black)]' : 'bg-[var(--color-accent-tint)]'" :style="dark ? '' : 'border-top: 0.5px solid var(--color-accent-tint)'">
+  <section class="px-2 md:px-6 py-20" :class="dark ? 'bg-[var(--near-black)]' : 'bg-[var(--color-accent-tint)]'" :style="dark ? '' : 'border-top: 0.5px solid var(--color-accent-tint)'">
     <div class="hue-container">
       <div class="mb-10 grid gap-8 lg:grid-cols-[220px_1fr]">
         <div>

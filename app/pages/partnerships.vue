@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hue-section px-6 pb-16 pt-24 md:pt-32">
+    <section class="hue-section px-2 md:px-6 pb-16 pt-24 md:pt-32">
       <div class="hue-container">
         <p class="hue-label mb-4">Partnerships</p>
         <h1 class="hue-display-xl mb-6 max-w-2xl">
@@ -13,7 +13,7 @@
       </div>
     </section>
 
-    <section class="hue-section-alt px-6 py-20">
+    <section class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
         <div v-for="type in partnerTypes" :key="type.title" class="bg-white p-10">
           <Icon :name="type.icon" class="mb-6 size-6 text-[var(--grey)]" />
@@ -28,7 +28,7 @@
       </div>
     </section>
 
-    <section class="hue-section px-6 py-20">
+    <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5">What we bring</p>
@@ -49,7 +49,7 @@
       </div>
     </section>
 
-    <section class="hue-section-dark px-6 py-24 text-center">
+    <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
         <h2 class="hue-display-lg mb-5 text-white">Ready to partner?</h2>
         <p class="mb-8 text-[0.9375rem] text-white/40">Let's talk about what a partnership could look like for your business.</p>

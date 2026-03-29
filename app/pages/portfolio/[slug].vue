@@ -1,7 +1,7 @@
 <template>
   <div v-if="item">
     <!-- Back -->
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/portfolio" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" />
@@ -65,7 +65,7 @@
     </section>
 
     <!-- Challenge -->
-    <section v-if="item.challenge" class="hue-section border-b border-[var(--silk)] px-6 py-20">
+    <section v-if="item.challenge" class="hue-section border-b border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">01</span>
@@ -78,7 +78,7 @@
     </section>
 
     <!-- Creation / Process -->
-    <section v-if="item.creation" class="hue-section border-b border-[var(--silk)] px-6 py-20">
+    <section v-if="item.creation" class="hue-section border-b border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">02</span>
@@ -91,7 +91,7 @@
     </section>
 
     <!-- Before / After -->
-    <section v-if="beforeAfters.length" class="border-b border-[var(--silk)] px-6 py-20">
+    <section v-if="beforeAfters.length" class="border-b border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-8 flex items-end justify-between">
           <p class="text-[1.75rem] font-light" style="font-family:var(--font-editorial);">Before &amp; After</p>
@@ -103,31 +103,31 @@
           class="mb-4 grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2"
         >
           <div v-if="ba.before_image" class="bg-white">
-            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-2 md:px-6 py-3">
               <div class="h-2 w-2 rounded-full bg-[var(--silver)]" />
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
             </div>
-            <p v-if="ba.caption" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
+            <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
           <div v-if="ba.after_image" class="bg-white">
-            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-6 py-3">
+            <div class="flex items-center gap-2.5 border-b border-[var(--silk)] px-2 md:px-6 py-3">
               <div class="h-2 w-2 rounded-full" style="background: var(--color-accent);" />
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
               <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
             </div>
-            <p v-if="ba.title" class="border-t border-[var(--silk)] px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
+            <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Image gallery -->
-    <section v-if="galleryImages.length > 1" class="border-b border-[var(--silk)] px-6 py-16">
+    <section v-if="galleryImages.length > 1" class="border-b border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Gallery</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]"
@@ -146,7 +146,7 @@
     </section>
 
     <!-- Child projects -->
-    <section v-if="item.projects?.length" class="border-b border-[var(--silk)] px-6 py-16">
+    <section v-if="item.projects?.length" class="border-b border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Project Deliverables</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
@@ -169,7 +169,7 @@
     </section>
 
     <!-- Results / Outcome -->
-    <section v-if="item.results" class="bg-[var(--near-black)] px-6 py-20">
+    <section v-if="item.results" class="bg-[var(--near-black)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="mb-5 text-[0.625rem] uppercase tracking-[0.25em]" style="color: var(--color-accent);">The Outcome</p>
         <div class="mb-10 max-w-lg text-[2.25rem] font-light leading-tight text-white" style="font-family:var(--font-editorial);" v-html="item.results" />
@@ -177,7 +177,7 @@
     </section>
 
     <!-- Related industry -->
-    <section v-if="validIndustries.length" class="hue-section px-6 py-16">
+    <section v-if="validIndustries.length" class="hue-section px-2 md:px-6 py-16">
       <div class="hue-container flex flex-wrap items-center gap-4">
         <p class="hue-label">More in this industry</p>
         <NuxtLink
@@ -201,7 +201,7 @@
       :context="item.name ?? 'Case Study'"
     />
 
-    <section class="px-6 py-20" style="background: var(--color-accent);">
+    <section class="px-2 md:px-6 py-20" style="background: var(--color-accent);">
       <div class="hue-container flex flex-col items-center justify-between gap-8 md:flex-row">
         <h2 class="text-[1.75rem] font-light text-white" style="font-family:var(--font-editorial);">
           Ready for your own<br><em>before &amp; after?</em>
@@ -261,10 +261,20 @@ function childImgUrl(child: DirectusPortfolioItem) {
   return id ? assetUrl(id, { width: 500, height: 375, fit: 'cover', quality: 80 }) : null
 }
 
-useSeoMeta({
-  title: `${item.value?.name ?? 'Project'} | Portfolio | Hue`,
-  description: item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`,
+const ogImg = computed(() => {
+  const id = item.value ? primaryImageId(item.value) : null
+  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
 })
 
-defineOgImage({ component: 'HueOg', props: { title: item.value?.name ?? 'Project', description: item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`, label: 'Portfolio' } })
+const ogDesc = computed(() => item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`)
+
+useSeoMeta({
+  title: `${item.value?.name ?? 'Project'} | Portfolio | Hue`,
+  description: ogDesc.value,
+  ogImage: ogImg.value ?? undefined,
+})
+
+if (!ogImg.value) {
+  defineOgImage({ component: 'HueOg', props: { title: item.value?.name ?? 'Project', description: ogDesc.value, label: 'Portfolio' } })
+}
 </script>

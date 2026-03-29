@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark px-6 py-28 md:py-36">
-      <div class="hue-container grid gap-16 lg:grid-cols-2">
+    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="Industries" :dark="true" top="2rem" />
+      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">Industries</p>
           <h1 class="hue-display-xl text-white">
@@ -19,7 +20,7 @@
     </section>
 
     <!-- Industry grid -->
-    <section class="hue-section px-6 py-16">
+    <section class="hue-section px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
@@ -52,7 +53,7 @@
     </section>
 
     <!-- Why industry matters -->
-    <section class="hue-section-dark px-6 py-24">
+    <section class="hue-section-dark px-2 md:px-6 py-24">
       <div class="hue-container">
         <p class="hue-label mb-10 text-white/40">Why it matters</p>
         <div class="grid gap-px overflow-hidden rounded-sm bg-white/5 md:grid-cols-3">
@@ -66,7 +67,7 @@
     </section>
 
     <!-- Services cross-link -->
-    <section class="hue-section px-6 py-16">
+    <section class="hue-section px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">Our services</p>
@@ -74,14 +75,14 @@
             v-for="svc in serviceLinks"
             :key="svc.to"
             :to="svc.to"
-            class="rounded-full border border-[var(--silk)] px-4 py-2 text-[0.8125rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+            class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >{{ svc.label }}</NuxtLink>
         </div>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="hue-section-alt px-6 py-20">
+    <section class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container flex flex-col items-center justify-between gap-8 sm:flex-row">
         <div>
           <h2 class="hue-display-md mb-2">Don't see your industry?</h2>

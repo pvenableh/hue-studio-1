@@ -41,6 +41,9 @@ const props = defineProps({
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
+.h {
+  fill: v-bind(color);
+}
 .cls-1 {
   fill: v-bind(color);
 }

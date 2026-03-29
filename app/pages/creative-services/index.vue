@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark px-6 py-28 md:py-36">
-      <div class="hue-container">
+    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="Services" :dark="true" top="2rem" />
+      <div class="hue-container relative">
         <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">Creative Services</p>
         <h1 ref="heroTitle" class="hue-display-xl max-w-3xl text-white opacity-0">
           Every service built around<br>one goal:
@@ -15,7 +16,7 @@
     </section>
 
     <!-- Stats strip -->
-    <section class="border-b border-[var(--silk)] bg-[var(--snow)] px-6 py-8">
+    <section class="border-b border-[var(--silk)] px-2 md:px-6 py-8" style="background: var(--accent-tint);">
       <div class="hue-container grid grid-cols-2 gap-6 sm:grid-cols-4">
         <div v-for="s in stats" :key="s.label" class="text-center">
           <p class="hue-editorial-lg">{{ s.value }}</p>
@@ -25,8 +26,9 @@
     </section>
 
     <!-- Packages -->
-    <section id="packages" class="hue-section px-6 py-24 md:py-32">
-      <div class="hue-container">
+    <section id="packages" class="hue-section relative overflow-hidden px-2 md:px-6 py-24 md:py-32">
+      <SectionWatermark word="Packages" top="2rem" />
+      <div class="hue-container relative">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Packages</p>
           <h2 class="hue-display-lg">Three tiers. One goal.</h2>
@@ -83,7 +85,7 @@
     </section>
 
     <!-- Custom Scope CTA -->
-    <section class="border-t border-[var(--silk)] bg-[var(--snow)] px-6 py-14">
+    <section class="border-t border-[var(--silk)] bg-[var(--snow)] px-2 md:px-6 py-14">
       <div class="hue-container flex flex-col items-center justify-between gap-6 md:flex-row">
         <div>
           <p class="hue-label mb-2">Need something custom?</p>
@@ -99,8 +101,9 @@
     </section>
 
     <!-- Service detail list -->
-    <section class="hue-section-alt px-6 py-24 md:py-32">
-      <div class="hue-container">
+    <section class="hue-section-alt relative overflow-hidden px-2 md:px-6 py-24 md:py-32">
+      <SectionWatermark word="Disciplines" top="1rem" />
+      <div class="hue-container relative">
         <div class="mb-14">
           <p class="hue-label mb-3">All Services</p>
           <h2 class="hue-display-lg">Six disciplines.<br>One studio.</h2>
@@ -196,7 +199,7 @@
     </section>
 
     <!-- Retainers -->
-    <section id="retainers" class="hue-section px-6 py-24 md:py-32">
+    <section id="retainers" class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Ongoing Partnership</p>
@@ -236,7 +239,7 @@
     </section>
 
     <!-- À la carte -->
-    <section id="alacarte" class="hue-section-alt px-6 py-24 md:py-32">
+    <section id="alacarte" class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14">
           <p class="hue-label mb-3">À La Carte</p>
@@ -259,7 +262,7 @@
     </section>
 
     <!-- How We Build — Tech Stack -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14">
           <p class="hue-label mb-3">How We Build</p>
@@ -282,16 +285,16 @@
           <table class="w-full text-left text-[0.8125rem]">
             <thead>
               <tr class="border-b border-[var(--silk)] bg-[var(--snow)]">
-                <th class="px-6 py-4 font-medium text-[var(--grey)]">Capability</th>
-                <th class="px-6 py-4 font-medium text-[var(--silver)]">WordPress / Drupal</th>
-                <th class="px-6 py-4 font-medium text-[var(--near-black)]">Nuxt + Directus</th>
+                <th class="px-2 md:px-6 py-4 font-medium text-[var(--grey)]">Capability</th>
+                <th class="px-2 md:px-6 py-4 font-medium text-[var(--silver)]">WordPress / Drupal</th>
+                <th class="px-2 md:px-6 py-4 font-medium text-[var(--near-black)]">Nuxt + Directus</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="row in comparisonRows" :key="row.capability" class="border-b border-[var(--silk)] last:border-0">
-                <td class="px-6 py-4 font-medium">{{ row.capability }}</td>
-                <td class="px-6 py-4 text-[var(--silver)]">{{ row.legacy }}</td>
-                <td class="px-6 py-4 text-[var(--near-black)]">{{ row.modern }}</td>
+                <td class="px-2 md:px-6 py-4 font-medium">{{ row.capability }}</td>
+                <td class="px-2 md:px-6 py-4 text-[var(--silver)]">{{ row.legacy }}</td>
+                <td class="px-2 md:px-6 py-4 text-[var(--near-black)]">{{ row.modern }}</td>
               </tr>
             </tbody>
           </table>
@@ -306,7 +309,7 @@
     <PostLaunch />
 
     <!-- Process -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14">
           <p class="hue-label mb-3">How We Work</p>
@@ -335,7 +338,7 @@
     />
 
     <!-- CTA — dual path -->
-    <section class="hue-section-dark px-6 py-24">
+    <section class="hue-section-dark px-2 md:px-6 py-24">
       <div class="hue-container grid gap-px overflow-hidden rounded-sm md:grid-cols-2">
         <div class="bg-[#111110] p-10 text-center">
           <p class="mb-3 text-[0.625rem] font-medium uppercase tracking-[0.25em] text-white/25">Ready to start</p>

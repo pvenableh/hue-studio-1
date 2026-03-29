@@ -1,7 +1,7 @@
 <template>
   <div v-if="post">
     <!-- Breadcrumb -->
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/magazine" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" /> Magazine
@@ -10,7 +10,7 @@
     </div>
 
     <!-- Article Header -->
-    <section class="px-6 py-16 md:py-24">
+    <section class="px-2 md:px-6 py-16 md:py-24">
       <div class="hue-container-sm text-center">
         <div v-if="primaryCategory" class="mb-5">
           <NuxtLink
@@ -33,7 +33,7 @@
     </section>
 
     <!-- Featured Image -->
-    <section v-if="heroImgSrc" class="px-6 pb-16">
+    <section v-if="heroImgSrc" class="px-2 md:px-6 pb-16">
       <div class="hue-container">
         <img
           :src="heroImgSrc"
@@ -45,26 +45,26 @@
     </section>
 
     <!-- Article Body -->
-    <section class="px-6 pb-20">
+    <section class="px-2 md:px-6 pb-20">
       <div class="hue-container-sm">
         <MagazineArticleBody v-if="post.body" :content="post.body" />
       </div>
     </section>
 
     <!-- Tags / Taxonomy -->
-    <section v-if="allTags.length" class="border-t border-[var(--silk)] px-6 py-10">
+    <section v-if="allTags.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-10">
       <div class="hue-container-sm flex flex-wrap items-center gap-3">
         <NuxtLink
           v-for="tag in allTags"
           :key="tag.url"
           :to="tag.url"
-          class="rounded-full border border-[var(--silk)] px-4 py-1.5 text-[0.8125rem] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+          class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
         >{{ tag.name }}</NuxtLink>
       </div>
     </section>
 
     <!-- Author Bio -->
-    <section v-if="post.author" class="border-t border-[var(--silk)] px-6 py-16">
+    <section v-if="post.author" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
       <div class="hue-container-sm grid gap-6 sm:grid-cols-[auto_1fr]">
         <NuxtLink v-if="post.author.url" :to="`/team/${post.author.url}`">
           <img
@@ -141,21 +141,46 @@ const allTags = computed(() => {
   return tags
 })
 
+const ogImageUrl = computed(() => {
+  const id = post.value?.featured_image ?? post.value?.images?.[0]?.directus_files_id
+  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+})
+
+const seo = post.value?.seo
+
 useSeoMeta({
-  title: `${post.value?.title} | hue: magazine`,
-  description: post.value?.excerpt ?? undefined,
+  title: seo?.title || `${post.value?.title} | hue: magazine`,
+  description: seo?.description || post.value?.excerpt ?? undefined,
   ogType: 'article',
+  ogImage: ogImageUrl.value ?? undefined,
   articlePublishedTime: post.value?.date_published ?? undefined,
   articleAuthor: authorName.value || undefined,
   articleSection: primaryCategory.value?.name ?? undefined,
 })
 
-defineOgImage({
-  component: 'HueOg',
-  props: {
-    title: post.value?.title ?? '',
-    description: post.value?.excerpt ?? '',
-    label: 'Magazine',
+if (!ogImageUrl.value) {
+  defineOgImage({
+    component: 'HueOg',
+    props: {
+      title: post.value?.title ?? '',
+      description: post.value?.excerpt ?? '',
+      label: 'Magazine',
+    },
+  })
+}
+
+useSchemaOrg([
+  {
+    '@type': 'Article',
+    'headline': post.value?.title ?? '',
+    'description': post.value?.excerpt ?? '',
+    'image': ogImageUrl.value ?? undefined,
+    'datePublished': post.value?.date_published ?? undefined,
+    'dateModified': post.value?.date_updated ?? undefined,
+    'author': {
+      '@type': 'Person',
+      'name': authorName.value,
+    },
   },
-})
+])
 </script>

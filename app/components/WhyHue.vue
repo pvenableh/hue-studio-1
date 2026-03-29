@@ -1,5 +1,5 @@
 <template>
-  <section class="border-y border-[var(--silk)] bg-[var(--near-black)] px-6 py-20">
+  <section class="border-y border-[var(--silk)] bg-[var(--near-black)] px-2 md:px-6 py-20">
     <div class="hue-container">
       <p class="mb-3 text-[0.625rem] uppercase tracking-[0.25em]" style="color: var(--color-accent-on-dark);">Why Hue</p>
       <h2 v-if="headline" class="mb-12 max-w-lg text-[1.75rem] font-light leading-tight text-white" style="font-family: var(--font-editorial);">
@@ -18,7 +18,7 @@
       </div>
 
       <div v-if="showCta" class="mt-10 flex items-center gap-6">
-        <NuxtLink to="/contact" class="inline-block rounded-sm border border-white/20 px-6 py-3 text-[0.6875rem] uppercase tracking-wider text-white/70 transition-colors hover:border-white/50 hover:text-white">
+        <NuxtLink to="/contact" class="inline-block rounded-sm border border-white/20 px-2 md:px-6 py-3 text-[0.6875rem] uppercase tracking-wider text-white/70 transition-colors hover:border-white/50 hover:text-white">
           Book a Strategy Session →
         </NuxtLink>
         <NuxtLink to="/about" class="text-[0.75rem] text-white/30 transition-colors hover:text-white/60">

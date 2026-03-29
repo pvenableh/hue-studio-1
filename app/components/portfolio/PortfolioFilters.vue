@@ -3,7 +3,7 @@
   <div class="fixed bottom-6 left-1/2 z-40 -translate-x-1/2">
     <div
       class="relative flex items-center gap-3 rounded-full border border-[var(--silk)] bg-white/95 shadow-lg backdrop-blur-md transition-all duration-300"
-      :class="expanded ? 'px-6 py-4' : 'px-5 py-2.5 cursor-pointer hover:shadow-xl'"
+      :class="expanded ? 'px-2 md:px-6 py-4' : 'px-5 py-2.5 cursor-pointer hover:shadow-xl'"
       @mouseenter="expanded = true"
       @mouseleave="delayCollapse"
     >

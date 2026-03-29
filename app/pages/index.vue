@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- ═══ HERO ═══ -->
-    <section class="hue-section-dark relative overflow-hidden px-6 py-28 md:py-36">
+    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
       <div class="hue-container relative z-10 grid gap-16 lg:grid-cols-2">
         <div>
           <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">
@@ -32,7 +32,7 @@
     </section>
 
     <!-- ═══ PHILOSOPHY ═══ -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container-sm text-center">
         <div class="mx-auto mb-10 h-px w-10 bg-[var(--silk)]" />
         <p class="hue-editorial-lg mb-7 reveal">
@@ -49,7 +49,7 @@
     </section>
 
     <!-- ═══ SERVICE PACKAGES ═══ -->
-    <section class="hue-section-alt px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">What We Do</p>
@@ -90,7 +90,7 @@
     </section>
 
     <!-- ═══ THE PROCESS ═══ -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 grid gap-8 lg:grid-cols-2 lg:items-end">
           <div>
@@ -121,7 +121,7 @@
     </section>
 
     <!-- ═══ FEATURED WORK ═══ -->
-    <section class="hue-section-alt px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 flex items-end justify-between">
           <div>
@@ -138,7 +138,7 @@
     </section>
 
     <!-- ═══ INDUSTRIES ═══ -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Industries</p>
@@ -171,7 +171,7 @@
     </section>
 
     <!-- ═══ ABOUT STRIP ═══ -->
-    <section class="hue-section-dark px-6 py-24 md:py-32">
+    <section class="hue-section-dark px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">About Hue</p>
@@ -197,7 +197,7 @@
     </section>
 
     <!-- ═══ BRAND AUDIT CTA ═══ -->
-    <section class="hue-section px-6 py-24 md:py-32">
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="hue-grid-bordered grid-cols-1 lg:grid-cols-3">
           <div class="col-span-2 p-10 lg:p-14">
@@ -224,7 +224,7 @@
     </section>
 
     <!-- ═══ CLOSING QUOTE ═══ -->
-    <section class="hue-section-dark px-6 py-32 text-center md:py-44">
+    <section class="hue-section-dark px-2 md:px-6 py-32 text-center md:py-44">
       <div class="hue-container-sm">
         <p class="hue-pullquote reveal text-white">
           "Design is intelligence<br class="hidden md:block"> made visible."

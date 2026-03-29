@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="hue-section px-6 pb-0 pt-24 md:pt-32">
+    <section class="hue-section px-2 md:px-6 pb-0 pt-24 md:pt-32">
       <div class="hue-container grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5">Let's Talk</p>

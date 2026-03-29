@@ -1,7 +1,7 @@
 <template>
   <footer class="bg-[var(--near-black)]">
     <!-- CTA strip — hidden on pages that have their own CTA section -->
-    <div v-if="showCta" class="border-b border-white/10 px-6 py-16 text-center">
+    <div v-if="showCta" class="border-b border-white/10 px-2 md:px-6 py-16 text-center">
       <div class="mx-auto max-w-md">
         <p class="hue-label mb-4 text-white/40">Start a Project</p>
         <h2 class="hue-display-lg mb-6 text-white">Let's create what<br>is possible.</h2>
@@ -16,7 +16,7 @@
     </div>
 
     <!-- Newsletter strip -->
-    <div class="border-b border-white/10 px-6 py-12">
+    <div class="border-b border-white/10 px-2 md:px-6 py-12">
       <div class="hue-container flex flex-col items-center justify-between gap-6 md:flex-row">
         <div>
           <p class="hue-label mb-2 text-white/50">Stay in the loop</p>
@@ -28,7 +28,7 @@
             type="email"
             required
             placeholder="your@email.com"
-            class="flex-1 rounded-sm border border-white/10 bg-white/5 px-4 py-2.5 text-[0.875rem] text-white placeholder-white/25 outline-none transition focus:border-white/25"
+            class="flex-1 rounded-none border-0 border-b border-white/20 bg-transparent px-1 py-2 text-[0.875rem] text-white placeholder-white/25 outline-none transition focus:border-white/40"
           />
           <button type="submit" class="hue-btn shrink-0 text-[0.6875rem]" :disabled="subscribing">
             <span v-if="subscribing">…</span>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- Footer grid -->
-    <div class="hue-container px-6 py-16 ">
+    <div class="hue-container px-2 md:px-6 py-16 ">
       <div class="grid gap-12 md:grid-cols-4 my-20">
         <div class="md:col-span-1">
           <LayoutLogo fill="grey" size="18px" class="shrink-0 w-12"/>

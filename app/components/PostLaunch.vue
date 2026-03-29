@@ -1,5 +1,5 @@
 <template>
-  <section class="border-y border-[var(--silk)] px-6 py-20">
+  <section class="border-y border-[var(--silk)] px-2 md:px-6 py-20">
     <div class="hue-container">
       <div class="mb-10 grid gap-8 lg:grid-cols-[220px_1fr]">
         <div>

@@ -4,8 +4,8 @@
     :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
   >
     <!-- Audit announcement bar -->
-    <NuxtLink to="/brand-audit" class="block px-4 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
-      <div class="hue-container flex items-center justify-between gap-4">
+    <NuxtLink to="/brand-audit" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
+      <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-2.5">
           <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
           <p class="text-[0.78rem] text-white/80">
@@ -21,43 +21,38 @@
     </NuxtLink>
 
     <!-- Main nav -->
-    <nav class="border-b border-[var(--color-border)] bg-white/95 backdrop-blur-md">
-      <div class="hue-container flex h-14 items-center justify-between">
-        <NuxtLink to="/">
-          <LayoutLogo size="18px" class="shrink-0 w-20" />
+    <nav class="bg-white/70 backdrop-blur-xl">
+      <div class="flex h-16 items-end px-2 md:px-6 pb-3">
+        <NuxtLink to="/" class="shrink-0">
+          <LayoutLogo size="18px" class="w-20" />
         </NuxtLink>
 
         <!-- Desktop links -->
-        <div class="hidden items-center gap-7 md:flex">
+        <div class="ml-auto hidden items-end gap-8 md:flex">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-[0.6875rem] font-medium uppercase tracking-wider text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
+            class="text-[0.5rem] font-medium uppercase tracking-[0.3em] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
             active-class="!text-[var(--near-black)]"
           >
             {{ link.label }}
           </NuxtLink>
         </div>
 
-        <div class="flex items-center gap-3">
-          <div class="hidden sm:block">
-            <MeetingRequest />
-          </div>
-          <!-- Mobile menu toggle -->
-          <button
-            class="flex h-9 w-9 items-center justify-center rounded-sm border border-[var(--silk)] md:hidden"
-            @click="mobileOpen = !mobileOpen"
-            aria-label="Toggle menu"
-          >
-            <Icon :name="mobileOpen ? 'lucide:x' : 'lucide:menu'" class="size-4" />
-          </button>
-        </div>
+        <!-- Mobile menu toggle -->
+        <button
+          class="ml-auto mr-1 flex h-9 w-9 items-center justify-center md:hidden"
+          @click="mobileOpen = !mobileOpen"
+          aria-label="Toggle menu"
+        >
+          <Icon :name="mobileOpen ? 'lucide:x' : 'lucide:menu'" class="size-4" />
+        </button>
       </div>
 
       <!-- Mobile menu -->
       <Transition name="mobile-menu">
-        <div v-if="mobileOpen" class="border-t border-[var(--silk)] bg-white px-6 py-4 md:hidden">
+        <div v-if="mobileOpen" class="border-t border-[var(--silk)] bg-white px-2 md:px-6 py-4 md:hidden">
           <div class="flex flex-col gap-4">
             <NuxtLink
               v-for="link in navLinks"

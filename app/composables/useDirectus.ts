@@ -167,6 +167,7 @@ export interface DirectusBlogPost {
   excerpt: string | null
   body: string | null
   featured_image: string | null
+  seo: { title?: string; description?: string; image?: string } | null
   date_published: string | null
   date_created: string | null
   date_updated: string | null
@@ -489,7 +490,11 @@ export function useDirectus() {
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   function primaryImageId(item: DirectusPortfolioItem): string | null {
-    return item.featured_image ?? item.images?.[0]?.directus_files_id ?? null
+    return item.featured_image
+      ?? item.images?.[0]?.directus_files_id
+      ?? item.projects?.[0]?.featured_image
+      ?? item.projects?.[0]?.images?.[0]?.directus_files_id
+      ?? null
   }
 
   function resolvedBeforeAfters(item: DirectusPortfolioItem): DirectusBeforeAndAfter[] {
@@ -514,7 +519,7 @@ export function useDirectus() {
   // ── Blog / Magazine ────────────────────────────────────────────
 
   const BLOG_FIELDS = [
-    'id', 'status', 'title', 'slug', 'excerpt', 'body', 'featured_image',
+    'id', 'status', 'title', 'slug', 'excerpt', 'body', 'featured_image', 'seo',
     'date_published', 'date_created', 'date_updated', 'reading_time', 'featured',
     'author.id', 'author.first_name', 'author.last_name', 'author.title',
     'author.image', 'author.photo', 'author.url',

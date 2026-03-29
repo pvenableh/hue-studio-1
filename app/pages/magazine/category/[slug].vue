@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Breadcrumb -->
-    <div class="border-b border-[var(--silk)] bg-white px-6 py-3">
+    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
       <div class="hue-container">
         <NuxtLink to="/magazine" class="hue-link text-[0.8125rem] text-[var(--grey)]">
           <Icon name="lucide:arrow-left" class="size-3.5" /> Magazine
@@ -10,7 +10,7 @@
     </div>
 
     <!-- Category Hero -->
-    <section class="hue-section px-6 py-16 md:py-24">
+    <section class="hue-section px-2 md:px-6 py-16 md:py-24">
       <div class="hue-container">
         <p class="hue-label mb-4">Category</p>
         <h1 class="hue-display-lg mb-4">{{ categoryName }}</h1>
@@ -19,7 +19,7 @@
     </section>
 
     <!-- Articles Grid -->
-    <section class="hue-section-alt px-6 py-16">
+    <section class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container">
         <div v-if="pending" class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           <div v-for="i in 6" :key="i" class="animate-pulse">

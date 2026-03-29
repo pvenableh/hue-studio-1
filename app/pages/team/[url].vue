@@ -37,7 +37,7 @@
     </section>
 
     <!-- Bio -->
-    <section v-if="member.extended_bio || member.bio" class="hue-section px-6 py-20">
+    <section v-if="member.extended_bio || member.bio" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container-sm">
         <p class="hue-label mb-8">About</p>
         <div class="hue-body-lg space-y-5 text-[var(--color-text-secondary)]" v-html="member.extended_bio ?? member.bio" />
@@ -45,21 +45,21 @@
     </section>
 
     <!-- Specialties -->
-    <section v-if="member.specialties?.length" class="hue-section-alt px-6 py-16">
+    <section v-if="member.specialties?.length" class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Specialties</p>
         <div class="flex flex-wrap gap-3">
           <span
             v-for="s in member.specialties"
             :key="s"
-            class="rounded-full border border-[var(--silk)] bg-white px-5 py-2.5 text-[0.875rem] text-[var(--grey)]"
+            class="rounded-full border border-[var(--silk)] bg-white px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)]"
           >{{ s }}</span>
         </div>
       </div>
     </section>
 
     <!-- Case Studies / Projects -->
-    <section v-if="caseStudies?.length" class="hue-section px-6 py-20">
+    <section v-if="caseStudies?.length" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Projects</p>
@@ -93,7 +93,7 @@
     </section>
 
     <!-- Latest Articles -->
-    <section v-if="posts?.length" class="hue-section-alt px-6 py-20">
+    <section v-if="posts?.length" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Latest articles</p>
@@ -108,7 +108,7 @@
     </section>
 
     <!-- Career Timeline -->
-    <section v-if="member.resume_highlights?.length" class="hue-section px-6 py-20">
+    <section v-if="member.resume_highlights?.length" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container-sm">
         <p class="hue-label mb-10">Career</p>
         <div class="space-y-8 border-l border-[var(--silk)] pl-8">
@@ -126,7 +126,7 @@
     </section>
 
     <!-- Education -->
-    <section v-if="member.education?.length" class="hue-section-alt px-6 py-16">
+    <section v-if="member.education?.length" class="hue-section-alt px-2 md:px-6 py-16">
       <div class="hue-container-sm">
         <p class="hue-label mb-8">Education</p>
         <div class="space-y-4">
@@ -192,12 +192,20 @@ function csService(cs: DirectusCaseStudy) {
   return cs.services?.[0]?.services_id?.name ?? null
 }
 
+const teamOgImg = computed(() => {
+  const id = member.value?.photo ?? member.value?.image
+  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+})
+
 useSeoMeta({
   title: `${fullName.value} | ${member.value?.title} | Hue`,
   description: member.value?.headline ?? `${fullName.value}, ${member.value?.title} at Hue Creative Agency.`,
+  ogImage: teamOgImg.value ?? undefined,
 })
 
-defineOgImage({ component: 'HueOg', props: { title: fullName.value, description: member.value?.title ?? '', label: 'Team' } })
+if (!teamOgImg.value) {
+  defineOgImage({ component: 'HueOg', props: { title: fullName.value, description: member.value?.title ?? '', label: 'Team' } })
+}
 
 useSchemaOrg([
   {
