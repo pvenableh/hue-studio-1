@@ -369,6 +369,10 @@ export function useDirectus() {
     'portfolio_items.portfolio_id.videos.title',
     'portfolio_items.portfolio_id.videos.description',
     'portfolio_items.portfolio_id.hero',
+    'portfolio_items.portfolio_id.projects.id',
+    'portfolio_items.portfolio_id.projects.name',
+    'portfolio_items.portfolio_id.projects.featured_image',
+    'portfolio_items.portfolio_id.projects.images.directus_files_id',
   ]
 
   async function fetchCaseStudies(options: { limit?: number; featured?: boolean } = {}): Promise<DirectusCaseStudy[]> {

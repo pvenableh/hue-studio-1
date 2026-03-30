@@ -156,6 +156,15 @@ function cardImage(cs: DirectusCaseStudy): string | null {
     return assetUrl(anyWithGallery.portfolio_id.images[0].directus_files_id, { width: 700, quality: 80 })
   }
 
+  // 5. Check child projects of linked portfolio items
+  for (const pi of portfolioItems) {
+    const projects = (pi.portfolio_id as any)?.projects ?? []
+    for (const child of projects) {
+      const childId = child.featured_image ?? child.images?.[0]?.directus_files_id
+      if (childId) return assetUrl(childId, { width: 700, quality: 80 })
+    }
+  }
+
   return null
 }
 

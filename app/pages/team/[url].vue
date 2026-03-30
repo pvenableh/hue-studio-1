@@ -1,20 +1,32 @@
 <template>
   <div v-if="member">
     <!-- Hero -->
-    <section class="grid border-b border-[var(--silk)] lg:grid-cols-[480px_1fr]">
-      <div class="relative overflow-hidden bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 640px;">
-        <img
-          v-if="heroImgSrc"
-          :src="heroImgSrc"
-          :alt="fullName"
-          class="h-full w-full object-cover"
-        />
-      </div>
-      <div class="flex flex-col justify-center px-8 py-14 lg:px-16 lg:py-20">
-        <p class="hue-label mb-3">Team</p>
-        <h1 class="mb-2 text-[clamp(2rem,4vw,3rem)] font-light leading-[1.1]">{{ fullName }}</h1>
-        <p v-if="member.title" class="mb-4 text-[1.0625rem] text-[var(--grey)]">{{ member.title }}</p>
-        <p v-if="member.headline" class="hue-editorial-md mb-8 max-w-lg">{{ member.headline }}</p>
+    <section class="relative overflow-hidden bg-[var(--cloud)]" style="min-height: 80vh;">
+      <img
+        v-if="heroImgSrc"
+        :src="heroImgSrc"
+        :alt="fullName"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+      <!-- Name overlay -->
+      <h1
+        class="absolute bottom-0 left-0 px-4 pb-6 md:px-10 md:pb-10 text-[clamp(3rem,8vw,7rem)] italic leading-[0.95] text-white/90"
+        style="font-family: var(--font-editorial);"
+      >
+        {{ member.first_name }}<br>{{ member.last_name }}
+      </h1>
+    </section>
+
+    <!-- Info bar -->
+    <section class="px-2 md:px-6 py-10">
+      <div class="hue-container flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="hue-label mb-2">Team</p>
+          <p v-if="member.title" class="text-[1.0625rem] text-[var(--grey)]">{{ member.title }}</p>
+          <p v-if="member.headline" class="hue-editorial-md mt-2 max-w-lg">{{ member.headline }}</p>
+        </div>
         <div class="flex flex-wrap gap-3">
           <a
             v-if="member.linkedin_url"
@@ -185,7 +197,23 @@ const { data: caseStudies } = await useAsyncData(
 )
 
 function csImg(cs: DirectusCaseStudy) {
-  return cs.featured_image ? assetUrl(cs.featured_image, { width: 600, quality: 80 }) : null
+  // 1. Case study's own image
+  let id = cs.featured_image ?? cs.gallery?.[0]?.directus_files_id
+  if (id) return assetUrl(id, { width: 600, quality: 80 })
+
+  // 2. Check linked portfolio items and their child projects
+  for (const pi of cs.portfolio_items ?? []) {
+    const p = pi.portfolio_id
+    if (!p) continue
+    id = p.featured_image ?? p.images?.[0]?.directus_files_id
+    if (id) return assetUrl(id, { width: 600, quality: 80 })
+    // Check child projects
+    for (const child of (p as any).projects ?? []) {
+      id = child.featured_image ?? child.images?.[0]?.directus_files_id
+      if (id) return assetUrl(id, { width: 600, quality: 80 })
+    }
+  }
+  return null
 }
 
 function csService(cs: DirectusCaseStudy) {
