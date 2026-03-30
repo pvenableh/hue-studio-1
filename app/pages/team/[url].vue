@@ -1,7 +1,7 @@
 <template>
   <div v-if="member">
-    <!-- Hero -->
-    <section class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(400px, 50vh, 600px);">
+    <!-- Hero (pinned) -->
+    <section ref="heroRef" class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(400px, 50vh, 600px);">
       <!-- Blurred background fill -->
       <img
         v-if="heroImgSrc"
@@ -14,6 +14,7 @@
       <!-- Sharp portrait centered -->
       <img
         v-if="heroImgSrc"
+        ref="bgWordRef"
         :src="heroImgSrc"
         :alt="fullName"
         class="absolute inset-0 mx-auto h-full object-contain drop-shadow-2xl"
@@ -23,6 +24,7 @@
 
       <!-- Name overlay -->
       <h1
+        ref="heroTitle"
         class="absolute bottom-[clamp(2.5rem,6vw,4rem)] left-0 px-4 md:px-10 uppercase leading-[0.95] tracking-[0.08em] font-light text-white/90"
         style="font-family: var(--font); font-size: clamp(2.5rem, 6vw, 4.5rem);"
       >
@@ -36,7 +38,7 @@
       <div class="hue-container flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="hue-label mb-2">Team</p>
-          <p v-if="member.title" class="text-[1.0625rem] text-[var(--grey)]">{{ member.title }}</p>
+          <p v-if="member.title" class="text-[1.0625rem] text-[var(--grey)] whitespace-nowrap">{{ member.title }}</p>
           <p v-if="member.headline" class="hue-editorial-md mt-2 max-w-lg">{{ member.headline }}</p>
         </div>
         <div class="flex flex-wrap gap-3">
@@ -181,6 +183,14 @@ import type { DirectusCaseStudy } from '~/composables/useDirectus'
 
 const route = useRoute()
 const { fetchTeamMember, fetchTeamMemberPosts, fetchCaseStudies, assetUrl } = useDirectus()
+const { parallaxElement, staggerEntrance } = useHeroAnimations()
+
+const heroRef = ref<HTMLElement | null>(null)
+const bgWordRef = ref<HTMLElement | null>(null)
+const heroTitle = ref<HTMLElement | null>(null)
+
+parallaxElement(bgWordRef, 0.15) // Subtle parallax on the portrait
+staggerEntrance([heroTitle], { delay: 0.3 })
 
 const { data: member } = await useAsyncData(
   `team-${route.params.url}`,

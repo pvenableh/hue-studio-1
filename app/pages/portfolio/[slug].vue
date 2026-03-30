@@ -1,22 +1,23 @@
 <template>
   <div v-if="item">
     <!-- Back -->
-    <div class="bg-white px-4 md:px-6 py-2">
+    <div class="bg-white px-2 py-2">
       <NuxtLink to="/portfolio" class="hue-link text-[0.6875rem] text-[var(--silver)]">
         <Icon name="lucide:arrow-left" class="size-3" /> All Work
       </NuxtLink>
     </div>
 
-    <!-- Hero -->
-    <section class="relative overflow-hidden px-2 md:px-6 py-16 lg:py-20">
+    <!-- Hero (pinned) -->
+    <section ref="heroRef" class="relative overflow-hidden bg-white px-2 md:px-6 py-16 lg:py-20">
       <span
-        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[0.7] opacity-[0.04] select-none translate-y-[0.15em]"
+        ref="bgWordRef"
+        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[1] opacity-[0.04] select-none translate-y-[0.2em]"
       >{{ item.client?.name?.split(' ')[0] || item.name?.split(' ')[0] }}</span>
       <div class="hue-container relative">
         <div class="grid gap-12 lg:grid-cols-[1fr_320px]">
           <div>
-            <p class="hue-label mb-4">{{ item.service?.name }}{{ industryLabel ? ` · ${industryLabel}` : '' }}</p>
-            <h1 class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
+            <p ref="heroLabel" class="hue-label mb-4">{{ item.service?.name }}{{ industryLabel ? ` · ${industryLabel}` : '' }}</p>
+            <h1 ref="heroTitle" class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
               {{ item.name }}
             </h1>
             <p v-if="item.description" class="hue-body-lg max-w-lg text-[var(--grey)]" v-html="item.description" />
@@ -254,11 +255,21 @@ const slug = route.params.slug as string
 const { trackBeforeAfterInteraction } = useAnalytics()
 const { fetchPortfolioItem, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
+const { parallaxElement, staggerEntrance } = useHeroAnimations()
+
+const heroRef = ref<HTMLElement | null>(null)
+const bgWordRef = ref<HTMLElement | null>(null)
+const heroLabel = ref<HTMLElement | null>(null)
+const heroTitle = ref<HTMLElement | null>(null)
+
 const { data: item } = await useAsyncData(`portfolio-${slug}`, () => fetchPortfolioItem(slug))
 
 if (!item.value) {
   throw createError({ statusCode: 404, statusMessage: 'Project not found' })
 }
+
+parallaxElement(bgWordRef, 0.3)
+staggerEntrance([heroLabel, heroTitle])
 
 const validIndustries = computed(() =>
   (item.value?.industries ?? []).map((i) => i.industries_id).filter(Boolean)

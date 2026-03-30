@@ -1,26 +1,26 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
-      <SectionWatermark word="Services" :dark="true" top="2rem" />
+    <section class="hue-section relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="Services" top="2rem" />
       <div class="hue-container relative">
-        <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">Creative Services</p>
-        <h1 ref="heroTitle" class="hue-display-xl max-w-3xl text-white opacity-0">
-          Every service built around<br>one goal:
-          <span style="font-family:var(--font-editorial);font-style:italic;">your growth.</span>
+        <p ref="heroLabel" class="hue-label mb-5 opacity-0">Creative Services</p>
+        <h1 ref="heroTitle" class="hue-display-xl max-w-3xl opacity-0">
+          Every service built<br>around one goal:<br>
+          <span style="font-family:var(--font-editorial);font-style:italic;">Your growth.</span>
         </h1>
-        <p ref="heroSub" class="mt-7 max-w-lg text-[1.0625rem] leading-relaxed text-white/45 opacity-0">
+        <p ref="heroSub" class="mt-7 max-w-lg text-[1.0625rem] leading-relaxed text-[var(--color-text-muted)] opacity-0">
           We don't sell deliverables. We solve business problems — then build the brand system, digital presence, and creative materials to make the solution stick.
         </p>
       </div>
     </section>
 
     <!-- Stats strip -->
-    <section class="border-b border-[var(--silk)] px-2 md:px-6 py-8" style="background: var(--accent-tint);">
+    <section class="hue-section-dark px-2 md:px-6 py-8">
       <div class="hue-container grid grid-cols-2 gap-6 sm:grid-cols-4">
         <div v-for="s in stats" :key="s.label" class="text-center">
-          <p class="hue-editorial-lg">{{ s.value }}</p>
-          <p class="hue-label-sm mt-1">{{ s.label }}</p>
+          <p class="hue-editorial-lg text-white">{{ s.value }}</p>
+          <p class="hue-label-sm mt-1 text-white/40">{{ s.label }}</p>
         </div>
       </div>
     </section>
@@ -106,12 +106,12 @@
       <div class="hue-container relative">
         <div class="mb-14">
           <p class="hue-label mb-3">All Services</p>
-          <h2 class="hue-display-lg">Six disciplines.<br>One studio.</h2>
+          <h2 class="hue-display-lg">{{ serviceCount }} disciplines.<br>One studio.</h2>
         </div>
 
-        <div class="space-y-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]">
+        <div v-if="allServices?.length" class="space-y-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]">
           <div
-            v-for="(svc, i) in serviceDetails"
+            v-for="(svc, i) in allServices"
             :key="svc.id"
             class="group bg-white"
           >
@@ -121,19 +121,19 @@
             >
               <div>
                 <span class="hue-label-sm text-[var(--silver)]">{{ String(i + 1).padStart(2, '0') }}</span>
-                <p class="hue-label mt-1">{{ svc.id.charAt(0).toUpperCase() + svc.id.slice(1) }}</p>
+                <p class="hue-label mt-1">{{ svc.title || svc.name }}</p>
               </div>
               <div>
                 <h3 class="hue-display-md mb-1 transition-transform duration-300 group-hover:translate-x-1">{{ svc.name }}</h3>
-                <p class="text-[0.875rem] text-[var(--color-text-muted)]">{{ svc.tagline }}</p>
+                <p class="text-[0.875rem] text-[var(--color-text-muted)]">{{ svc.caption }}</p>
               </div>
               <div class="flex items-center justify-between lg:justify-end lg:gap-8">
-                <div class="flex flex-wrap gap-1.5">
+                <div v-if="svc.tags?.length" class="flex flex-wrap gap-1.5">
                   <span
-                    v-for="ind in svc.industries.slice(0, 2)"
-                    :key="ind"
-                    class="rounded-full border border-[var(--silk)] px-2.5 py-0.5 text-[0.7rem] text-[var(--silver)]"
-                  >{{ ind.split('&')[0].trim() }}</span>
+                    v-for="tag in (svc.tags as string[]).slice(0, 2)"
+                    :key="tag"
+                    class="rounded-full border border-[var(--silk)] px-2.5 py-0.5 text-[0.6rem] tracking-[0.06em] text-[var(--silver)]"
+                  >{{ tag }}</span>
                 </div>
                 <Icon
                   :name="open === i ? 'lucide:minus' : 'lucide:plus'"
@@ -147,45 +147,22 @@
               <div v-if="open === i" class="border-t border-[var(--silk)] px-8 pb-10 pt-8">
                 <div class="grid gap-10 lg:grid-cols-[1fr_280px]">
                   <div>
-                    <p class="hue-body-lg mb-8 max-w-2xl">{{ svc.intro }}</p>
-                    <div class="grid gap-6 sm:grid-cols-2">
-                      <div v-for="group in svc.deliverables" :key="group.label">
-                        <p class="hue-label-sm mb-3">{{ group.label }}</p>
-                        <ul class="space-y-1.5">
-                          <li v-for="item in group.items" :key="item" class="flex items-start gap-2 text-[0.8125rem] text-[var(--color-text-secondary)]">
+                    <div v-if="svc.description" class="hue-body-lg mb-8 max-w-2xl" v-html="svc.description" />
+                    <div v-if="serviceCapabilities(svc).length" class="grid gap-6 sm:grid-cols-2">
+                      <div v-for="cap in serviceCapabilities(svc)" :key="cap.id">
+                        <p class="hue-label-sm mb-3">{{ cap.title }}</p>
+                        <p v-if="cap.description" class="text-[0.8125rem] leading-relaxed text-[var(--color-text-secondary)]">{{ cap.description }}</p>
+                        <ul v-if="cap.features" class="mt-2 space-y-1.5">
+                          <li v-for="feat in cap.features.split(',')" :key="feat" class="flex items-start gap-2 text-[0.8125rem] text-[var(--color-text-secondary)]">
                             <span class="mt-2 block h-px w-3 shrink-0 bg-[var(--silver)]" />
-                            {{ item }}
+                            {{ feat.trim() }}
                           </li>
                         </ul>
                       </div>
                     </div>
                   </div>
                   <div class="space-y-4">
-                    <div class="rounded-lg border border-[var(--silk)] p-5">
-                      <p class="hue-label-sm mb-4">Quick facts</p>
-                      <div class="space-y-3">
-                        <div class="flex justify-between border-b border-[var(--silk)] pb-2.5">
-                          <span class="text-[0.8125rem] text-[var(--grey)]">Timeline</span>
-                          <span class="text-[0.8125rem] font-medium">{{ svc.timeline }}</span>
-                        </div>
-                        <div class="flex justify-between pb-2.5">
-                          <span class="text-[0.8125rem] text-[var(--grey)]">Engagement</span>
-                          <span class="text-[0.8125rem] font-medium">{{ svc.engagementType }}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="rounded-lg border border-[var(--silk)] p-5">
-                      <p class="hue-label-sm mb-3">Industries served</p>
-                      <div class="flex flex-wrap gap-1.5">
-                        <NuxtLink
-                          v-for="ind in svc.industries"
-                          :key="ind"
-                          :to="`/industries/${indSlug(ind)}`"
-                          class="rounded-full border border-[var(--silk)] px-2.5 py-1 text-[0.7rem] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
-                        >{{ ind }}</NuxtLink>
-                      </div>
-                    </div>
-                    <NuxtLink :to="`/creative-services/${svc.slug}`" class="hue-btn block text-center">
+                    <NuxtLink :to="`/creative-services/${svc.url}`" class="hue-btn block text-center">
                       Full service details
                       <Icon name="lucide:arrow-right" class="size-3.5" />
                     </NuxtLink>
@@ -367,8 +344,11 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
-import { packages, retainerPlans, alacarteServices, processSteps, serviceDetails } from '~/data/services'
-import { industries } from '~/data/industries'
+import { packages, retainerPlans, alacarteServices, processSteps } from '~/data/services'
+
+const { fetchServices, fetchIndustries: fetchAllIndustries } = useDirectus()
+const { data: allServices } = await useAsyncData('services-all-index', () => fetchServices())
+const { data: allIndustries } = await useAsyncData('industries-all-index', () => fetchAllIndustries())
 
 useSeoMeta({
   title: 'Creative Services & Packages | Hue — Creative Marketing Studio',
@@ -394,15 +374,26 @@ useSchemaOrg([
 
 const open = ref(-1)
 
-const stats = [
+const serviceCount = computed(() => allServices.value?.length ?? 0)
+
+const stats = computed(() => [
   { value: '20+', label: 'Years Experience' },
   { value: '200+', label: 'Projects Delivered' },
   { value: '92%', label: 'Client Retention' },
-  { value: '6', label: 'Core Disciplines' },
-]
+  { value: String(serviceCount.value), label: 'Core Disciplines' },
+])
 
 function indSlug(name: string) {
-  return industries.find((i) => i.name.includes(name.split('&')[0].trim()))?.slug ?? 'industries'
+  const ind = allIndustries.value?.find((i: any) => i.name?.includes(name.split('&')[0].trim()))
+  return ind?.url ?? 'industries'
+}
+
+/** Map Directus capabilities to grouped deliverables format */
+function serviceCapabilities(svc: any) {
+  return (svc.capabilities ?? [])
+    .map((c: any) => c.capabilities_id)
+    .filter(Boolean)
+    .sort((a: any, b: any) => (a.sort ?? 0) - (b.sort ?? 0))
 }
 
 const techCapabilities = [

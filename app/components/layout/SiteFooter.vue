@@ -50,7 +50,7 @@
             Strategic brand positioning and creative execution for growth-stage companies, government agencies, and mission-driven organizations.
           </p>
           <div class="mt-6 flex gap-3">
-            <a href="mailto:contact@huestudios.com" class="footer-link text-[0.75rem]">contact@huestudios.com</a>
+            <a href="mailto:contact@huestudios.com" class="footer-link text-[0.625rem]">contact@huestudios.com</a>
           </div>
           <p class="mt-2 text-[0.75rem] text-white/20">305.680.0485 · 917.710.5381</p>
            <div class="mt-8">

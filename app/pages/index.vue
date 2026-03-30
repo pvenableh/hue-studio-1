@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- ═══ HERO ═══ -->
-    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
+    <section ref="homeHeroRef" class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
       <div class="hue-container relative z-10 grid gap-16 lg:grid-cols-2">
         <div>
           <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">
@@ -33,10 +33,10 @@
 
     <!-- ═══ PHILOSOPHY ═══ -->
     <section class="hue-section px-2 md:px-6 py-24 md:py-32">
-      <div class="hue-container-sm text-center">
+      <div class="hue-container max-w-3xl mx-auto text-center">
         <div class="mx-auto mb-10 h-px w-10 bg-[var(--silk)]" />
         <p class="hue-editorial-lg mb-7 reveal">
-          "Visual excellence is achieved through a process<br class="hidden md:block"> that is executed with a defined purpose."
+          "Visual excellence is achieved through a process that is executed with a defined purpose."
         </p>
         <p class="hue-body-lg mb-5 reveal reveal-delay-1">
           Every engagement begins with understanding your business — your market, competitive landscape, and growth objectives — before any design work starts.
@@ -89,34 +89,85 @@
       </div>
     </section>
 
-    <!-- ═══ THE PROCESS ═══ -->
-    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <!-- ═══ CASE STUDIES ═══ -->
+    <section v-if="caseStudies?.length" class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 grid gap-8 lg:grid-cols-2 lg:items-end">
+        <div class="mb-14 flex items-end justify-between">
           <div>
-            <p class="hue-label mb-3">Our Process</p>
-            <h2 class="hue-display-lg">Process creates<br>
-              <span style="font-family:var(--font-editorial);font-style:italic;">meaning.</span>
-            </h2>
+            <p class="hue-label mb-3">Case Studies</p>
+            <h2 class="hue-display-lg">Results that speak<br>for themselves.</h2>
           </div>
-          <p class="hue-body-lg lg:max-w-md">
-            We believe great design comes from deep understanding. Our four-stage process ensures every detail serves a defined purpose — from analysis through to the big idea.
-          </p>
-        </div>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
-          <div v-for="step in processSteps" :key="step.number" class="group bg-white p-9 transition-colors hover:bg-[var(--snow)]">
-            <span class="hue-label-sm text-[var(--silver)]">{{ step.number }}</span>
-            <h3 class="mt-4 mb-2 text-[1.1rem] font-light">{{ step.title }}</h3>
-            <p class="hue-label-sm mb-4 text-[var(--silver)]">{{ step.subtitle }}</p>
-            <p class="text-[0.8125rem] leading-relaxed text-[var(--color-text-muted)]">{{ step.description }}</p>
-          </div>
-        </div>
-        <div class="mt-8 text-center">
-          <NuxtLink to="/about" class="hue-link">
-            Learn our approach
+          <NuxtLink to="/case-studies" class="hue-link hidden sm:inline-flex">
+            View all case studies
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <NuxtLink
+            v-for="cs in caseStudies.slice(0, 3)"
+            :key="cs.id"
+            :to="`/case-studies/${cs.url}`"
+            class="group hue-card flex flex-col overflow-hidden"
+          >
+            <div class="aspect-[16/10] bg-[var(--snow)] flex items-center justify-center p-6">
+              <img
+                v-if="csHomeImage(cs)"
+                :src="csHomeImage(cs)!"
+                :alt="cs.title"
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div v-else class="text-[var(--silver)]">
+                <Icon name="lucide:image" class="size-12" />
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <p v-if="cs.organization?.name" class="hue-label-sm mb-2 text-[var(--silver)]">{{ cs.organization.name }}</p>
+              <h3 class="mb-2 text-[0.75rem] font-medium uppercase tracking-[0.08em]">{{ cs.title }}</h3>
+              <p v-if="cs.excerpt" class="mt-auto pt-3 text-[0.8125rem] font-sans leading-relaxed text-[var(--color-text-muted)] line-clamp-2">{{ cs.excerpt }}</p>
+            </div>
+          </NuxtLink>
+        </div>
+        <div class="mt-8 text-center sm:hidden">
+          <NuxtLink to="/case-studies" class="hue-link">
+            View all case studies
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ HOW WE WORK ═══ -->
+    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+      <div class="hue-container">
+        <div class="mb-14">
+          <p class="hue-label mb-3">How We Work</p>
+          <h2 class="hue-display-lg">From first call to final delivery.</h2>
+        </div>
+        <NumberedGrid :items="processGridItems" :cols="4" />
+        <div class="mt-8 text-center">
+          <NuxtLink to="/creative-services" class="hue-link">
+            View all services
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SERVICES CAROUSEL ═══ -->
+    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
+      <div class="hue-container">
+        <div class="mb-14 flex items-end justify-between">
+          <div>
+            <p class="hue-label mb-3">Our Services</p>
+            <h2 class="hue-display-lg">What we do.</h2>
+          </div>
+          <NuxtLink to="/creative-services" class="hue-link hidden sm:inline-flex">
+            View all services
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+        <NumberedGrid :items="serviceGridItems" :carousel="true" :visible-cols="4" />
       </div>
     </section>
 
@@ -138,7 +189,7 @@
     </section>
 
     <!-- ═══ INDUSTRIES ═══ -->
-    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Industries</p>
@@ -147,23 +198,7 @@
             We specialize in sectors where credibility, trust, and professional presence drive decisions — from B2B growth companies to government and community organizations.
           </p>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
-          <NuxtLink
-            v-for="(ind, i) in featuredIndustries"
-            :key="ind.slug"
-            :to="`/industries/${ind.slug}`"
-            class="group flex flex-col justify-between bg-white p-8 transition-colors hover:bg-[var(--snow)]"
-          >
-            <div>
-              <span class="hue-label-sm">{{ String(i + 1).padStart(2, '0') }}</span>
-              <h3 class="mt-4 text-[1.0625rem] font-light leading-snug transition-transform duration-300 group-hover:translate-x-1">{{ ind.name }}</h3>
-              <p class="mt-2 text-[0.8125rem] leading-relaxed text-[var(--color-text-muted)]">{{ ind.headline }}</p>
-            </div>
-            <div class="mt-6 flex items-center gap-2 text-[0.75rem] text-[var(--silver)] transition-all group-hover:gap-3 group-hover:text-[var(--near-black)]">
-              See work <Icon name="lucide:arrow-right" class="size-3" />
-            </div>
-          </NuxtLink>
-        </div>
+        <NumberedGrid :items="industryGridItems" :cols="4" />
         <div class="mt-8 text-center">
           <NuxtLink to="/industries" class="hue-link">All industries <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>
@@ -239,8 +274,23 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
+
+const homeHeroRef = ref<HTMLElement | null>(null)
 import { packages, processSteps } from '~/data/services'
 import { industries } from '~/data/industries'
+
+const { fetchCaseStudies, fetchServices, assetUrl } = useDirectus()
+const { data: allServices } = await useAsyncData('home-services', () => fetchServices())
+const { data: caseStudies } = await useAsyncData('home-case-studies', () => fetchCaseStudies({ limit: 3, featured: true }))
+
+function csHomeImage(cs: any): string | null {
+  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
+  if (cs.organization?.logo) return assetUrl(cs.organization.logo, 'medium-contain')
+  const pi = cs.portfolio_items?.find((p: any) => p.portfolio_id?.featured_image || p.portfolio_id?.images?.length)
+  if (pi?.portfolio_id?.featured_image) return assetUrl(pi.portfolio_id.featured_image, 'medium-contain')
+  if (pi?.portfolio_id?.images?.[0]?.directus_files_id) return assetUrl(pi.portfolio_id.images[0].directus_files_id, 'medium-contain')
+  return null
+}
 
 useSeoMeta({
   title: 'Hue Creative Agency — Brand Strategy & Creative Execution | Miami Beach & New York',
@@ -251,12 +301,36 @@ defineOgImage({ component: 'HueOg', props: { title: 'Hue — Creative Marketing 
 
 const featuredIndustries = industries.slice(0, 4)
 
-const agencyStats = [
+const agencyStats = computed(() => [
   { value: '20+', label: 'Years in Business' },
   { value: '200+', label: 'Projects Delivered' },
   { value: 'NY·MIA', label: 'Studio Locations' },
-  { value: '6', label: 'Core Disciplines' },
-]
+  { value: String(allServices.value?.length ?? 8), label: 'Core Disciplines' },
+])
+
+const processGridItems = processSteps.map((s) => ({
+  number: s.number,
+  title: s.title,
+  description: s.description,
+}))
+
+const industryGridItems = featuredIndustries.map((ind, i) => ({
+  number: String(i + 1).padStart(2, '0'),
+  title: ind.name,
+  description: ind.headline,
+  to: `/industries/${ind.slug}`,
+  linkText: 'See work',
+}))
+
+const serviceGridItems = computed(() =>
+  (allServices.value ?? []).map((s: any, i: number) => ({
+    number: String(i + 1).padStart(2, '0'),
+    title: s.name,
+    description: s.caption,
+    to: `/creative-services/${s.url}`,
+    linkText: 'Explore',
+  }))
+)
 
 const auditStats = [
   { value: '8', label: 'Questions' },

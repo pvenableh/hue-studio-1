@@ -1,40 +1,42 @@
 <template>
   <div v-if="cs">
-    <div class="bg-white px-4 md:px-6 py-2">
+    <div class="bg-white px-2 py-2">
       <NuxtLink to="/case-studies" class="hue-link text-[0.6875rem] text-[var(--silver)]">
         <Icon name="lucide:arrow-left" class="size-3" /> All Case Studies
       </NuxtLink>
     </div>
 
-    <!-- Hero -->
-    <section class="relative overflow-hidden lg:grid lg:grid-cols-2">
+    <!-- Hero (pinned) -->
+    <section ref="heroRef" class="relative overflow-hidden bg-white">
       <span
-        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[0.7] opacity-[0.04] select-none translate-y-[0.15em]"
+        ref="bgWordRef"
+        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[1] opacity-[0.04] select-none translate-y-[0.2em]"
       >{{ cs.title?.split(' ')[0] }}</span>
       <div class="relative px-8 py-16 lg:px-14 lg:py-20">
-        <div class="mb-4 flex flex-wrap gap-2">
+        <div ref="heroLabel" class="mb-4 flex flex-wrap gap-2">
           <span v-for="svc in cs.services" :key="svc.services_id?.id" class="hue-label">{{ svc.services_id?.name }}</span>
         </div>
-        <h1 class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
+        <h1 ref="heroTitle" class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
           {{ cs.title }}
         </h1>
         <p v-if="cs.organization?.name || cs.client" class="mb-5 text-[0.75rem] uppercase tracking-[0.1em] text-[var(--grey)]">
           {{ cs.organization?.name ?? cs.client }}
         </p>
-        <p v-if="cs.excerpt" class="hue-body-lg max-w-lg">{{ cs.excerpt }}</p>
+        <p v-if="cs.excerpt" ref="heroDesc" class="hue-body-lg max-w-lg">{{ cs.excerpt }}</p>
       </div>
-      <div class="bg-[var(--near-black)] px-10 py-16 lg:px-12">
+      <!-- Project details panel hidden for now -->
+      <!--
+      <div v-if="hasProjectDetails" class="bg-[var(--near-black)] px-10 py-16 lg:px-12">
         <p class="hue-label-sm mb-5 text-white/30">Project details</p>
         <div class="space-y-3">
-          <!-- Year and duration hidden until data is updated -->
-          <!-- <div v-if="cs.project_year" class="flex justify-between border-b border-white/5 pb-3">
+          <div v-if="cs.project_year" class="flex justify-between border-b border-white/5 pb-3">
             <span class="hue-label-sm text-white/30">Year</span>
             <span class="text-[0.8125rem] text-white/60">{{ cs.project_year }}</span>
           </div>
           <div v-if="cs.project_duration" class="flex justify-between border-b border-white/5 pb-3">
             <span class="hue-label-sm text-white/30">Duration</span>
             <span class="text-[0.8125rem] text-white/60">{{ cs.project_duration }}</span>
-          </div> -->
+          </div>
           <div v-if="allServices.length" class="flex justify-between border-b border-white/5 pb-3">
             <span class="hue-label-sm text-white/30">Disciplines</span>
             <span class="text-[0.8125rem] text-white/60">{{ allServices.join(', ') }}</span>
@@ -47,6 +49,7 @@
           </div>
         </div>
       </div>
+      -->
     </section>
 
     <!-- Featured image -->
@@ -258,10 +261,20 @@ import type { DirectusPortfolioItem } from '~/composables/useDirectus'
 const route = useRoute()
 const url = route.params.url as string
 const { fetchCaseStudyByUrl, fetchPortfolioItem, assetUrl, resolvedBeforeAfters } = useDirectus()
+const { parallaxElement, staggerEntrance } = useHeroAnimations()
+
+const heroRef = ref<HTMLElement | null>(null)
+const bgWordRef = ref<HTMLElement | null>(null)
+const heroLabel = ref<HTMLElement | null>(null)
+const heroTitle = ref<HTMLElement | null>(null)
+const heroDesc = ref<HTMLElement | null>(null)
 
 const { data: cs } = await useAsyncData(`case-study-${url}`, () => fetchCaseStudyByUrl(url))
 
 if (!cs.value) throw createError({ statusCode: 404, statusMessage: 'Case study not found' })
+
+parallaxElement(bgWordRef, 0.3)
+staggerEntrance([heroLabel, heroTitle, heroDesc])
 
 /** Get linked portfolio item slugs from the junction — deduplicated */
 const linkedSlugs = computed(() => {
@@ -345,6 +358,11 @@ const allServices = computed(() => {
   childProjects.value.forEach((p) => { if (p.service?.name) names.add(p.service.name) })
   return [...names]
 })
+
+/** Only show project details panel if there's meaningful data */
+const hasProjectDetails = computed(() =>
+  !!(cs.value?.project_year || cs.value?.project_duration || allServices.value.length || cs.value?.tags?.length)
+)
 
 /** Hero image: case study featured_image → parent portfolio item featured_image */
 const heroImage = computed(() => {

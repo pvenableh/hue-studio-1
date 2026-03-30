@@ -409,7 +409,13 @@ export function useDirectus() {
     const params = new URLSearchParams({
       'filter[status][_eq]': 'published',
       sort: 'sort',
-      fields: 'id,name,title,url,color,class,caption,word,description,sort,status,featured_image',
+      fields: [
+        'id', 'name', 'title', 'url', 'color', 'class', 'caption', 'word', 'description',
+        'sort', 'status', 'featured_image', 'tags',
+        'capabilities.capabilities_id.id', 'capabilities.capabilities_id.title',
+        'capabilities.capabilities_id.description', 'capabilities.capabilities_id.features',
+        'capabilities.capabilities_id.sort',
+      ].join(','),
     })
     const res = await directusFetch<{ data: DirectusService[] }>('items/services', params)
     return res.data ?? []

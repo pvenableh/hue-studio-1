@@ -26,8 +26,8 @@
     <!-- Main nav -->
     <nav class="bg-white/70 backdrop-blur-xl overflow-hidden">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
-        <NuxtLink to="/" class="absolute -bottom-[6px] -left-[10px] md:left-0 z-10 shrink-0">
-          <LayoutLogo size="18px" class="w-36" />
+        <NuxtLink to="/" class="absolute bottom-[1px] -left-[10px] md:left-0 z-10 shrink-0">
+          <LayoutLogo size="18px" class="w-32" />
         </NuxtLink>
         <div class="w-24 shrink-0" /><!-- spacer for logo -->
 
