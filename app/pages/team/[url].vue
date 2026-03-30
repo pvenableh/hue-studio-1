@@ -7,16 +7,24 @@
         :src="heroImgSrc"
         :alt="fullName"
         class="absolute inset-0 h-full w-full object-cover"
+        :style="`object-position: center ${member.first_name === 'Camila' ? '0%' : '30%'};`"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
       <!-- Name overlay -->
+      <!-- First name -->
       <h1
-        class="absolute bottom-0 left-0 px-4 pb-6 md:px-10 md:pb-10 text-[clamp(3rem,8vw,7rem)] italic leading-[0.95] text-white/90"
-        style="font-family: var(--font-editorial);"
+        class="absolute bottom-[clamp(2.5rem,6vw,5rem)] left-0 px-4 md:px-10 md:uppercase italic leading-[0.8] text-white/90"
+        style="font-family: var(--font-editorial); font-size: clamp(3rem, 8vw, 7rem); letter-spacing: clamp(0em, 1vw, 0.08em);"
       >
-        {{ member.first_name }}<br>{{ member.last_name }}
+        {{ member.first_name }}
       </h1>
+
+      <!-- Last name watermark below -->
+      <span
+        class="pointer-events-none absolute bottom-0 left-0 px-4 pb-6 md:px-10 md:pb-8 md:uppercase select-none font-medium tracking-[0.3em] text-white/20"
+        style="font-family: var(--font); font-size: clamp(1.5rem, 4vw, 3.5rem);"
+      >{{ member.last_name }}</span>
     </section>
 
     <!-- Info bar -->
