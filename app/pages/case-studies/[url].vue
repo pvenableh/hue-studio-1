@@ -96,12 +96,12 @@
             :to="`/portfolio/${item.slug || item.url}`"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+            <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
               <img
                 v-if="portfolioImgUrl(item)"
                 :src="portfolioImgUrl(item)!"
                 :alt="item.name"
-                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
@@ -135,7 +135,7 @@
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
+              <img :src="assetUrl(ba.before_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
             </div>
             <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
@@ -145,7 +145,7 @@
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
+              <img :src="assetUrl(ba.after_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
             </div>
             <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
@@ -193,7 +193,7 @@
           <img
             v-for="(img, i) in cs.gallery"
             :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, { width: 700, quality: 80 })"
+            :src="assetUrl(img.directus_files_id, 'medium')"
             :alt="`${cs.title} — image ${i + 1}`"
             class="w-full object-cover"
             loading="lazy"
@@ -289,9 +289,9 @@ const allServices = computed(() => {
 
 /** Hero image: case study featured_image → parent portfolio item featured_image */
 const heroImage = computed(() => {
-  if (cs.value?.featured_image) return assetUrl(cs.value.featured_image, { width: 1400, quality: 85 })
+  if (cs.value?.featured_image) return assetUrl(cs.value.featured_image, 'hero')
   const withImage = parentPortfolioItems.value.find((p) => p.featured_image)
-  if (withImage?.featured_image) return assetUrl(withImage.featured_image, { width: 1400, quality: 85 })
+  if (withImage?.featured_image) return assetUrl(withImage.featured_image, 'hero')
   return null
 })
 
@@ -319,7 +319,7 @@ const videos = computed(() => {
 /** Portfolio item image URL */
 function portfolioImgUrl(item: DirectusPortfolioItem): string | null {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: 600, quality: 80 }) : null
+  return id ? assetUrl(id, 'medium') : null
 }
 
 /** Extract YouTube video ID from various URL formats */
@@ -339,7 +339,7 @@ const csOgImg = computed(() => {
     ?? cs.value?.gallery?.[0]?.directus_files_id
     ?? fullPortfolioItems.value?.[0]?.featured_image
     ?? fullPortfolioItems.value?.[0]?.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+  return id ? assetUrl(id, 'large') : null
 })
 
 useSeoMeta({

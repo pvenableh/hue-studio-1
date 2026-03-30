@@ -36,12 +36,12 @@
             :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
           >
             <!-- Image -->
-            <div class="relative overflow-hidden bg-white" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
+            <div class="relative flex items-center justify-center overflow-hidden bg-white" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
               <img
                 v-if="imgUrl(item, true)"
                 :src="imgUrl(item, true)"
                 :alt="item.name"
-                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
                 <span class="hue-label">{{ item.client?.short_name || item.name }}</span>
@@ -110,12 +110,12 @@
             class="group relative block overflow-hidden bg-white transition-colors hover:bg-[var(--snow)]"
           >
             <!-- Image -->
-            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 3/2">
+            <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 3/2">
               <img
                 v-if="imgUrl(item)"
                 :src="imgUrl(item)"
                 :alt="item.name"
-                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
@@ -226,7 +226,7 @@ const gridItems = computed(() => {
 
 function imgUrl(item: DirectusPortfolioItem, wide = false) {
   const id = primaryImageId(item)
-  return id ? assetUrl(id, { width: wide ? 800 : 600, quality: 80 }) : null
+  return id ? assetUrl(id, wide ? 'large' : 'medium') : null
 }
 
 function industryName(item: DirectusPortfolioItem) {

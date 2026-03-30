@@ -111,7 +111,7 @@ const primaryCategory = computed(() => post.value?.categories?.[0]?.blog_categor
 
 const heroImgSrc = computed(() => {
   const id = post.value?.featured_image
-  return id ? assetUrl(id, { width: 1400, quality: 85 }) : null
+  return id ? assetUrl(id, 'hero') : null
 })
 
 const authorName = computed(() => {
@@ -121,7 +121,7 @@ const authorName = computed(() => {
 
 const authorImgSrc = computed(() => {
   const id = post.value?.author?.photo ?? post.value?.author?.image
-  return id ? assetUrl(id, { width: 160, height: 160, quality: 80 }) : null
+  return id ? assetUrl(id, 'avatar') : null
 })
 
 const allTags = computed(() => {
@@ -143,7 +143,7 @@ const allTags = computed(() => {
 
 const ogImageUrl = computed(() => {
   const id = post.value?.featured_image ?? post.value?.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+  return id ? assetUrl(id, 'large') : null
 })
 
 const seo = post.value?.seo

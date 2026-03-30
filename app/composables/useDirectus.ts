@@ -276,10 +276,16 @@ export function useDirectus() {
     return $fetch<T>(url)
   }
 
-  function assetUrl(id: string, params?: Record<string, string | number>): string {
+  /**
+   * Build an asset URL using a Directus transformation preset.
+   * Presets: thumbnail (75), small (300), medium (600), medium-contain,
+   *          large (1200), large-contain, xlarge (2000), xlarge-contain,
+   *          hero (1920x1080), avatar (100), email-small, email-large
+   */
+  function assetUrl(id: string, preset?: string): string {
     if (!id) return ''
     const url = new URL(`${assetsBase}/${id}`)
-    if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)))
+    if (preset) url.searchParams.set('key', preset)
     return url.toString()
   }
 

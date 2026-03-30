@@ -189,7 +189,7 @@ const fullName = computed(() => [member.value?.first_name, member.value?.last_na
 
 const heroImgSrc = computed(() => {
   const id = member.value?.photo ?? member.value?.image
-  return id ? assetUrl(id, { width: 960, quality: 85 }) : null
+  return id ? assetUrl(id, 'large') : null
 })
 
 // Fetch their blog posts
@@ -207,18 +207,18 @@ const { data: caseStudies } = await useAsyncData(
 function csImg(cs: DirectusCaseStudy) {
   // 1. Case study's own image
   let id = cs.featured_image ?? cs.gallery?.[0]?.directus_files_id
-  if (id) return assetUrl(id, { width: 600, quality: 80 })
+  if (id) return assetUrl(id, 'medium')
 
   // 2. Check linked portfolio items and their child projects
   for (const pi of cs.portfolio_items ?? []) {
     const p = pi.portfolio_id
     if (!p) continue
     id = p.featured_image ?? p.images?.[0]?.directus_files_id
-    if (id) return assetUrl(id, { width: 600, quality: 80 })
+    if (id) return assetUrl(id, 'medium')
     // Check child projects
     for (const child of (p as any).projects ?? []) {
       id = child.featured_image ?? child.images?.[0]?.directus_files_id
-      if (id) return assetUrl(id, { width: 600, quality: 80 })
+      if (id) return assetUrl(id, 'medium')
     }
   }
   return null
@@ -230,7 +230,7 @@ function csService(cs: DirectusCaseStudy) {
 
 const teamOgImg = computed(() => {
   const id = member.value?.photo ?? member.value?.image
-  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+  return id ? assetUrl(id, 'large') : null
 })
 
 useSeoMeta({

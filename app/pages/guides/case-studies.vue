@@ -111,11 +111,65 @@
       </div>
     </section>
 
-    <!-- 3. The Story Sections -->
-    <section id="story" class="hue-section px-2 md:px-6 py-20">
+    <!-- 3. Featured Image & Hero -->
+    <section id="hero-image" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container-md">
         <div class="mb-10 flex items-center gap-4">
           <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">3</span>
+          <h2 class="hue-display-md">Featured Image & Hero</h2>
+        </div>
+        <p class="hue-body-lg mb-10 max-w-xl">
+          The featured image is the most prominent visual on a case study. It appears as a full-width hero on the detail page and as the card thumbnail on the listing page.
+        </p>
+
+        <!-- How it's used -->
+        <div class="mb-10 grid gap-5 md:grid-cols-2">
+          <div class="rounded-sm border border-[var(--silk)] bg-white p-7">
+            <div class="mb-3 flex items-center gap-3">
+              <Icon name="lucide:monitor" class="size-5 text-[var(--near-black)]" />
+              <h3 class="text-[0.9375rem] font-medium">Detail Page Hero</h3>
+            </div>
+            <p class="hue-body-sm">Displayed full-width below the project info. Cropped to fit a wide landscape format (roughly 16:9). Use the Directus focal point tool to control where the crop centers.</p>
+          </div>
+          <div class="rounded-sm border border-[var(--silk)] bg-white p-7">
+            <div class="mb-3 flex items-center gap-3">
+              <Icon name="lucide:layout-grid" class="size-5 text-[var(--near-black)]" />
+              <h3 class="text-[0.9375rem] font-medium">Listing Card Thumbnail</h3>
+            </div>
+            <p class="hue-body-sm">Shown as a contained image inside a 16:9 card on the case studies index. Logos are scaled proportionally so wide and square marks look balanced next to each other.</p>
+          </div>
+        </div>
+
+        <!-- What to upload -->
+        <h3 class="hue-label mb-6">What makes a good featured image</h3>
+        <div class="mb-8 space-y-4">
+          <div v-for="rec in heroRecommendations" :key="rec.title" class="flex items-start gap-4">
+            <div class="flex size-7 shrink-0 items-center justify-center rounded-full" :class="rec.good ? 'bg-[var(--near-black)]' : 'bg-[var(--silk)]'">
+              <Icon :name="rec.good ? 'lucide:check' : 'lucide:x'" class="size-3.5" :class="rec.good ? 'text-white' : 'text-[var(--grey)]'" />
+            </div>
+            <div>
+              <p class="text-[0.9375rem]"><strong>{{ rec.title }}</strong></p>
+              <p class="hue-body-sm mt-0.5">{{ rec.description }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fallback chain -->
+        <div class="rounded-sm border-l-2 border-[var(--near-black)] bg-[var(--snow)] py-5 pl-5 pr-6">
+          <p class="mb-2 text-[0.875rem] font-medium text-[var(--near-black)]">Fallback behavior</p>
+          <p class="text-[0.8125rem] text-[var(--color-text-secondary)]">
+            If no featured image is uploaded, the site automatically falls back to:
+            the <strong>branding/logo portfolio item's</strong> featured image, then <strong>any linked portfolio item's</strong> featured image, then the <strong>first gallery image</strong> from a linked portfolio item. For the best result, always upload a dedicated featured image.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. The Story Sections -->
+    <section id="story" class="hue-section-alt px-2 md:px-6 py-20">
+      <div class="hue-container-md">
+        <div class="mb-10 flex items-center gap-4">
+          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">4</span>
           <h2 class="hue-display-md">The Story Sections</h2>
         </div>
         <p class="hue-body-lg mb-10 max-w-xl">
@@ -141,11 +195,11 @@
       </div>
     </section>
 
-    <!-- 4. Relationships -->
-    <section id="relationships" class="hue-section-alt px-2 md:px-6 py-20">
+    <!-- 5. Relationships -->
+    <section id="relationships" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container-md">
         <div class="mb-10 flex items-center gap-4">
-          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">4</span>
+          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">5</span>
           <h2 class="hue-display-md">Relationships</h2>
         </div>
         <p class="hue-body-lg mb-10 max-w-xl">
@@ -175,11 +229,11 @@
       </div>
     </section>
 
-    <!-- 5. Creating a New Case Study -->
-    <section id="create" class="hue-section px-2 md:px-6 py-20">
+    <!-- 6. Creating a New Case Study -->
+    <section id="create" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container-md">
         <div class="mb-10 flex items-center gap-4">
-          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">5</span>
+          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">6</span>
           <h2 class="hue-display-md">Creating a New Case Study</h2>
         </div>
 
@@ -199,11 +253,11 @@
       </div>
     </section>
 
-    <!-- 6. Updating Existing -->
-    <section id="update" class="hue-section-alt px-2 md:px-6 py-20">
+    <!-- 7. Updating Existing -->
+    <section id="update" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container-md">
         <div class="mb-10 flex items-center gap-4">
-          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">6</span>
+          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">7</span>
           <h2 class="hue-display-md">Updating an Existing Case Study</h2>
         </div>
 
@@ -218,11 +272,11 @@
       </div>
     </section>
 
-    <!-- 7. Tips & Best Practices -->
-    <section id="tips" class="hue-section px-2 md:px-6 py-20">
+    <!-- 8. Tips & Best Practices -->
+    <section id="tips" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container-md">
         <div class="mb-10 flex items-center gap-4">
-          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">7</span>
+          <span class="flex size-9 items-center justify-center rounded-full bg-[var(--near-black)] text-[0.75rem] font-bold text-white">8</span>
           <h2 class="hue-display-md">Tips & Best Practices</h2>
         </div>
 
@@ -258,6 +312,7 @@ useSeoMeta({
 const sections = [
   { id: 'overview', label: 'Overview' },
   { id: 'fields', label: 'Fields' },
+  { id: 'hero-image', label: 'Hero Image' },
   { id: 'story', label: 'Story Sections' },
   { id: 'relationships', label: 'Relationships' },
   { id: 'create', label: 'Create New' },
@@ -278,6 +333,39 @@ const fields = [
   { name: 'Project URL', type: 'Text', required: false, description: 'Live site URL (e.g. killowenconstruction.com)' },
   { name: 'Tags', type: 'Tags', required: false, description: 'Keywords for categorization (e.g. branding, architecture)' },
   { name: 'Featured', type: 'Toggle', required: false, description: 'Highlights on homepage and portfolio page' },
+]
+
+const heroRecommendations = [
+  {
+    good: true,
+    title: 'A signature deliverable or brand collateral mockup',
+    description: 'Stationery suite, packaging, signage, or a website screenshot on a device — something that shows the finished work in context.',
+  },
+  {
+    good: true,
+    title: 'High-resolution, landscape-oriented',
+    description: 'The hero crops to roughly 16:9. Landscape images work best. Portrait or square images will be heavily cropped — use the Directus focal point tool if needed.',
+  },
+  {
+    good: true,
+    title: 'Clean background, strong contrast',
+    description: 'White or neutral backgrounds let the work speak. Avoid busy textures or dark backgrounds that compete with the logo/design.',
+  },
+  {
+    good: true,
+    title: 'The logo on a white or light background for card thumbnails',
+    description: 'On the listing page, the image is shown contained (not cropped). A logo on white gives the cleanest result and scales well across wide and square marks.',
+  },
+  {
+    good: false,
+    title: 'Raw logo files without context',
+    description: 'A bare .png logo on transparent background can look flat. Prefer mockups or styled presentations that show the brand in use.',
+  },
+  {
+    good: false,
+    title: 'Low-resolution or heavily compressed images',
+    description: 'The hero renders at up to 1920px wide. Upload at least 1920x1080 for crisp results. Directus handles compression via presets.',
+  },
 ]
 
 const storySections = [

@@ -128,12 +128,12 @@
             :to="`/portfolio/${item.slug || item.url}`"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+            <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
               <img
                 v-if="relatedImgUrl(item)"
                 :src="relatedImgUrl(item)"
                 :alt="item.name"
-                class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
+                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
@@ -203,7 +203,7 @@ const relatedProjects = computed(() => {
 
 function relatedImgUrl(item: DirectusPortfolioItem) {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: 600, quality: 80 }) : null
+  return id ? assetUrl(id, 'medium') : null
 }
 
 function indSlug(name: string) {

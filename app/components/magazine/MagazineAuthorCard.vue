@@ -47,7 +47,7 @@ const initials = computed(() => [props.author.first_name?.[0], props.author.last
 
 const avatarSrc = computed(() => {
   const id = props.author.photo ?? props.author.image
-  return id ? assetUrl(id, { width: 96, height: 96, quality: 80 }) : null
+  return id ? assetUrl(id, 'avatar') : null
 })
 
 const formattedDate = computed(() => {

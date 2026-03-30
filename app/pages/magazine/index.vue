@@ -162,7 +162,7 @@ const gridPosts = computed(() => {
 
 const featuredImgSrc = computed(() => {
   const id = featuredPost.value?.featured_image
-  return id ? assetUrl(id, { width: 1920, quality: 85 }) : null
+  return id ? assetUrl(id, 'hero') : null
 })
 
 const featuredCategory = computed(() => featuredPost.value?.categories?.[0]?.blog_categories_id?.name)

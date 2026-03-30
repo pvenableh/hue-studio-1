@@ -44,7 +44,7 @@ const { assetUrl } = useDirectus()
 
 const imgSrc = computed(() => {
   const id = props.post.featured_image ?? props.post.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, { width: props.large ? 900 : 600, quality: 80 }) : null
+  return id ? assetUrl(id, props.large ? 'large' : 'medium') : null
 })
 
 const categoryName = computed(() => props.post.categories?.[0]?.blog_categories_id?.name)

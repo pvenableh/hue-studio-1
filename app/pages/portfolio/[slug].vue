@@ -57,7 +57,7 @@
     <!-- Featured image -->
     <section v-if="item.featured_image" class="border-b border-[var(--silk)]">
       <img
-        :src="assetUrl(item.featured_image, { width: 1400, height: 700, fit: 'cover', quality: 85 })"
+        :src="assetUrl(item.featured_image, 'hero')"
         :alt="item.name"
         class="w-full object-cover"
         style="max-height: 60vh;"
@@ -108,7 +108,7 @@
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.before_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
+              <img :src="assetUrl(ba.before_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
             </div>
             <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
@@ -118,7 +118,7 @@
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.after_image, { width: 700, quality: 80 })" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
+              <img :src="assetUrl(ba.after_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
             </div>
             <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
@@ -136,7 +136,7 @@
           <img
             v-for="(img, i) in galleryImages"
             :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, { width: 700, height: 500, fit: 'cover', quality: 80 })"
+            :src="assetUrl(img.directus_files_id, 'medium')"
             :alt="`${item.name} — image ${i + 1}`"
             class="w-full object-cover"
             loading="lazy"
@@ -156,8 +156,8 @@
             :to="`/portfolio/${child.slug || child.url}`"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div v-if="childImgUrl(child)" class="overflow-hidden bg-white" style="aspect-ratio: 4/3;">
-              <img :src="childImgUrl(child)!" :alt="child.name" class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+            <div v-if="childImgUrl(child)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+              <img :src="childImgUrl(child)!" :alt="child.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
             </div>
             <div class="p-5">
               <p v-if="child.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ child.service.name }}</p>
@@ -258,12 +258,12 @@ const childServices = computed(() => {
 
 function childImgUrl(child: DirectusPortfolioItem) {
   const id = primaryImageId(child)
-  return id ? assetUrl(id, { width: 500, height: 375, fit: 'cover', quality: 80 }) : null
+  return id ? assetUrl(id, 'medium') : null
 }
 
 const ogImg = computed(() => {
   const id = item.value ? primaryImageId(item.value) : null
-  return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
+  return id ? assetUrl(id, 'large') : null
 })
 
 const ogDesc = computed(() => item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`)
