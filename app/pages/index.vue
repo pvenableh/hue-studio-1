@@ -231,6 +231,53 @@
       </div>
     </section>
 
+    <!-- ═══ AI & MCP CALLOUT ═══ -->
+    <section class="relative overflow-hidden bg-[#1a1225] px-2 md:px-6 py-24 md:py-32">
+      <!-- Subtle gradient glow -->
+      <div class="pointer-events-none absolute inset-0">
+        <div class="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#8B5CF6]/[0.06] blur-[120px]" />
+        <div class="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-x-1/2 rounded-full bg-[#8B5CF6]/[0.04] blur-[100px]" />
+      </div>
+      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
+        <div>
+          <p class="hue-label mb-5 text-[#8B5CF6]/60">AI & Automation</p>
+          <h2 class="hue-display-lg mb-6 text-white">
+            Your content should<br>talk to
+            <span style="font-family:var(--font-editorial);font-style:italic;">AI.</span>
+          </h2>
+          <p class="mb-8 text-[1.0625rem] leading-relaxed text-white/40">
+            We build content platforms that are natively AI-ready. Through MCP integrations and structured content architecture, your brand becomes queryable, composable, and actionable by AI tools — today, not someday.
+          </p>
+          <NuxtLink to="/creative-services/ai-automation-mcp" class="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 px-5 py-2.5 text-[0.75rem] font-medium uppercase tracking-wider text-[#8B5CF6]/80 transition-all hover:border-[#8B5CF6]/60 hover:text-[#8B5CF6]">
+            Explore AI Services
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+        <div class="grid grid-cols-2 content-center gap-3">
+          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
+            <Icon name="lucide:bot" class="mb-3 size-5 text-[#8B5CF6]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">MCP Integration</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">AI tools query your content natively via Model Context Protocol.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
+            <Icon name="lucide:sparkles" class="mb-3 size-5 text-[#8B5CF6]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Content Intelligence</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Automated tagging, classification, and enrichment powered by AI.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
+            <Icon name="lucide:workflow" class="mb-3 size-5 text-[#8B5CF6]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Smart Workflows</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">AI-assisted content creation and approval pipelines in your CMS.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
+            <Icon name="lucide:zap" class="mb-3 size-5 text-[#8B5CF6]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Automation</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Event-driven pipelines connecting your content to any service.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══ BRAND AUDIT CTA ═══ -->
     <section class="hue-section px-2 md:px-6 py-24 md:py-32">
       <div class="hue-container">
