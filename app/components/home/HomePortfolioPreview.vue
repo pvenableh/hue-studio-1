@@ -57,7 +57,7 @@ const featured = computed(() => (items.value ?? []).slice(0, 3))
 
 function imgUrl(item: DirectusPortfolioItem) {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium') : null
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 
 function industryName(item: DirectusPortfolioItem) {

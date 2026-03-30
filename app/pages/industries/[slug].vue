@@ -68,8 +68,57 @@
       </div>
     </section>
 
+    <!-- Case Studies for this industry -->
+    <section v-if="industryCaseStudies.length" class="hue-section px-2 md:px-6 py-20">
+      <div class="hue-container">
+        <div class="mb-10 flex items-end justify-between">
+          <p class="hue-label">Case studies</p>
+          <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem]">
+            All case studies <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
+          <NuxtLink
+            v-for="cs in industryCaseStudies"
+            :key="cs.id"
+            :to="`/case-studies/${cs.url}`"
+            class="group flex flex-col justify-between bg-white p-8 transition-colors hover:bg-[var(--snow)]"
+          >
+            <div>
+              <div class="mb-4 flex flex-wrap gap-1.5">
+                <span
+                  v-for="svc in cs.services?.slice(0,2)"
+                  :key="svc.services_id?.id"
+                  class="hue-label-sm"
+                >{{ svc.services_id?.name }}</span>
+              </div>
+
+              <div v-if="csImage(cs)" class="mb-5 flex items-center justify-center overflow-hidden rounded-lg bg-white" style="aspect-ratio:16/9;">
+                <img
+                  :src="csImage(cs)!"
+                  :alt="cs.title ?? ''"
+                  class="max-h-[70%] max-w-[75%] object-contain"
+                  loading="lazy"
+                />
+              </div>
+
+              <h3 class="hue-display-md mb-2 transition-transform duration-300 group-hover:translate-x-1">{{ cs.title }}</h3>
+              <p v-if="cs.excerpt" class="hue-editorial-md line-clamp-2">{{ cs.excerpt }}</p>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--silk)] transition-all duration-300 group-hover:border-[var(--near-black)] group-hover:bg-[var(--near-black)]">
+                <Icon name="lucide:arrow-right" class="size-3.5 text-[var(--silver)] transition-colors group-hover:text-white" />
+              </div>
+            </div>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <!-- Portfolio for this industry (live Directus) -->
-    <section class="hue-section px-2 md:px-6 py-20">
+    <section class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Work in this industry</p>
@@ -143,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DirectusPortfolioItem } from '~/composables/useDirectus'
+import type { DirectusPortfolioItem, DirectusCaseStudy } from '~/composables/useDirectus'
 import { industries, getIndustryBySlug } from '~/data/industries'
 import { serviceDetails } from '~/data/services'
 
@@ -151,12 +200,12 @@ const route = useRoute()
 const industry = getIndustryBySlug(route.params.slug as string)
 if (!industry) throw createError({ statusCode: 404, statusMessage: 'Industry not found' })
 
-const { fetchPortfolio, assetUrl } = useDirectus()
+const { fetchPortfolio, fetchCaseStudies, assetUrl } = useDirectus()
 
-const { data: allItems, pending } = await useAsyncData(
-  `industry-portfolio-${industry.slug}`,
-  () => fetchPortfolio({ limit: 100 })
-)
+const [{ data: allItems, pending }, { data: allCaseStudies }] = await Promise.all([
+  useAsyncData(`industry-portfolio-${industry.slug}`, () => fetchPortfolio({ limit: 100 })),
+  useAsyncData(`industry-case-studies-${industry.slug}`, () => fetchCaseStudies({ limit: 50 })),
+])
 
 const industryProjects = computed(() =>
   (allItems.value ?? []).filter((p) =>
@@ -172,13 +221,34 @@ const industryProjects = computed(() =>
   ).slice(0, 6)
 )
 
+/** Case studies linked to this industry */
+const industryCaseStudies = computed(() =>
+  (allCaseStudies.value ?? []).filter((cs) =>
+    cs.industries?.some((i) => {
+      const directusName = (i.industries_id?.name ?? '').toLowerCase()
+      const staticName = industry!.name.toLowerCase()
+      const staticKeywords = staticName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
+      const directusKeywords = directusName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
+      return staticKeywords.some((kw) => directusName.includes(kw)) ||
+             directusKeywords.some((kw) => staticName.includes(kw))
+    })
+  ).slice(0, 4)
+)
+
+function csImage(cs: DirectusCaseStudy): string | null {
+  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
+  const pi = cs.portfolio_items?.find((p) => p.portfolio_id?.featured_image)
+  if (pi?.portfolio_id?.featured_image) return assetUrl(pi.portfolio_id.featured_image, 'medium-contain')
+  return null
+}
+
 const otherIndustries = computed(() =>
   industries.filter((i) => i.slug !== industry!.slug).slice(0, 5)
 )
 
 function imgUrl(item: DirectusPortfolioItem) {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium') : null
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 
 function svcSlug(name: string) {

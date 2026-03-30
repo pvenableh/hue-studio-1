@@ -203,7 +203,7 @@ const relatedProjects = computed(() => {
 
 function relatedImgUrl(item: DirectusPortfolioItem) {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium') : null
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 
 function indSlug(name: string) {

@@ -108,7 +108,7 @@
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.before_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
+              <img :src="assetUrl(ba.before_image, 'medium-contain')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — before`" />
             </div>
             <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
@@ -118,7 +118,7 @@
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.after_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
+              <img :src="assetUrl(ba.after_image, 'medium-contain')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${item?.name} — after`" />
             </div>
             <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
@@ -136,7 +136,7 @@
           <img
             v-for="(img, i) in galleryImages"
             :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, 'medium')"
+            :src="assetUrl(img.directus_files_id, 'medium-contain')"
             :alt="`${item.name} — image ${i + 1}`"
             class="w-full object-cover"
             loading="lazy"
@@ -258,7 +258,7 @@ const childServices = computed(() => {
 
 function childImgUrl(child: DirectusPortfolioItem) {
   const id = primaryImageId(child)
-  return id ? assetUrl(id, 'medium') : null
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 
 const ogImg = computed(() => {

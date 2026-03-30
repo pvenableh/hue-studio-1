@@ -207,18 +207,18 @@ const { data: caseStudies } = await useAsyncData(
 function csImg(cs: DirectusCaseStudy) {
   // 1. Case study's own image
   let id = cs.featured_image ?? cs.gallery?.[0]?.directus_files_id
-  if (id) return assetUrl(id, 'medium')
+  if (id) return assetUrl(id, 'medium-contain')
 
   // 2. Check linked portfolio items and their child projects
   for (const pi of cs.portfolio_items ?? []) {
     const p = pi.portfolio_id
     if (!p) continue
     id = p.featured_image ?? p.images?.[0]?.directus_files_id
-    if (id) return assetUrl(id, 'medium')
+    if (id) return assetUrl(id, 'medium-contain')
     // Check child projects
     for (const child of (p as any).projects ?? []) {
       id = child.featured_image ?? child.images?.[0]?.directus_files_id
-      if (id) return assetUrl(id, 'medium')
+      if (id) return assetUrl(id, 'medium-contain')
     }
   }
   return null

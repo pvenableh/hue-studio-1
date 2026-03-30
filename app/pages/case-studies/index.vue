@@ -133,7 +133,7 @@ const caseStudyList = computed(() => caseStudies.value ?? [])
 /** Smart image fallback: featured_image → logo portfolio item → first portfolio item image */
 function cardImage(cs: DirectusCaseStudy): string | null {
   // 1. Case study's own featured image
-  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium')
+  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
 
   // 2. Find the logo/branding portfolio item's featured image
   const portfolioItems = cs.portfolio_items ?? []
@@ -141,19 +141,19 @@ function cardImage(cs: DirectusCaseStudy): string | null {
     pi.portfolio_id?.service?.name?.toLowerCase().includes('brand') && pi.portfolio_id?.featured_image
   )
   if (logoItem?.portfolio_id?.featured_image) {
-    return assetUrl(logoItem.portfolio_id.featured_image, 'medium')
+    return assetUrl(logoItem.portfolio_id.featured_image, 'medium-contain')
   }
 
   // 3. Any portfolio item with a featured image
   const anyWithImage = portfolioItems.find((pi) => pi.portfolio_id?.featured_image)
   if (anyWithImage?.portfolio_id?.featured_image) {
-    return assetUrl(anyWithImage.portfolio_id.featured_image, 'medium')
+    return assetUrl(anyWithImage.portfolio_id.featured_image, 'medium-contain')
   }
 
   // 4. First portfolio item's first gallery image
   const anyWithGallery = portfolioItems.find((pi) => pi.portfolio_id?.images?.length)
   if (anyWithGallery?.portfolio_id?.images?.[0]?.directus_files_id) {
-    return assetUrl(anyWithGallery.portfolio_id.images[0].directus_files_id, 'medium')
+    return assetUrl(anyWithGallery.portfolio_id.images[0].directus_files_id, 'medium-contain')
   }
 
   // 5. Check child projects of linked portfolio items
@@ -161,7 +161,7 @@ function cardImage(cs: DirectusCaseStudy): string | null {
     const projects = (pi.portfolio_id as any)?.projects ?? []
     for (const child of projects) {
       const childId = child.featured_image ?? child.images?.[0]?.directus_files_id
-      if (childId) return assetUrl(childId, 'medium')
+      if (childId) return assetUrl(childId, 'medium-contain')
     }
   }
 

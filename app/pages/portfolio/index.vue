@@ -226,7 +226,7 @@ const gridItems = computed(() => {
 
 function imgUrl(item: DirectusPortfolioItem, wide = false) {
   const id = primaryImageId(item)
-  return id ? assetUrl(id, wide ? 'large' : 'medium') : null
+  return id ? assetUrl(id, wide ? 'large-contain' : 'medium-contain') : null
 }
 
 function industryName(item: DirectusPortfolioItem) {

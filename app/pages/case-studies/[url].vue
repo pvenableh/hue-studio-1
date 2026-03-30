@@ -56,31 +56,49 @@
       />
     </section>
 
-    <!-- Challenge / Solution / Results -->
+    <!-- Synopsis (from portfolio items) -->
+    <section v-if="narrativeSynopsis" class="hue-section border-b border-[var(--silk)] px-2 md:px-6 py-20">
+      <div class="hue-container grid gap-10 lg:grid-cols-[220px_1fr]">
+        <div>
+          <p class="hue-label">Synopsis</p>
+        </div>
+        <div class="hue-body-lg max-w-2xl" v-html="narrativeSynopsis" />
+      </div>
+    </section>
+
+    <!-- Challenge / Creation / Results -->
     <section class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container space-y-16">
-        <div v-if="cs.challenge" class="grid gap-10 lg:grid-cols-[220px_1fr]">
+        <div v-if="narrativeChallenge" class="grid gap-10 lg:grid-cols-[220px_1fr]">
           <div>
             <span class="hue-label-sm text-[var(--silver)]">01</span>
             <p class="hue-label mt-1">The Challenge</p>
           </div>
-          <div class="hue-body-lg max-w-2xl" v-html="cs.challenge" />
+          <div class="hue-body-lg max-w-2xl" v-html="narrativeChallenge" />
         </div>
 
-        <div v-if="cs.solution" class="grid gap-10 lg:grid-cols-[220px_1fr]">
+        <div v-if="narrativeCreation" class="grid gap-10 lg:grid-cols-[220px_1fr]">
           <div>
             <span class="hue-label-sm text-[var(--silver)]">02</span>
-            <p class="hue-label mt-1">Our Approach</p>
+            <p class="hue-label mt-1">The Creation</p>
           </div>
-          <div class="hue-body-lg max-w-2xl" v-html="cs.solution" />
+          <div class="hue-body-lg max-w-2xl" v-html="narrativeCreation" />
         </div>
 
-        <div v-if="cs.results" class="grid gap-10 lg:grid-cols-[220px_1fr]">
+        <div v-if="narrativeSolution" class="grid gap-10 lg:grid-cols-[220px_1fr]">
           <div>
-            <span class="hue-label-sm text-[var(--silver)]">03</span>
+            <span class="hue-label-sm text-[var(--silver)]">{{ narrativeCreation ? '03' : '02' }}</span>
+            <p class="hue-label mt-1">Our Approach</p>
+          </div>
+          <div class="hue-body-lg max-w-2xl" v-html="narrativeSolution" />
+        </div>
+
+        <div v-if="narrativeResults" class="grid gap-10 lg:grid-cols-[220px_1fr]">
+          <div>
+            <span class="hue-label-sm text-[var(--silver)]">{{ String(1 + (narrativeChallenge ? 1 : 0) + (narrativeCreation ? 1 : 0) + (narrativeSolution ? 1 : 0)).padStart(2, '0') }}</span>
             <p class="hue-label mt-1">The Results</p>
           </div>
-          <div class="hue-body-lg max-w-2xl" v-html="cs.results" />
+          <div class="hue-body-lg max-w-2xl" v-html="narrativeResults" />
         </div>
       </div>
     </section>
@@ -135,7 +153,7 @@
               <span class="hue-label-sm text-[var(--grey)]">Where they were</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.before_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
+              <img :src="assetUrl(ba.before_image, 'medium-contain')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — before`" />
             </div>
             <p v-if="ba.caption" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption }}</p>
           </div>
@@ -145,7 +163,7 @@
               <span class="hue-label-sm" style="color: var(--color-accent);">Where they are now</span>
             </div>
             <div class="flex items-center justify-center bg-white" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.after_image, 'medium')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
+              <img :src="assetUrl(ba.after_image, 'medium-contain')" class="max-h-full max-w-full object-contain p-8" loading="lazy" :alt="`${cs.title} — after`" />
             </div>
             <p v-if="ba.title" class="border-t border-[var(--silk)] px-2 md:px-6 py-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.title }}</p>
           </div>
@@ -193,7 +211,7 @@
           <img
             v-for="(img, i) in cs.gallery"
             :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, 'medium')"
+            :src="assetUrl(img.directus_files_id, 'medium-contain')"
             :alt="`${cs.title} — image ${i + 1}`"
             class="w-full object-cover"
             loading="lazy"
@@ -278,6 +296,44 @@ const childProjects = computed(() => {
   return children.length ? children : parentPortfolioItems.value
 })
 
+/**
+ * Narrative content — pulls from case study fields first, falls back to
+ * the first portfolio item that has content for each section.
+ */
+const narrativeSynopsis = computed(() => {
+  for (const p of parentPortfolioItems.value) {
+    if (p.synopsis) return p.synopsis
+  }
+  return null
+})
+
+const narrativeChallenge = computed(() => {
+  if (cs.value?.challenge) return cs.value.challenge
+  for (const p of parentPortfolioItems.value) {
+    if (p.challenge) return p.challenge
+  }
+  return null
+})
+
+const narrativeCreation = computed(() => {
+  for (const p of parentPortfolioItems.value) {
+    if (p.creation) return p.creation
+  }
+  return null
+})
+
+const narrativeSolution = computed(() => {
+  return cs.value?.solution ?? null
+})
+
+const narrativeResults = computed(() => {
+  if (cs.value?.results) return cs.value.results
+  for (const p of parentPortfolioItems.value) {
+    if (p.results) return p.results
+  }
+  return null
+})
+
 /** Collect all unique service names across everything */
 const allServices = computed(() => {
   const names = new Set<string>()
@@ -319,7 +375,7 @@ const videos = computed(() => {
 /** Portfolio item image URL */
 function portfolioImgUrl(item: DirectusPortfolioItem): string | null {
   const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium') : null
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 
 /** Extract YouTube video ID from various URL formats */
