@@ -261,6 +261,21 @@ export function useDirectus() {
     fetchHeaders['Authorization'] = `Bearer ${config.directusStaticToken}`
   }
 
+  /**
+   * Fetch from Directus — on the server uses the Directus URL directly with
+   * the static token; on the client proxies through /api/directus/ to avoid
+   * CORS issues and keep the token server-side.
+   */
+  function directusFetch<T>(path: string, params?: URLSearchParams): Promise<T> {
+    if (import.meta.server) {
+      const url = params ? `${baseUrl}/${path}?${params}` : `${baseUrl}/${path}`
+      return $fetch<T>(url, { headers: fetchHeaders })
+    }
+    // Client-side: proxy through Nuxt server route
+    const url = params ? `/api/directus/${path}?${params}` : `/api/directus/${path}`
+    return $fetch<T>(url)
+  }
+
   function assetUrl(id: string, params?: Record<string, string | number>): string {
     if (!id) return ''
     const url = new URL(`${assetsBase}/${id}`)
@@ -306,7 +321,7 @@ export function useDirectus() {
       sort: 'sort',
     })
     if (options.parentOnly) params.set('filter[parent_id][_null]', 'true')
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
     return res.data ?? []
   }
 
@@ -317,21 +332,27 @@ export function useDirectus() {
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
     return res.data?.[0] ?? null
   }
 
   async function fetchIndustries(): Promise<DirectusIndustry[]> {
-    const res = await $fetch<{ data: DirectusIndustry[] }>(
-      `${baseUrl}/items/industries?filter[status][_eq]=published&sort=sort&fields=id,name,class,color,url,status`
-    )
+    const params = new URLSearchParams({
+      'filter[status][_eq]': 'published',
+      sort: 'sort',
+      fields: 'id,name,class,color,url,status',
+    })
+    const res = await directusFetch<{ data: DirectusIndustry[] }>('items/industries', params)
     return res.data ?? []
   }
 
   async function fetchServices(): Promise<DirectusService[]> {
-    const res = await $fetch<{ data: DirectusService[] }>(
-      `${baseUrl}/items/services?filter[status][_eq]=published&sort=sort&fields=id,name,title,url,color,class,caption,word,description,sort,status,featured_image`
-    )
+    const params = new URLSearchParams({
+      'filter[status][_eq]': 'published',
+      sort: 'sort',
+      fields: 'id,name,title,url,color,class,caption,word,description,sort,status,featured_image',
+    })
+    const res = await directusFetch<{ data: DirectusService[] }>('items/services', params)
     return res.data ?? []
   }
 
@@ -345,7 +366,7 @@ export function useDirectus() {
       limit: String(options.limit ?? 10),
       sort: 'sort',
     })
-    const res = await $fetch<{ data: DirectusPortfolioItem[] }>(`${baseUrl}/items/portfolio?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
     return res.data ?? []
   }
 
@@ -393,7 +414,7 @@ export function useDirectus() {
       sort: 'sort,-date_created',
     })
     if (options.featured) params.set('filter[featured][_eq]', 'true')
-    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusCaseStudy[] }>('items/case_studies', params)
     return res.data ?? []
   }
 
@@ -414,7 +435,7 @@ export function useDirectus() {
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusCaseStudy[] }>(`${baseUrl}/items/case_studies?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusCaseStudy[] }>('items/case_studies', params)
     return res.data?.[0] ?? null
   }
 
@@ -425,7 +446,7 @@ export function useDirectus() {
       sort: '-featured,sort',
     })
     if (options.featured) params.set('filter[featured][_eq]', 'true')
-    const res = await $fetch<{ data: DirectusTestimonial[] }>(`${baseUrl}/items/client_testimonials?${params}`)
+    const res = await directusFetch<{ data: DirectusTestimonial[] }>('items/client_testimonials', params)
     return res.data ?? []
   }
 
@@ -549,7 +570,7 @@ export function useDirectus() {
     if (options.offset) params.set('offset', String(options.offset))
     if (options.featured) params.set('filter[featured][_eq]', 'true')
     if (options.category) params.set('filter[categories][blog_categories_id][slug][_eq]', options.category)
-    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusBlogPost[] }>('items/blog', params)
     return res.data ?? []
   }
 
@@ -560,7 +581,7 @@ export function useDirectus() {
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusBlogPost[] }>('items/blog', params)
     return res.data?.[0] ?? null
   }
 
@@ -571,7 +592,7 @@ export function useDirectus() {
       sort: 'sort,name',
       limit: '50',
     })
-    const res = await $fetch<{ data: DirectusBlogCategory[] }>(`${baseUrl}/items/blog_categories?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusBlogCategory[] }>('items/blog_categories', params)
     return res.data ?? []
   }
 
@@ -591,7 +612,7 @@ export function useDirectus() {
       'filter[status][_eq]': 'published',
       limit: '1',
     })
-    const res = await $fetch<{ data: DirectusBlogAuthor[] }>(`${baseUrl}/items/people?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusBlogAuthor[] }>('items/people', params)
     return res.data?.[0] ?? null
   }
 
@@ -603,7 +624,7 @@ export function useDirectus() {
       sort: '-date_published,-date_created',
       limit: String(limit),
     })
-    const res = await $fetch<{ data: DirectusBlogPost[] }>(`${baseUrl}/items/blog?${params}`, { headers: fetchHeaders })
+    const res = await directusFetch<{ data: DirectusBlogPost[] }>('items/blog', params)
     return res.data ?? []
   }
 

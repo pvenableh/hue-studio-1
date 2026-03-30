@@ -337,8 +337,8 @@ function extractVimeoId(url: string): string {
 const csOgImg = computed(() => {
   const id = cs.value?.featured_image
     ?? cs.value?.gallery?.[0]?.directus_files_id
-    ?? portfolioItems.value?.[0]?.featured_image
-    ?? portfolioItems.value?.[0]?.images?.[0]?.directus_files_id
+    ?? fullPortfolioItems.value?.[0]?.featured_image
+    ?? fullPortfolioItems.value?.[0]?.images?.[0]?.directus_files_id
   return id ? assetUrl(id, { width: 1200, height: 630, quality: 85 }) : null
 })
 
