@@ -20,7 +20,7 @@
             :loading="i === 0 ? 'eager' : 'lazy'"
           />
           <div v-else class="h-full w-full bg-white flex items-center justify-center">
-            <span class="hue-label-sm">{{ item.client?.short_name }}</span>
+            <span class="hue-label-sm">{{ item.client?.name }}</span>
           </div>
         </div>
         <div class="p-6">

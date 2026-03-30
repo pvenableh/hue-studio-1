@@ -19,12 +19,14 @@ export default defineEventHandler(async (event) => {
 
   const path = getRouterParam(event, 'path') ?? ''
 
-  // Preserve the raw query string to avoid mangling bracket notation
-  // (e.g. filter[status][_eq]=published)
-  const rawUrl = getRequestURL(event)
-  const queryString = rawUrl.search ?? ''
+  // Use the raw URL from the incoming request to preserve exact query string
+  // encoding (brackets, commas, etc.) without any parsing/re-encoding
+  const incomingUrl = getRequestURL(event)
+  const rawQuery = incomingUrl.href.split('?')[1] ?? ''
 
-  const url = `${baseUrl}/${path}${queryString}`
+  const url = rawQuery
+    ? `${baseUrl}/${path}?${rawQuery}`
+    : `${baseUrl}/${path}`
 
   const data = await $fetch(url, {
     headers: { Authorization: `Bearer ${token}` },

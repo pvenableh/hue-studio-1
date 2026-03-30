@@ -137,7 +137,7 @@
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
-                <span class="hue-label-sm">{{ item.client?.short_name || item.name }}</span>
+                <span class="hue-label-sm">{{ item.client?.name || item.name }}</span>
               </div>
             </div>
             <div class="p-6">

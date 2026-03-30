@@ -33,7 +33,10 @@ export interface DirectusIndustry {
   class: string | null
   color: string | null
   url: string | null
+  headline: string | null
+  description: string | null
   status: string
+  portfolio?: { portfolio_id: DirectusPortfolioItem | null }[]
 }
 
 export interface DirectusService {
@@ -77,6 +80,17 @@ export interface DirectusPortfolioIndustry {
   industries_id: DirectusIndustry | null
 }
 
+export interface DirectusClient {
+  id: string
+  name: string | null
+  slug: string | null
+  code: string | null
+  website: string | null
+  logo: string | null
+  industry: string | null
+  organization: DirectusOrganization | null
+}
+
 export interface DirectusPortfolioItem {
   id: string
   status: string
@@ -97,7 +111,7 @@ export interface DirectusPortfolioItem {
   project_duration: string | null
   date_created: string | null
   date_updated: string | null
-  client: DirectusOrganization | null
+  client: DirectusClient | null
   service: DirectusService | null
   industries: DirectusPortfolioIndustry[]
   images: DirectusPortfolioFile[]
@@ -295,9 +309,9 @@ export function useDirectus() {
     'featured_image', 'featured', 'parent_id',
     'project_year', 'project_duration',
     'date_created', 'date_updated',
-    'client.id', 'client.name', 'client.short_name', 'client.code',
-    'client.website', 'client.description', 'client.logo',
-    'client.icon', 'client.brand_color',
+    'client.id', 'client.name', 'client.slug', 'client.code',
+    'client.website', 'client.logo', 'client.industry',
+    'client.organization.id', 'client.organization.name', 'client.organization.short_name',
     'service.id', 'service.name', 'service.title', 'service.url',
     'service.color', 'service.class', 'service.caption', 'service.word',
     'industries.id', 'industries.sort',
@@ -349,6 +363,45 @@ export function useDirectus() {
       fields: 'id,name,class,color,url,status',
     })
     const res = await directusFetch<{ data: DirectusIndustry[] }>('items/industries', params)
+    return res.data ?? []
+  }
+
+  /** Fetch a single industry by URL slug (without portfolio — fetch those separately) */
+  async function fetchIndustryByUrl(url: string): Promise<DirectusIndustry | null> {
+    const params = new URLSearchParams({
+      fields: 'id,name,class,color,url,headline,description,status',
+      'filter[url][_eq]': url,
+      'filter[status][_eq]': 'published',
+      limit: '1',
+    })
+    const res = await directusFetch<{ data: DirectusIndustry[] }>('items/industries', params)
+    return res.data?.[0] ?? null
+  }
+
+  /** Fetch portfolio items linked to an industry via the M2M (lighter fields to avoid permission issues) */
+  async function fetchIndustryPortfolio(industryId: string): Promise<DirectusPortfolioItem[]> {
+    const params = new URLSearchParams({
+      fields: [
+        'id', 'name', 'slug', 'url', 'status', 'sort',
+        'synopsis', 'challenge', 'creation', 'results',
+        'featured_image', 'featured', 'parent_id',
+        'client.id', 'client.name',
+        'service.id', 'service.name', 'service.url',
+        'images.directus_files_id',
+        'before_and_afters.before_and_afters_id.id',
+        'before_and_afters.before_and_afters_id.title',
+        'before_and_afters.before_and_afters_id.before_image',
+        'before_and_afters.before_and_afters_id.after_image',
+        'projects.id', 'projects.name', 'projects.slug', 'projects.url',
+        'projects.featured_image', 'projects.service.name',
+        'projects.images.directus_files_id',
+      ].join(','),
+      'filter[status][_eq]': 'published',
+      'filter[industries][industries_id][_eq]': industryId,
+      limit: '100',
+      sort: 'sort',
+    })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
     return res.data ?? []
   }
 
@@ -642,6 +695,8 @@ export function useDirectus() {
     fetchPortfolioItem,
     fetchFeaturedPortfolio,
     fetchIndustries,
+    fetchIndustryByUrl,
+    fetchIndustryPortfolio,
     fetchServices,
     fetchCaseStudies,
     fetchCaseStudyByUrl,

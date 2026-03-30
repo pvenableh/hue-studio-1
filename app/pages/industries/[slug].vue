@@ -13,57 +13,29 @@
       <div class="px-8 py-16 lg:px-14 lg:py-20">
         <p class="hue-label mb-4">Industry</p>
         <h1 class="hue-display-lg mb-5">{{ industry.name }}</h1>
-        <p class="hue-editorial-md mb-6">"{{ industry.headline }}"</p>
-        <p class="hue-body-lg max-w-lg">{{ industry.description }}</p>
+        <p v-if="industry.headline" class="hue-editorial-md mb-6">"{{ industry.headline }}"</p>
+        <p v-if="industry.description" class="hue-body-lg max-w-lg">{{ industry.description }}</p>
       </div>
       <div class="bg-[var(--near-black)] px-10 py-16">
         <p class="hue-label-sm mb-5 text-white/30">Clients in this sector</p>
         <div class="mb-8 space-y-2">
-          <p v-for="c in industry.clients" :key="c" class="text-[0.875rem] text-white/60">{{ c }}</p>
-          <p v-if="!industry.clients.length" class="text-[0.875rem] text-white/30 italic">Portfolio work available — enquire directly.</p>
-        </div>
-        <div v-if="industry.quote" class="border-t border-white/10 pt-8">
-          <p class="hue-editorial-md italic text-white/70">"{{ industry.quote.text }}"</p>
-          <p class="mt-3 hue-label-sm text-white/30">— {{ industry.quote.author }}</p>
+          <p v-for="name in clientNames" :key="name" class="text-[0.875rem] text-white/60">{{ name }}</p>
+          <p v-if="!clientNames.length" class="text-[0.875rem] text-white/30 italic">Portfolio work available — enquire directly.</p>
         </div>
       </div>
     </section>
 
-    <!-- Challenges & Solutions -->
-    <section class="hue-section px-2 md:px-6 py-20">
-      <div class="hue-container grid gap-12 lg:grid-cols-2">
-        <div>
-          <p class="hue-label mb-8">Common challenges</p>
-          <ul class="space-y-4">
-            <li v-for="c in industry.challenges" :key="c" class="flex items-start gap-3">
-              <span class="mt-2 block h-px w-4 shrink-0 bg-[var(--silver)]" />
-              <p class="text-[0.9375rem] text-[var(--color-text-secondary)]">{{ c }}</p>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <p class="hue-label mb-8">How we help</p>
-          <ul class="space-y-4">
-            <li v-for="s in industry.solutions" :key="s" class="flex items-start gap-3">
-              <span class="mt-2 block h-px w-4 shrink-0 bg-[var(--near-black)]" />
-              <p class="text-[0.9375rem] text-[var(--color-text-secondary)]">{{ s }}</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Services for this industry -->
-    <section class="hue-section-alt px-2 md:px-6 py-20">
+    <!-- Services for this industry (derived from portfolio) -->
+    <section v-if="serviceNames.length" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <p class="hue-label mb-8">Services we provide</p>
         <div class="flex flex-wrap gap-3">
           <NuxtLink
-            v-for="svc in industry.services"
-            :key="svc"
-            :to="`/creative-services/${svcSlug(svc)}`"
-            class="rounded-full border border-[var(--silk)] bg-white px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
-          >{{ svc }}</NuxtLink>
+            v-for="svc in serviceLinks"
+            :key="svc.name"
+            :to="svc.url ? `/creative-services/${svc.url}` : '/creative-services'"
+            class="rounded-full border border-[var(--silk)] bg-white px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+          >{{ svc.name }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -117,21 +89,17 @@
       </div>
     </section>
 
-    <!-- Portfolio for this industry (live Directus) -->
-    <section class="hue-section-alt px-2 md:px-6 py-20">
+    <!-- Portfolio for this industry (from Directus M2M) -->
+    <section v-if="industryProjects.length" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Work in this industry</p>
-          <NuxtLink :to="`/portfolio?industry=${encodeURIComponent(industry.name)}`" class="hue-link text-[0.8125rem]">
+          <NuxtLink to="/portfolio" class="hue-link text-[0.8125rem]">
             See all <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
 
-        <div v-if="pending" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-3">
-          <div v-for="i in 3" :key="i" class="h-64 animate-pulse bg-[var(--cloud)]" />
-        </div>
-
-        <div v-else-if="industryProjects.length" class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
             v-for="item in industryProjects"
             :key="item.id"
@@ -147,7 +115,7 @@
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
-                <span class="hue-label-sm">{{ item.client?.short_name }}</span>
+                <span class="hue-label-sm">{{ item.client?.name || item.name }}</span>
               </div>
             </div>
             <div class="p-6">
@@ -157,25 +125,27 @@
             </div>
           </NuxtLink>
         </div>
-
-        <div v-else class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
-          <p class="hue-editorial-md">Portfolio for this industry coming soon.</p>
-          <NuxtLink to="/portfolio" class="hue-link mt-4 inline-flex">Browse all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
-        </div>
       </div>
     </section>
 
+    <div v-else-if="!industryProjects.length && !industryCaseStudies.length" class="hue-section px-2 md:px-6 py-16">
+      <div class="hue-container rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
+        <p class="hue-editorial-md">Portfolio for this industry coming soon.</p>
+        <NuxtLink to="/portfolio" class="hue-link mt-4 inline-flex">Browse all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
+      </div>
+    </div>
+
     <!-- Other industries -->
-    <section class="hue-section-alt px-2 md:px-6 py-16">
+    <section class="hue-section px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">Explore other industries</p>
           <NuxtLink
             v-for="ind in otherIndustries"
-            :key="ind.slug"
-            :to="`/industries/${ind.slug}`"
+            :key="ind.id"
+            :to="`/industries/${ind.url}`"
             class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
-          >{{ ind.shortName }}</NuxtLink>
+          >{{ ind.name }}</NuxtLink>
         </div>
       </div>
     </section>
@@ -184,56 +154,98 @@
     <InlineCapture
       :dark="true"
       label="Quick Start"
-      :headline="`In ${industry.shortName}? Let's talk about your brand.`"
+      :headline="`In ${industry.name?.split('&')[0].trim()}? Let's talk about your brand.`"
       button-text="Send"
       :context="`Industry: ${industry.name}`"
     />
   </div>
+
+  <div v-else class="flex min-h-[60vh] items-center justify-center text-center">
+    <div>
+      <h1 class="hue-display-lg mb-4">Industry Not Found</h1>
+      <NuxtLink to="/industries" class="hue-link">← All Industries</NuxtLink>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { DirectusPortfolioItem, DirectusCaseStudy } from '~/composables/useDirectus'
-import { industries, getIndustryBySlug } from '~/data/industries'
-import { serviceDetails } from '~/data/services'
+import type { DirectusPortfolioItem, DirectusCaseStudy, DirectusIndustry } from '~/composables/useDirectus'
 
 const route = useRoute()
-const industry = getIndustryBySlug(route.params.slug as string)
-if (!industry) throw createError({ statusCode: 404, statusMessage: 'Industry not found' })
+const slug = route.params.slug as string
 
-const { fetchPortfolio, fetchCaseStudies, assetUrl } = useDirectus()
+const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchCaseStudies, assetUrl } = useDirectus()
 
-const [{ data: allItems, pending }, { data: allCaseStudies }] = await Promise.all([
-  useAsyncData(`industry-portfolio-${industry.slug}`, () => fetchPortfolio({ limit: 100 })),
-  useAsyncData(`industry-case-studies-${industry.slug}`, () => fetchCaseStudies({ limit: 50 })),
+const { data: industry } = await useAsyncData(`industry-${slug}`, () => fetchIndustryByUrl(slug))
+
+if (!industry.value) throw createError({ statusCode: 404, statusMessage: 'Industry not found' })
+
+const [{ data: portfolioItems }, { data: allIndustries }, { data: allCaseStudies }] = await Promise.all([
+  useAsyncData(`industry-portfolio-${slug}`, () => fetchIndustryPortfolio(industry.value!.id)),
+  useAsyncData('industries-all', () => fetchIndustries()),
+  useAsyncData(`industry-case-studies-${slug}`, () => fetchCaseStudies({ limit: 50 })),
 ])
 
-const industryProjects = computed(() =>
-  (allItems.value ?? []).filter((p) =>
-    p.industries?.some((i) => {
-      const directusName = (i.industries_id?.name ?? '').toLowerCase()
-      const staticName = industry.name.toLowerCase()
-      // Match bidirectionally: split both names on delimiters and check for overlap
-      const staticKeywords = staticName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
-      const directusKeywords = directusName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
-      return staticKeywords.some((kw) => directusName.includes(kw)) ||
-             directusKeywords.some((kw) => staticName.includes(kw))
-    })
-  ).slice(0, 6)
-)
+/** Child deliverables from portfolio items linked to this industry */
+const industryProjects = computed(() => {
+  const children: DirectusPortfolioItem[] = []
+  ;(portfolioItems.value ?? []).forEach((p) => {
+    const projects = (p.projects ?? []) as DirectusPortfolioItem[]
+    if (projects.length) {
+      projects.forEach((child) => children.push(child))
+    } else {
+      children.push(p)
+    }
+  })
+  const seen = new Set<string>()
+  return children.filter((p) => {
+    if (!p.id || seen.has(p.id)) return false
+    seen.add(p.id)
+    return true
+  }).slice(0, 9)
+})
 
-/** Case studies linked to this industry */
+/** Client names derived from portfolio items in this industry */
+const clientNames = computed(() => {
+  const names = new Set<string>()
+  ;(portfolioItems.value ?? []).forEach((p) => {
+    if (p.client?.name) names.add(p.client.name)
+    ;(p.projects ?? []).forEach((child: DirectusPortfolioItem) => {
+      if ((child as any).client?.name) names.add((child as any).client.name)
+    })
+  })
+  return [...names]
+})
+
+/** Service names and URLs derived from parent portfolio items (children are UUIDs, parents have expanded service) */
+const serviceLinks = computed(() => {
+  const map = new Map<string, string | null>()
+  ;(portfolioItems.value ?? []).forEach((p) => {
+    if (p.service?.name && !map.has(p.service.name)) {
+      map.set(p.service.name, p.service.url ?? null)
+    }
+  })
+  return [...map.entries()].map(([name, url]) => ({ name, url }))
+})
+
+const serviceNames = computed(() => serviceLinks.value.map((s) => s.name))
+
+/** Case studies that share this industry */
 const industryCaseStudies = computed(() =>
   (allCaseStudies.value ?? []).filter((cs) =>
-    cs.industries?.some((i) => {
-      const directusName = (i.industries_id?.name ?? '').toLowerCase()
-      const staticName = industry!.name.toLowerCase()
-      const staticKeywords = staticName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
-      const directusKeywords = directusName.split(/[,/&]/).map((part) => part.trim()).filter(Boolean)
-      return staticKeywords.some((kw) => directusName.includes(kw)) ||
-             directusKeywords.some((kw) => staticName.includes(kw))
-    })
+    cs.industries?.some((i) => i.industries_id?.id === industry.value?.id)
   ).slice(0, 4)
 )
+
+/** Other industries for the cross-link bar */
+const otherIndustries = computed(() =>
+  (allIndustries.value ?? []).filter((i) => i.url !== slug).slice(0, 6)
+)
+
+function imgUrl(item: DirectusPortfolioItem) {
+  const id = item.featured_image ?? item.images?.[0]?.directus_files_id
+  return id ? assetUrl(id, 'medium-contain') : null
+}
 
 function csImage(cs: DirectusCaseStudy): string | null {
   if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
@@ -242,23 +254,19 @@ function csImage(cs: DirectusCaseStudy): string | null {
   return null
 }
 
-const otherIndustries = computed(() =>
-  industries.filter((i) => i.slug !== industry!.slug).slice(0, 5)
-)
-
-function imgUrl(item: DirectusPortfolioItem) {
-  const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium-contain') : null
-}
-
-function svcSlug(name: string) {
-  return serviceDetails.find((s) => s.name.toLowerCase().includes(name.toLowerCase().split('&')[0].trim()))?.slug ?? ''
-}
-
 useSeoMeta({
-  title: `${industry.name} | Industries | Hue Creative Agency`,
-  description: industry.description,
+  title: `${industry.value?.name ?? 'Industry'} | Industries | Hue Creative Agency`,
+  description: industry.value?.description ?? `Creative marketing services for the ${industry.value?.name} industry.`,
 })
 
-defineOgImage({ component: 'HueOg', props: { title: industry.name, description: industry.description, label: 'Industries' } })
+defineOgImage({
+  component: 'HueOg',
+  props: {
+    title: industry.value?.name ?? 'Industry',
+    description: industry.value?.headline ?? industry.value?.description ?? '',
+    label: 'Industries',
+  },
+})
+
+useScrollReveal()
 </script>

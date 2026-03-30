@@ -44,7 +44,7 @@
                 class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
-                <span class="hue-label">{{ item.client?.short_name || item.name }}</span>
+                <span class="hue-label">{{ item.client?.name || item.name }}</span>
               </div>
             </div>
 
@@ -119,7 +119,7 @@
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-white">
-                <span class="hue-label-sm">{{ item.client?.short_name || item.name }}</span>
+                <span class="hue-label-sm">{{ item.client?.name || item.name }}</span>
               </div>
               <!-- Hover overlay -->
               <div class="absolute inset-0 flex flex-col justify-center bg-[var(--color-accent)]/90 p-7 opacity-0 transition-opacity duration-250 group-hover:opacity-100">
