@@ -186,19 +186,10 @@ const [{ data: portfolioItems }, { data: allIndustries }, { data: allCaseStudies
   useAsyncData(`industry-case-studies-${slug}`, () => fetchCaseStudies({ limit: 50 })),
 ])
 
-/** Child deliverables from portfolio items linked to this industry */
+/** Portfolio items linked to this industry (parent items as they appear in Directus) */
 const industryProjects = computed(() => {
-  const children: DirectusPortfolioItem[] = []
-  ;(portfolioItems.value ?? []).forEach((p) => {
-    const projects = (p.projects ?? []) as DirectusPortfolioItem[]
-    if (projects.length) {
-      projects.forEach((child) => children.push(child))
-    } else {
-      children.push(p)
-    }
-  })
   const seen = new Set<string>()
-  return children.filter((p) => {
+  return (portfolioItems.value ?? []).filter((p) => {
     if (!p.id || seen.has(p.id)) return false
     seen.add(p.id)
     return true
@@ -217,13 +208,19 @@ const clientNames = computed(() => {
   return [...names]
 })
 
-/** Service names and URLs derived from parent portfolio items (children are UUIDs, parents have expanded service) */
+/** Service names and URLs derived from portfolio items + their children */
 const serviceLinks = computed(() => {
   const map = new Map<string, string | null>()
   ;(portfolioItems.value ?? []).forEach((p) => {
     if (p.service?.name && !map.has(p.service.name)) {
       map.set(p.service.name, p.service.url ?? null)
     }
+    // Children have expanded service from the fetch
+    ;((p.projects ?? []) as DirectusPortfolioItem[]).forEach((child) => {
+      if (child.service?.name && !map.has(child.service.name)) {
+        map.set(child.service.name, child.service.url ?? null)
+      }
+    })
   })
   return [...map.entries()].map(([name, url]) => ({ name, url }))
 })
@@ -243,8 +240,16 @@ const otherIndustries = computed(() =>
 )
 
 function imgUrl(item: DirectusPortfolioItem) {
-  const id = item.featured_image ?? item.images?.[0]?.directus_files_id
-  return id ? assetUrl(id, 'medium-contain') : null
+  // 1. Item's own featured image
+  if (item.featured_image) return assetUrl(item.featured_image, 'medium-contain')
+  // 2. Item's own gallery
+  if (item.images?.[0]?.directus_files_id) return assetUrl(item.images[0].directus_files_id, 'medium-contain')
+  // 3. First child project's featured image or gallery
+  for (const child of (item.projects ?? []) as DirectusPortfolioItem[]) {
+    const id = child.featured_image ?? child.images?.[0]?.directus_files_id
+    if (id) return assetUrl(id, 'medium-contain')
+  }
+  return null
 }
 
 function csImage(cs: DirectusCaseStudy): string | null {
