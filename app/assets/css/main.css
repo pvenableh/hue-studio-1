@@ -2,6 +2,12 @@
 @import "./fonts.css";
 @import "./hue-theme.css";
 
+@theme {
+  --font-sans: 'Avenir Next', 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-serif: 'Bauer Bodoni', 'Cormorant Garamond', 'Didot', Georgia, serif;
+  --font-body: 'Proxima Nova', 'Avenir Next', 'DM Sans', sans-serif;
+}
+
 @layer base {
   html { scroll-behavior: smooth; }
   *, *::before, *::after { box-sizing: border-box; }

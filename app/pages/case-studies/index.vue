@@ -50,11 +50,11 @@
                 />
               </div>
 
-              <h2 class="hue-display-md mb-2 transition-transform duration-300 group-hover:translate-x-1">{{ cs.title }}</h2>
-              <p v-if="cs.organization || cs.client" class="mb-4 text-[0.8125rem] text-[var(--color-text-muted)]">
+              <h2 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em] mb-2 transition-transform duration-300 group-hover:translate-x-1">{{ cs.title }}</h2>
+              <p v-if="cs.organization || cs.client" class="mb-3 text-[0.75rem] text-[var(--color-text-muted)]">
                 {{ cs.organization?.name ?? cs.client }}
               </p>
-              <p v-if="cs.excerpt" class="hue-editorial-md line-clamp-3">{{ cs.excerpt }}</p>
+              <p v-if="cs.excerpt" class="font-sans text-[0.75rem] font-light leading-snug text-[var(--grey)] line-clamp-3">{{ cs.excerpt }}</p>
             </div>
 
             <div class="mt-8 flex items-center justify-between">
@@ -62,7 +62,7 @@
                 <span
                   v-for="tag in cs.tags.slice(0,3)"
                   :key="tag"
-                  class="rounded-full border border-[var(--silk)] px-2 py-0.5 text-[0.7rem] text-[var(--silver)]"
+                  class="rounded-full border border-[var(--silk)] px-2.5 py-0.5 text-[0.5625rem] font-medium uppercase tracking-[0.1em] text-[var(--silver)]"
                 >{{ tag }}</span>
               </div>
               <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--silk)] transition-all duration-300 group-hover:border-[var(--near-black)] group-hover:bg-[var(--near-black)]">

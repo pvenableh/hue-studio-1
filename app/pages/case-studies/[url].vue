@@ -1,21 +1,24 @@
 <template>
   <div v-if="cs">
-    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
-      <div class="hue-container">
-        <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem] text-[var(--grey)]">
-          <Icon name="lucide:arrow-left" class="size-3.5" /> All Case Studies
-        </NuxtLink>
-      </div>
+    <div class="bg-white px-4 md:px-6 py-2">
+      <NuxtLink to="/case-studies" class="hue-link text-[0.6875rem] text-[var(--silver)]">
+        <Icon name="lucide:arrow-left" class="size-3" /> All Case Studies
+      </NuxtLink>
     </div>
 
     <!-- Hero -->
-    <section class="grid border-b border-[var(--silk)] lg:grid-cols-2">
-      <div class="px-8 py-16 lg:px-14 lg:py-20">
+    <section class="relative overflow-hidden lg:grid lg:grid-cols-2">
+      <span
+        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[0.7] opacity-[0.04] select-none translate-y-[0.15em]"
+      >{{ cs.title?.split(' ')[0] }}</span>
+      <div class="relative px-8 py-16 lg:px-14 lg:py-20">
         <div class="mb-4 flex flex-wrap gap-2">
           <span v-for="svc in cs.services" :key="svc.services_id?.id" class="hue-label">{{ svc.services_id?.name }}</span>
         </div>
-        <h1 class="hue-display-lg mb-5">{{ cs.title }}</h1>
-        <p v-if="cs.organization?.name || cs.client" class="mb-5 text-[0.9rem] text-[var(--grey)]">
+        <h1 class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
+          {{ cs.title }}
+        </h1>
+        <p v-if="cs.organization?.name || cs.client" class="mb-5 text-[0.75rem] uppercase tracking-[0.1em] text-[var(--grey)]">
           {{ cs.organization?.name ?? cs.client }}
         </p>
         <p v-if="cs.excerpt" class="hue-body-lg max-w-lg">{{ cs.excerpt }}</p>

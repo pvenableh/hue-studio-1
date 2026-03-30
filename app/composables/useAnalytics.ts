@@ -47,6 +47,21 @@ export function useAnalytics() {
       trackEvent('nav_click', { destination })
     },
 
+    /** Before/After slider was interacted with */
+    trackBeforeAfterInteraction(projectName: string, direction: 'before' | 'after' | 'drag') {
+      trackEvent('before_after_interaction', { project_name: projectName, direction })
+    },
+
+    /** Portfolio item was viewed */
+    trackPortfolioView(projectName: string, service?: string, industry?: string) {
+      trackEvent('portfolio_view', { project_name: projectName, service, industry })
+    },
+
+    /** Case study was viewed */
+    trackCaseStudyView(title: string, service?: string) {
+      trackEvent('case_study_view', { case_study_title: title, service })
+    },
+
     /** Generic event pass-through */
     trackEvent,
   }

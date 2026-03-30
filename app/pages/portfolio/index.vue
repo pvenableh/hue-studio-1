@@ -53,7 +53,7 @@
               <div>
                 <p class="mb-2 text-[0.625rem] tracking-widest text-[var(--silver)]">{{ String(i + 1).padStart(2, '0') }} / Featured</p>
                 <p class="hue-label-sm mb-3" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
-                <h2 class="mb-4 text-[1.75rem] font-light leading-tight">{{ item.name }}</h2>
+                <h2 class="mb-4 text-[1.25rem] font-light uppercase tracking-[0.08em] leading-tight">{{ item.name }}</h2>
                 <p
                   v-if="item.synopsis"
                   class="mb-6 line-clamp-3 text-[0.875rem] leading-relaxed text-[var(--grey)]"
@@ -123,7 +123,7 @@
               </div>
               <!-- Hover overlay -->
               <div class="absolute inset-0 flex flex-col justify-center bg-[var(--color-accent)]/90 p-7 opacity-0 transition-opacity duration-250 group-hover:opacity-100">
-                <p class="mb-3 text-lg italic text-white" style="font-family:var(--font-editorial);">{{ item.name }}</p>
+                <p class="mb-3 text-[0.75rem] font-medium uppercase tracking-[0.12em] text-white">{{ item.name }}</p>
                 <p v-if="item.synopsis" class="mb-4 line-clamp-3 text-[0.8125rem] leading-relaxed text-white/80" v-html="stripTags(item.synopsis)" />
                 <span class="inline-block border-b border-white/40 pb-0.5 text-[0.625rem] uppercase tracking-widest text-white">View Case Study →</span>
               </div>
@@ -132,7 +132,7 @@
             <!-- Info -->
             <div class="p-5">
               <p class="hue-label-sm mb-1.5" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
-              <h2 class="text-[1rem] font-light leading-snug">{{ item.name }}</h2>
+              <h2 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em] leading-snug">{{ item.name }}</h2>
               <p v-if="item.client" class="mt-1 text-[0.75rem] text-[var(--grey)]">{{ item.client.name }}</p>
             </div>
           </NuxtLink>

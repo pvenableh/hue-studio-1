@@ -1,7 +1,10 @@
 <template>
   <header
-    class="sticky top-0 z-50 transition-transform duration-300"
-    :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
+    class="sticky top-0 z-50 transition-all duration-300"
+    :class="[
+      navHidden ? '-translate-y-full' : 'translate-y-0',
+      scrolled ? 'shadow-[0_1px_8px_rgba(0,0,0,0.06)]' : ''
+    ]"
   >
     <!-- Audit announcement bar -->
     <NuxtLink to="/brand-audit" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
@@ -21,11 +24,12 @@
     </NuxtLink>
 
     <!-- Main nav -->
-    <nav class="bg-white/70 backdrop-blur-xl">
-      <div class="flex h-16 items-end px-2 md:px-6 pb-3">
-        <NuxtLink to="/" class="shrink-0">
-          <LayoutLogo size="18px" class="w-20" />
+    <nav class="bg-white/70 backdrop-blur-xl overflow-hidden">
+      <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
+        <NuxtLink to="/" class="absolute -bottom-[6px] -left-[10px] md:left-0 z-10 shrink-0">
+          <LayoutLogo size="18px" class="w-36" />
         </NuxtLink>
+        <div class="w-24 shrink-0" /><!-- spacer for logo -->
 
         <!-- Desktop links -->
         <div class="ml-auto hidden items-end gap-8 md:flex">
@@ -74,6 +78,7 @@
 <script setup lang="ts">
 const mobileOpen = ref(false)
 const navHidden = ref(false)
+const scrolled = ref(false)
 
 const navLinks = [
   { label: 'Services',      to: '/creative-services' },
@@ -96,6 +101,7 @@ onMounted(() => {
 
   const onScroll = () => {
     const y = window.scrollY
+    scrolled.value = y > 10
     if (y < threshold) {
       navHidden.value = false
     } else if (y > lastY + 5) {

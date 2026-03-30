@@ -415,6 +415,62 @@ export function useDirectus() {
     return res.data ?? []
   }
 
+  /** Fetch a single service by URL slug */
+  async function fetchServiceByUrl(url: string): Promise<DirectusService | null> {
+    const params = new URLSearchParams({
+      fields: 'id,name,title,url,color,class,caption,word,description,sort,status,featured_image',
+      'filter[url][_eq]': url,
+      'filter[status][_eq]': 'published',
+      limit: '1',
+    })
+    const res = await directusFetch<{ data: DirectusService[] }>('items/services', params)
+    return res.data?.[0] ?? null
+  }
+
+  /** Fetch portfolio items linked to a service */
+  async function fetchServicePortfolio(serviceId: string): Promise<DirectusPortfolioItem[]> {
+    const params = new URLSearchParams({
+      fields: [
+        'id', 'name', 'slug', 'url', 'status', 'sort',
+        'synopsis', 'challenge', 'creation', 'results',
+        'featured_image', 'featured', 'parent_id',
+        'client.id', 'client.name',
+        'service.id', 'service.name', 'service.url',
+        'images.directus_files_id',
+        'projects.id', 'projects.name', 'projects.slug', 'projects.url',
+        'projects.featured_image', 'projects.service.name',
+        'projects.images.directus_files_id',
+      ].join(','),
+      'filter[status][_eq]': 'published',
+      'filter[service][_eq]': serviceId,
+      limit: '100',
+      sort: 'sort',
+    })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
+    return res.data ?? []
+  }
+
+  /** Fetch case studies linked to a service via the M2M */
+  async function fetchServiceCaseStudies(serviceId: string): Promise<DirectusCaseStudy[]> {
+    const params = new URLSearchParams({
+      fields: [
+        'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
+        'challenge', 'solution', 'results', 'client', 'project_year',
+        'project_duration', 'tags', 'featured', 'date_created',
+        'organization.id', 'organization.name', 'organization.short_name',
+        'organization.logo', 'organization.icon',
+        'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        ...CASE_STUDY_PORTFOLIO_FIELDS,
+      ].join(','),
+      'filter[status][_eq]': 'published',
+      'filter[services][services_id][_eq]': serviceId,
+      limit: '50',
+      sort: 'sort,-date_created',
+    })
+    const res = await directusFetch<{ data: DirectusCaseStudy[] }>('items/case_studies', params)
+    return res.data ?? []
+  }
+
   /** Fetch portfolio items that are case studies (parent items with narrative content) */
   async function fetchFeaturedPortfolio(options: { limit?: number } = {}): Promise<DirectusPortfolioItem[]> {
     const params = new URLSearchParams({
@@ -473,6 +529,27 @@ export function useDirectus() {
       sort: 'sort,-date_created',
     })
     if (options.featured) params.set('filter[featured][_eq]', 'true')
+    const res = await directusFetch<{ data: DirectusCaseStudy[] }>('items/case_studies', params)
+    return res.data ?? []
+  }
+
+  /** Fetch case studies linked to an industry via the M2M */
+  async function fetchIndustryCaseStudies(industryId: string): Promise<DirectusCaseStudy[]> {
+    const params = new URLSearchParams({
+      fields: [
+        'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
+        'challenge', 'solution', 'results', 'client', 'project_year',
+        'project_duration', 'tags', 'featured', 'date_created',
+        'organization.id', 'organization.name', 'organization.short_name',
+        'organization.logo', 'organization.icon',
+        'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+        ...CASE_STUDY_PORTFOLIO_FIELDS,
+      ].join(','),
+      'filter[status][_eq]': 'published',
+      'filter[industries][industries_id][_eq]': industryId,
+      limit: '50',
+      sort: 'sort,-date_created',
+    })
     const res = await directusFetch<{ data: DirectusCaseStudy[] }>('items/case_studies', params)
     return res.data ?? []
   }
@@ -698,7 +775,11 @@ export function useDirectus() {
     fetchIndustryByUrl,
     fetchIndustryPortfolio,
     fetchServices,
+    fetchServiceByUrl,
+    fetchServicePortfolio,
+    fetchServiceCaseStudies,
     fetchCaseStudies,
+    fetchIndustryCaseStudies,
     fetchCaseStudyByUrl,
     fetchTestimonials,
     submitContact,

@@ -1,27 +1,24 @@
 <template>
   <div v-if="industry">
-    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
-      <div class="hue-container">
-        <NuxtLink to="/industries" class="hue-link text-[0.8125rem] text-[var(--grey)]">
-          <Icon name="lucide:arrow-left" class="size-3.5" /> All Industries
-        </NuxtLink>
-      </div>
+    <div class="bg-white px-4 md:px-6 py-2">
+      <NuxtLink to="/industries" class="hue-link text-[0.6875rem] text-[var(--silver)]">
+        <Icon name="lucide:arrow-left" class="size-3" /> All Industries
+      </NuxtLink>
     </div>
 
     <!-- Hero -->
-    <section class="grid border-b border-[var(--silk)] lg:grid-cols-[1fr_360px]">
-      <div class="px-8 py-16 lg:px-14 lg:py-20">
+    <section class="relative overflow-hidden px-2 md:px-6 py-16 lg:py-20">
+      <span
+        class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[0.7] opacity-[0.04] select-none translate-y-[0.15em]"
+      >{{ industry.name?.split(' ')[0] }}</span>
+      <div class="hue-container relative">
         <p class="hue-label mb-4">Industry</p>
-        <h1 class="hue-display-lg mb-5">{{ industry.name }}</h1>
+        <h1 class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
+          {{ industry.name?.split(' ')[0] }}<br />
+          {{ industry.name?.split(' ').slice(1).join(' ').replace('& ', '/ ') }}
+        </h1>
         <p v-if="industry.headline" class="hue-editorial-md mb-6">"{{ industry.headline }}"</p>
         <p v-if="industry.description" class="hue-body-lg max-w-lg">{{ industry.description }}</p>
-      </div>
-      <div class="bg-[var(--near-black)] px-10 py-16">
-        <p class="hue-label-sm mb-5 text-white/30">Clients in this sector</p>
-        <div class="mb-8 space-y-2">
-          <p v-for="name in clientNames" :key="name" class="text-[0.875rem] text-white/60">{{ name }}</p>
-          <p v-if="!clientNames.length" class="text-[0.875rem] text-white/30 italic">Portfolio work available — enquire directly.</p>
-        </div>
       </div>
     </section>
 
@@ -40,95 +37,48 @@
       </div>
     </section>
 
-    <!-- Case Studies for this industry -->
-    <section v-if="industryCaseStudies.length" class="hue-section px-2 md:px-6 py-20">
-      <div class="hue-container">
-        <div class="mb-10 flex items-end justify-between">
-          <p class="hue-label">Case studies</p>
-          <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem]">
-            All case studies <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-        </div>
-
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2">
-          <NuxtLink
-            v-for="cs in industryCaseStudies"
-            :key="cs.id"
-            :to="`/case-studies/${cs.url}`"
-            class="group flex flex-col justify-between bg-white p-8 transition-colors hover:bg-[var(--snow)]"
-          >
-            <div>
-              <div class="mb-4 flex flex-wrap gap-1.5">
-                <span
-                  v-for="svc in cs.services?.slice(0,2)"
-                  :key="svc.services_id?.id"
-                  class="hue-label-sm"
-                >{{ svc.services_id?.name }}</span>
-              </div>
-
-              <div v-if="csImage(cs)" class="mb-5 flex items-center justify-center overflow-hidden rounded-lg bg-white" style="aspect-ratio:16/9;">
-                <img
-                  :src="csImage(cs)!"
-                  :alt="cs.title ?? ''"
-                  class="max-h-[70%] max-w-[75%] object-contain"
-                  loading="lazy"
-                />
-              </div>
-
-              <h3 class="hue-display-md mb-2 transition-transform duration-300 group-hover:translate-x-1">{{ cs.title }}</h3>
-              <p v-if="cs.excerpt" class="hue-editorial-md line-clamp-2">{{ cs.excerpt }}</p>
-            </div>
-
-            <div class="mt-6 flex items-center justify-end">
-              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--silk)] transition-all duration-300 group-hover:border-[var(--near-black)] group-hover:bg-[var(--near-black)]">
-                <Icon name="lucide:arrow-right" class="size-3.5 text-[var(--silver)] transition-colors group-hover:text-white" />
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Portfolio for this industry (from Directus M2M) -->
-    <section v-if="industryProjects.length" class="hue-section-alt px-2 md:px-6 py-20">
+    <!-- Work in this industry (case studies + portfolio merged) -->
+    <section v-if="allWork.length" class="hue-section-alt px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Work in this industry</p>
-          <NuxtLink to="/portfolio" class="hue-link text-[0.8125rem]">
-            See all <Icon name="lucide:arrow-right" class="size-3.5" />
+          <NuxtLink to="/portfolio" class="hue-label hue-link">
+            See all <Icon name="lucide:arrow-right" class="size-3" />
           </NuxtLink>
         </div>
 
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
-            v-for="item in industryProjects"
-            :key="item.id"
-            :to="`/portfolio/${item.slug || item.url}`"
+            v-for="card in allWork"
+            :key="card.id"
+            :to="card.to"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
             <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
               <img
-                v-if="imgUrl(item)"
-                :src="imgUrl(item)"
-                :alt="item.name"
+                v-if="card.image"
+                :src="card.image"
+                :alt="card.name"
                 class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
               <div v-else class="flex h-full w-full items-center justify-center bg-[var(--cloud)]">
-                <span class="hue-label-sm">{{ item.client?.name || item.name }}</span>
+                <span class="hue-label-sm">{{ card.name }}</span>
               </div>
             </div>
             <div class="p-6">
-              <span class="hue-label-sm">{{ item.service?.name }}</span>
-              <h3 class="mt-2 text-[1rem] font-light transition-transform duration-300 group-hover:translate-x-1">{{ item.name }}</h3>
-              <p v-if="item.client" class="mt-1 text-[0.8125rem] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
+              <span class="hue-label-sm">{{ card.service }}</span>
+              <span v-if="card.type === 'case-study'" class="hue-label-sm ml-2 text-[var(--silver)]">Case Study</span>
+              <h3 class="mt-2 text-[0.6875rem] font-medium uppercase tracking-[0.12em] transition-transform duration-300 group-hover:translate-x-1">{{ card.name }}</h3>
+              <p v-if="card.excerpt" class="mt-1.5 font-sans text-[0.75rem] font-light leading-snug text-[var(--grey)] line-clamp-2">{{ card.excerpt }}</p>
+              <p v-else-if="card.client" class="mt-1 text-[0.75rem] text-[var(--color-text-muted)]">{{ card.client }}</p>
             </div>
           </NuxtLink>
         </div>
       </div>
     </section>
 
-    <div v-else-if="!industryProjects.length && !industryCaseStudies.length" class="hue-section px-2 md:px-6 py-16">
+    <div v-else-if="!allWork.length" class="hue-section px-2 md:px-6 py-16">
       <div class="hue-container rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-16 text-center">
         <p class="hue-editorial-md">Portfolio for this industry coming soon.</p>
         <NuxtLink to="/portfolio" class="hue-link mt-4 inline-flex">Browse all work <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
@@ -174,16 +124,17 @@ import type { DirectusPortfolioItem, DirectusCaseStudy, DirectusIndustry } from 
 const route = useRoute()
 const slug = route.params.slug as string
 
-const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchCaseStudies, assetUrl } = useDirectus()
+const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchServices, assetUrl } = useDirectus()
 
 const { data: industry } = await useAsyncData(`industry-${slug}`, () => fetchIndustryByUrl(slug))
 
 if (!industry.value) throw createError({ statusCode: 404, statusMessage: 'Industry not found' })
 
-const [{ data: portfolioItems }, { data: allIndustries }, { data: allCaseStudies }] = await Promise.all([
+const [{ data: portfolioItems }, { data: allIndustries }, { data: industryCaseStudyData }, { data: allServices }] = await Promise.all([
   useAsyncData(`industry-portfolio-${slug}`, () => fetchIndustryPortfolio(industry.value!.id)),
   useAsyncData('industries-all', () => fetchIndustries()),
-  useAsyncData(`industry-case-studies-${slug}`, () => fetchCaseStudies({ limit: 50 })),
+  useAsyncData(`industry-case-studies-${slug}`, () => fetchIndustryCaseStudies(industry.value!.id)),
+  useAsyncData('services-all', () => fetchServices()),
 ])
 
 /** Portfolio items linked to this industry (parent items as they appear in Directus) */
@@ -208,31 +159,87 @@ const clientNames = computed(() => {
   return [...names]
 })
 
-/** Service names and URLs derived from portfolio items + their children */
+/** All services, ordered by relevance to this industry (services used in portfolio/case studies first) */
 const serviceLinks = computed(() => {
-  const map = new Map<string, string | null>()
+  // Count how many times each service appears in this industry's work
+  const counts = new Map<string, number>()
   ;(portfolioItems.value ?? []).forEach((p) => {
-    if (p.service?.name && !map.has(p.service.name)) {
-      map.set(p.service.name, p.service.url ?? null)
-    }
-    // Children have expanded service from the fetch
+    if (p.service?.name) counts.set(p.service.name, (counts.get(p.service.name) ?? 0) + 1)
     ;((p.projects ?? []) as DirectusPortfolioItem[]).forEach((child) => {
-      if (child.service?.name && !map.has(child.service.name)) {
-        map.set(child.service.name, child.service.url ?? null)
-      }
+      if (child.service?.name) counts.set(child.service.name, (counts.get(child.service.name) ?? 0) + 1)
     })
   })
-  return [...map.entries()].map(([name, url]) => ({ name, url }))
+  ;(industryCaseStudyData.value ?? []).forEach((cs) => {
+    cs.services?.forEach((s) => {
+      if (s.services_id?.name) counts.set(s.services_id.name, (counts.get(s.services_id.name) ?? 0) + 1)
+    })
+  })
+
+  // Show all services, sorted: most relevant to this industry first, then by Directus sort
+  return (allServices.value ?? []).map((s) => ({
+    name: s.name,
+    url: s.url ?? null,
+    relevance: counts.get(s.name) ?? 0,
+  })).sort((a, b) => b.relevance - a.relevance || 0)
 })
 
 const serviceNames = computed(() => serviceLinks.value.map((s) => s.name))
 
-/** Case studies that share this industry */
-const industryCaseStudies = computed(() =>
-  (allCaseStudies.value ?? []).filter((cs) =>
-    cs.industries?.some((i) => i.industries_id?.id === industry.value?.id)
-  ).slice(0, 4)
-)
+/** Case studies linked to this industry (directly from Directus M2M) */
+const industryCaseStudies = computed(() => (industryCaseStudyData.value ?? []).slice(0, 6))
+
+/** Unified work grid: portfolio items + case studies merged, deduped, sorted */
+interface WorkCard {
+  id: string
+  type: 'portfolio' | 'case-study'
+  name: string
+  excerpt: string | null
+  to: string
+  image: string | null
+  service: string | null
+  client: string | null
+  sort: number
+}
+
+const allWork = computed<WorkCard[]>(() => {
+  const cards: WorkCard[] = []
+
+  // Case studies first
+  for (const cs of (industryCaseStudyData.value ?? [])) {
+    if (!cs.id) continue
+    cards.push({
+      id: cs.id,
+      type: 'case-study',
+      name: cs.title ?? '',
+      excerpt: cs.excerpt ?? null,
+      to: `/case-studies/${cs.url}`,
+      image: csImage(cs),
+      service: cs.services?.[0]?.services_id?.name ?? null,
+      client: cs.organization?.name ?? cs.client ?? null,
+      sort: 0,
+    })
+  }
+
+  // Then portfolio items
+  const seen = new Set<string>()
+  for (const p of (portfolioItems.value ?? [])) {
+    if (!p.id || seen.has(p.id)) continue
+    seen.add(p.id)
+    cards.push({
+      id: p.id,
+      type: 'portfolio',
+      name: p.name ?? '',
+      excerpt: null,
+      to: `/portfolio/${p.slug || p.url}`,
+      image: imgUrl(p),
+      service: p.service?.name ?? null,
+      client: p.client?.name ?? null,
+      sort: p.sort ?? 999,
+    })
+  }
+
+  return cards.slice(0, 12)
+})
 
 /** Other industries for the cross-link bar */
 const otherIndustries = computed(() =>
@@ -253,9 +260,24 @@ function imgUrl(item: DirectusPortfolioItem) {
 }
 
 function csImage(cs: DirectusCaseStudy): string | null {
+  // 1. Case study's own featured image
   if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
+  // 2. Organization logo or icon
+  if (cs.organization?.logo) return assetUrl(cs.organization.logo, 'medium-contain')
+  if (cs.organization?.icon) return assetUrl(cs.organization.icon, 'medium-contain')
+  // 3. Linked portfolio item's featured image
   const pi = cs.portfolio_items?.find((p) => p.portfolio_id?.featured_image)
   if (pi?.portfolio_id?.featured_image) return assetUrl(pi.portfolio_id.featured_image, 'medium-contain')
+  // 4. Linked portfolio item's gallery
+  const piGallery = cs.portfolio_items?.find((p) => p.portfolio_id?.images?.[0]?.directus_files_id)
+  if (piGallery?.portfolio_id?.images?.[0]?.directus_files_id) return assetUrl(piGallery.portfolio_id.images[0].directus_files_id, 'medium-contain')
+  // 5. Linked portfolio item's child project image
+  for (const link of (cs.portfolio_items ?? [])) {
+    for (const child of (link.portfolio_id?.projects ?? []) as any[]) {
+      const id = child.featured_image ?? child.images?.[0]?.directus_files_id
+      if (id) return assetUrl(id, 'medium-contain')
+    }
+  }
   return null
 }
 

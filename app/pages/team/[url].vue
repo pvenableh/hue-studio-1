@@ -1,30 +1,34 @@
 <template>
   <div v-if="member">
     <!-- Hero -->
-    <section class="relative overflow-hidden bg-[var(--cloud)]" style="min-height: 80vh;">
+    <section class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(400px, 50vh, 600px);">
+      <!-- Blurred background fill -->
+      <img
+        v-if="heroImgSrc"
+        :src="heroImgSrc"
+        :alt="''"
+        aria-hidden="true"
+        class="absolute inset-0 h-full w-full object-cover blur-2xl scale-110 opacity-40"
+      />
+
+      <!-- Sharp portrait centered -->
       <img
         v-if="heroImgSrc"
         :src="heroImgSrc"
         :alt="fullName"
-        class="absolute inset-0 h-full w-full object-cover"
-        :style="`object-position: center ${member.first_name === 'Camila' ? '0%' : '30%'};`"
+        class="absolute inset-0 mx-auto h-full object-contain drop-shadow-2xl"
+        style="object-position: center top;"
       />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
       <!-- Name overlay -->
-      <!-- First name -->
       <h1
-        class="absolute bottom-[clamp(2.5rem,6vw,5rem)] left-0 px-4 md:px-10 md:uppercase italic leading-[0.8] text-white/90"
-        style="font-family: var(--font-editorial); font-size: clamp(3rem, 8vw, 7rem); letter-spacing: clamp(0em, 1vw, 0.08em);"
+        class="absolute bottom-[clamp(2.5rem,6vw,4rem)] left-0 px-4 md:px-10 uppercase leading-[0.95] tracking-[0.08em] font-light text-white/90"
+        style="font-family: var(--font); font-size: clamp(2.5rem, 6vw, 4.5rem);"
       >
-        {{ member.first_name }}
+        {{ member.first_name }}<br />
+        <span class="font-serif italic opacity-70" style="font-size: 0.6em; letter-spacing: 0;">{{ member.last_name }}</span>
       </h1>
-
-      <!-- Last name watermark below -->
-      <span
-        class="pointer-events-none absolute bottom-0 left-0 px-4 pb-6 md:px-10 md:pb-8 md:uppercase select-none font-medium tracking-[0.3em] text-white/20"
-        style="font-family: var(--font); font-size: clamp(1.5rem, 4vw, 3.5rem);"
-      >{{ member.last_name }}</span>
     </section>
 
     <!-- Info bar -->
