@@ -111,11 +111,73 @@
       </div>
     </section>
 
-    <!-- Project deliverables -->
-    <section v-if="childProjects.length" class="px-2 md:px-6 py-16">
+    <!-- ═══ OUTCOME + DELIVERABLES — Desktop: sticky scroll-reveal ═══ -->
+
+    <!-- Desktop: combined sticky layout -->
+    <section
+      v-if="narrativeResults && childProjects.length"
+      data-scroll-reveal-root
+      class="hidden lg:block border-t border-[var(--silk)] px-2 md:px-6"
+    >
+      <div class="hue-container">
+        <div class="grid grid-cols-[1fr_1fr] gap-16 lg:grid-cols-[380px_1fr] lg:gap-20">
+          <!-- Left: sticky outcome -->
+          <div class="sticky top-20 self-start pt-20">
+            <p class="mb-5 text-[0.625rem] uppercase tracking-[0.25em]" style="color: var(--color-accent);">The Outcome</p>
+            <TextScrollReveal
+              :text="stripHtmlText(narrativeResults)"
+              class="max-w-md text-[1.5rem] font-normal leading-snug text-[var(--near-black)] lg:text-[1.75rem]"
+            />
+          </div>
+
+          <!-- Right: scrolling deliverables -->
+          <div class="py-20">
+            <p class="hue-label mb-8">Project Deliverables</p>
+            <div class="flex flex-col gap-6">
+              <component
+                :is="item.url ? NuxtLink : 'div'"
+                v-for="item in childProjects"
+                :key="item.id"
+                v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
+                class="group block overflow-hidden border border-[var(--silk)] bg-white transition-colors hover:bg-[var(--snow)]"
+              >
+                <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 16/9;">
+                  <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+                </div>
+                <div class="p-5">
+                  <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+                  <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
+                  <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+                </div>
+              </component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Desktop: outcome only (no deliverables) -->
+    <section
+      v-else-if="narrativeResults && !childProjects.length"
+      data-scroll-reveal-root
+      class="hidden lg:block border-t border-[var(--silk)] px-2 md:px-6 py-20"
+    >
+      <div class="hue-container">
+        <p class="mb-5 text-[0.625rem] uppercase tracking-[0.25em]" style="color: var(--color-accent);">The Outcome</p>
+        <TextScrollReveal
+          :text="stripHtmlText(narrativeResults)"
+          class="max-w-lg text-[1.5rem] font-normal leading-snug text-[var(--near-black)] lg:text-[1.75rem]"
+        />
+      </div>
+    </section>
+
+    <!-- ═══ MOBILE FALLBACK — current sequential layout ═══ -->
+
+    <!-- Mobile: deliverables -->
+    <section v-if="childProjects.length" class="lg:hidden px-2 py-16">
       <div class="hue-container">
         <p class="hue-label mb-8">Project Deliverables</p>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-px overflow-hidden border border-[var(--silk)] bg-[var(--silk)] grid-cols-2">
           <component
             :is="item.url ? NuxtLink : 'div'"
             v-for="item in childProjects"
@@ -126,7 +188,7 @@
             <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
               <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
             </div>
-            <div class="p-5">
+            <div class="p-4">
               <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
             </div>
@@ -135,11 +197,11 @@
       </div>
     </section>
 
-    <!-- The Outcome (dark section) -->
-    <section v-if="narrativeResults" class="bg-[var(--near-black)] px-2 md:px-6 py-20">
+    <!-- Mobile: outcome -->
+    <section v-if="narrativeResults" class="lg:hidden bg-[var(--near-black)] px-2 py-20">
       <div class="hue-container">
         <p class="mb-5 text-[0.625rem] uppercase tracking-[0.25em]" style="color: var(--color-accent);">The Outcome</p>
-        <div class="mb-10 max-w-lg text-[2.25rem] font-light leading-tight text-white" style="font-family:var(--font-editorial);" v-html="narrativeResults" />
+        <div class="max-w-lg text-[2.25rem] font-light leading-tight text-white" style="font-family:var(--font-editorial);" v-html="narrativeResults" />
       </div>
     </section>
 
@@ -353,6 +415,11 @@ const bgWord = computed(() => {
   const meaningful = words.find((w) => !articles.has(w.toLowerCase()))
   return meaningful ?? words[0] ?? ''
 })
+
+/** Strip HTML for scroll reveal */
+function stripHtmlText(html: string): string {
+  return html.replace(/<[^>]+>/g, '').trim()
+}
 
 /** Narrative content — all from the case study record */
 const narrativeChallenge = computed(() => cs.value?.challenge ?? null)
