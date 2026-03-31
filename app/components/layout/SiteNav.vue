@@ -26,7 +26,7 @@
     <!-- Main nav -->
     <nav class="bg-white/70 backdrop-blur-xl">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
-        <NuxtLink to="/" class="absolute bottom-[1px] -left-[10px] md:left-0 z-10 shrink-0">
+        <NuxtLink to="/" class="absolute bottom-[-1px] left-0 md:bottom-[1px] md:left-0 z-10 shrink-0">
           <LayoutLogo size="18px" class="w-32" />
         </NuxtLink>
         <div class="w-24 shrink-0" /><!-- spacer for logo -->
@@ -68,8 +68,8 @@
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-[var(--near-black)]/80 backdrop-blur-sm" @click="mobileOpen = false" />
 
-        <!-- Menu panel — full width, drops from top -->
-        <div class="mobile-panel absolute inset-x-0 top-0 bg-[var(--near-black)] px-6 pb-10 pt-20">
+        <!-- Menu panel — full width, full height, drops from top -->
+        <div class="mobile-panel absolute inset-0 bg-[var(--near-black)] px-6 pt-20">
           <!-- Close button -->
           <button
             class="absolute right-5 top-5 flex h-9 w-9 items-center justify-center text-white/40 transition-colors hover:text-white"
@@ -79,14 +79,26 @@
             <Icon name="lucide:x" class="size-5" />
           </button>
 
-          <nav class="flex flex-col gap-10">
+          <!-- Logo watermark -->
+          <LayoutLogo color="rgba(255,255,255,0.04)" class="pointer-events-none absolute -left-[5%] top-0 w-[105%] select-none" />
+
+          <nav class="relative z-10 flex h-full flex-col justify-between pb-10">
             <div class="flex flex-col gap-5">
+              <NuxtLink
+                to="/"
+                class="mobile-link text-[0.625rem] font-medium uppercase tracking-[0.3em] text-white/50 transition-all duration-300 hover:text-white hover:tracking-[0.35em]"
+                :style="{ transitionDelay: '80ms' }"
+                exact-active-class="!text-white"
+                @click="mobileOpen = false"
+              >
+                Home
+              </NuxtLink>
               <NuxtLink
                 v-for="(link, i) in navLinks"
                 :key="link.to"
                 :to="link.to"
                 class="mobile-link text-[0.625rem] font-medium uppercase tracking-[0.3em] text-white/50 transition-all duration-300 hover:text-white hover:tracking-[0.35em]"
-                :style="{ transitionDelay: `${80 + i * 40}ms` }"
+                :style="{ transitionDelay: `${120 + i * 40}ms` }"
                 active-class="!text-white"
                 @click="mobileOpen = false"
               >
@@ -94,8 +106,8 @@
               </NuxtLink>
             </div>
 
-            <div class="flex items-center gap-6">
-              <MeetingRequest class="mobile-cta !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
+            <div class="flex flex-col gap-4">
+              <MeetingRequest class="mobile-cta self-start !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
               <p class="text-[0.5rem] uppercase tracking-[0.3em] text-white/20">Miami Beach · New York</p>
             </div>
           </nav>
@@ -184,13 +196,17 @@ onMounted(() => {
 }
 
 /* ── Overlay transitions ── */
-.mobile-overlay-enter-active,
-.mobile-overlay-leave-active {
+.mobile-overlay-enter-active {
   transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.mobile-overlay-enter-active .mobile-panel,
-.mobile-overlay-leave-active .mobile-panel {
+.mobile-overlay-leave-active {
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-overlay-enter-active .mobile-panel {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-overlay-leave-active .mobile-panel {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .mobile-overlay-enter-from,
 .mobile-overlay-leave-to {
@@ -208,5 +224,13 @@ onMounted(() => {
 .mobile-overlay-enter-from .mobile-link {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+/* ── Smooth link exit ── */
+.mobile-overlay-leave-active .mobile-link {
+  transition: opacity 0.2s ease;
+}
+.mobile-overlay-leave-to .mobile-link {
+  opacity: 0;
 }
 </style>

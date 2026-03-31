@@ -71,7 +71,7 @@
               >{{ slide.description }}</p>
               <div
                 :data-anim="`${i}-cta`"
-                class="mt-12 flex flex-col gap-4 sm:flex-row"
+                class="mt-12 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
                 style="opacity: 0"
               >
                 <template v-for="cta in slide.ctas" :key="cta.text">
