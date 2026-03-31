@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="`/portfolio/${item.slug || item.url}`"
+    :to="`/portfolio/${item.url}`"
     class="group relative block bg-white transition-colors hover:bg-[var(--snow)]"
   >
     <!-- Image -->
@@ -19,7 +19,7 @@
       <div v-if="overlay" class="absolute inset-0 flex flex-col justify-center bg-[var(--color-accent)]/90 p-7 opacity-0 transition-opacity duration-250 group-hover:opacity-100">
         <p class="mb-3 text-[0.75rem] font-medium uppercase tracking-[0.12em] text-white">{{ item.name }}</p>
         <p v-if="item.synopsis" class="mb-4 line-clamp-3 text-[0.8125rem] leading-relaxed text-white/80" v-html="stripTags(item.synopsis ?? '')" />
-        <span class="inline-block border-b border-white/40 pb-0.5 text-[0.625rem] uppercase tracking-widest text-white">View Case Study →</span>
+        <span class="inline-block border-b border-white/40 pb-0.5 text-[0.625rem] uppercase tracking-widest text-white">View Project →</span>
       </div>
     </div>
 

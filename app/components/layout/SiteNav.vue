@@ -24,10 +24,10 @@
     </NuxtLink>
 
     <!-- Main nav -->
-    <nav class="bg-white/70 backdrop-blur-xl">
+    <nav class="bg-white/70 backdrop-blur-xl overflow-hidden">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
-        <NuxtLink to="/" class="absolute bottom-[-1px] left-0 md:bottom-[1px] md:left-0 z-10 shrink-0">
-          <LayoutLogo size="18px" class="w-32" />
+        <NuxtLink to="/" class="absolute bottom-[-1px] left-0 md:-bottom-[2px] md:left-0 z-10 shrink-0">
+          <LayoutLogo size="18px" :animate="true" class="w-32" />
         </NuxtLink>
         <div class="w-24 shrink-0" /><!-- spacer for logo -->
 
@@ -80,7 +80,7 @@
           </button>
 
           <!-- Logo watermark -->
-          <LayoutLogo color="rgba(255,255,255,0.04)" class="pointer-events-none absolute -left-[5%] top-0 w-[105%] select-none" />
+          <LayoutLogo color="rgba(255,255,255,0.04)" class="menu-watermark pointer-events-none absolute bottom-0 w-[103%] -left-2 select-none" />
 
           <nav class="relative z-10 flex h-full flex-col justify-between pb-10">
             <div class="flex flex-col gap-5">
@@ -232,5 +232,21 @@ onMounted(() => {
 }
 .mobile-overlay-leave-to .mobile-link {
   opacity: 0;
+}
+
+/* ── Logo watermark depth animation ── */
+.mobile-overlay-enter-active .menu-watermark {
+  transition: opacity 0.8s ease 0.15s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+.mobile-overlay-enter-from .menu-watermark {
+  opacity: 0;
+  transform: translateY(30px) scale(0.97);
+}
+.mobile-overlay-leave-active .menu-watermark {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-overlay-leave-to .menu-watermark {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
 }
 </style>

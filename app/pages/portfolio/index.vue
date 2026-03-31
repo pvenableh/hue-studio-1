@@ -23,73 +23,9 @@
       @update:industry="activeIndustry = $event"
     /> -->
 
-    <!-- Featured Case Studies -->
-    <section v-if="activeService === 'All' && activeIndustry === 'All' && featuredItems.length" class="px-2 md:px-6 pt-12">
-      <div class="hue-container">
-        <p class="hue-label mb-8">Featured Case Studies</p>
-        <div class="space-y-12">
-          <NuxtLink
-            v-for="(item, i) in featuredItems"
-            :key="item.id"
-            :to="`/portfolio/${item.url}`"
-            class="group grid overflow-hidden md:grid-cols-2"
-            :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
-          >
-            <!-- Image -->
-            <div class="relative flex items-center justify-center overflow-hidden bg-white" :class="i % 2 === 1 ? 'md:[direction:ltr]' : ''" style="aspect-ratio: 4/3">
-              <img
-                v-if="imgUrl(item, true)"
-                :src="imgUrl(item, true)"
-                :alt="item.name"
-                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-              />
-              <div v-else class="flex h-full w-full items-center justify-center bg-white">
-                <span class="hue-label">{{ item.client?.name || item.name }}</span>
-              </div>
-            </div>
-
-            <!-- Content -->
-            <div class="flex flex-col justify-between p-10 md:[direction:ltr]">
-              <div>
-                <p class="mb-2 text-[0.625rem] tracking-widest text-[var(--silver)]">{{ String(i + 1).padStart(2, '0') }} / Featured</p>
-                <p class="hue-label-sm mb-3" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
-                <h2 class="mb-4 text-[1.25rem] font-light uppercase tracking-[0.08em] leading-tight">{{ item.name }}</h2>
-                <p
-                  v-if="item.synopsis"
-                  class="mb-6 line-clamp-3 text-[0.875rem] leading-relaxed text-[var(--grey)]"
-                  v-html="stripTags(item.synopsis)"
-                />
-                <!-- Result callout -->
-                <div v-if="item.results" class="mb-6 border-l-2 border-[var(--color-accent)] bg-[var(--snow)] py-2 pl-4">
-                  <p class="mb-1 text-[0.5625rem] font-medium uppercase tracking-widest" style="color: var(--color-accent);">Business Outcome</p>
-                  <p class="line-clamp-2 text-[0.9375rem] italic leading-snug" style="font-family:var(--font-editorial);" v-html="stripTags(item.results)" />
-                </div>
-              </div>
-              <div class="flex items-end justify-between">
-                <div class="flex gap-6">
-                  <div>
-                    <p class="hue-label-sm mb-1 text-[var(--silver)]">Services</p>
-                    <p class="text-[0.75rem] text-[var(--grey)]">{{ item.service?.name }}</p>
-                  </div>
-                  <!-- Year hidden until data is updated -->
-                  <!-- <div v-if="item.project_year">
-                    <p class="hue-label-sm mb-1 text-[var(--silver)]">Year</p>
-                    <p class="text-[0.75rem]" :class="i % 2 === 1 ? 'text-white/50' : 'text-[var(--grey)]'">{{ item.project_year }}</p>
-                  </div> -->
-                </div>
-                <span class="text-[0.6875rem] uppercase tracking-wider" style="color: var(--color-accent);">View Case Study →</span>
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
     <!-- Grid -->
     <section class="hue-section px-2 md:px-6 pb-24 pt-12">
       <div class="hue-container">
-        <p v-if="featuredItems.length && activeService === 'All' && activeIndustry === 'All'" class="hue-label mb-8">More Work</p>
-
         <!-- Loading -->
         <div v-if="pending" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div v-for="i in 6" :key="i" class="h-80 animate-pulse rounded-sm bg-[var(--cloud)]" />
@@ -158,12 +94,9 @@ useSeoMeta({
 
 defineOgImage({ component: 'HueOg', props: { title: 'Portfolio', description: 'Selected work across brand, digital, print, and video.', label: 'Portfolio' } })
 
-const { fetchPortfolio, fetchFeaturedPortfolio, assetUrl, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
+const { fetchPortfolio, assetUrl, primaryImageId, primaryIndustryName } = useDirectus()
 
-const [{ data: allItems, pending }, { data: featured }] = await Promise.all([
-  useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100, parentOnly: true })),
-  useAsyncData('portfolio-featured', () => fetchFeaturedPortfolio({ limit: 3 })),
-])
+const { data: allItems, pending } = await useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100, parentOnly: true }))
 
 const activeService  = ref('All')
 const activeIndustry = ref('All')
@@ -191,25 +124,10 @@ const filtered = computed(() => {
   })
 })
 
-const featuredItems = computed(() => featured.value ?? [])
-const featuredIds = computed(() => new Set(featuredItems.value.map((f) => f.id)))
+const gridItems = computed(() => filtered.value)
 
-// Grid shows filtered items minus featured (when unfiltered)
-const gridItems = computed(() => {
-  if (activeService.value !== 'All' || activeIndustry.value !== 'All') return filtered.value
-  return filtered.value.filter((p) => !featuredIds.value.has(p.id))
-})
-
-function imgUrl(item: DirectusPortfolioItem, wide = false) {
+function imgUrl(item: DirectusPortfolioItem) {
   const id = primaryImageId(item)
-  return id ? assetUrl(id, wide ? 'large-contain' : 'medium-contain') : null
-}
-
-function industryName(item: DirectusPortfolioItem) {
-  return primaryIndustryName(item)
-}
-
-function stripTags(html: string) {
-  return stripHtml(html)
+  return id ? assetUrl(id, 'medium-contain') : null
 }
 </script>

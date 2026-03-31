@@ -3,7 +3,7 @@
     ref="wordRef"
     class="pointer-events-none absolute select-none italic opacity-[0.04]"
     :class="[
-      dark ? 'text-white' : 'text-[var(--near-black)]',
+      'text-[#888]',
       right ? 'right-0' : 'left-0',
     ]"
     :style="positionStyle"

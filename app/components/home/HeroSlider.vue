@@ -1,16 +1,19 @@
 <template>
   <section
     ref="sliderRef"
-    class="relative overflow-hidden bg-black"
+    class="relative overflow-hidden bg-black cursor-grab select-none"
     :style="{ height: heroHeight }"
     tabindex="0"
     aria-roledescription="carousel"
     aria-label="Featured highlights"
     @mouseenter="pause"
-    @mouseleave="resume"
+    @mouseleave="onMouseLeave"
     @keydown="onKeydown"
     @touchstart.passive="onTouchStart"
     @touchend.passive="onTouchEnd"
+    @mousedown.prevent="onDragStart"
+    @mousemove.prevent="onDragMove"
+    @mouseup.prevent="onDragEnd"
   >
     <!-- Slides — stacked absolutely, only active one visible -->
     <div
@@ -314,6 +317,41 @@ function onTouchEnd(e: TouchEvent) {
   const dy = e.changedTouches[0].clientY - touchY.value
   if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
     goTo(active.value + (dx < 0 ? 1 : -1))
+  }
+  resume()
+}
+
+// --- Mouse drag ---
+const dragging = ref(false)
+const dragStartX = ref(0)
+const dragStartY = ref(0)
+
+function onDragStart(e: MouseEvent) {
+  dragging.value = true
+  dragStartX.value = e.clientX
+  dragStartY.value = e.clientY
+  pause()
+}
+function onDragMove(e: MouseEvent) {
+  if (!dragging.value) return
+  // Change cursor while dragging
+  if (sliderRef.value) sliderRef.value.style.cursor = 'grabbing'
+}
+function onDragEnd(e: MouseEvent) {
+  if (!dragging.value) return
+  dragging.value = false
+  if (sliderRef.value) sliderRef.value.style.cursor = ''
+  const dx = e.clientX - dragStartX.value
+  const dy = e.clientY - dragStartY.value
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    goTo(active.value + (dx < 0 ? 1 : -1))
+  }
+  resume()
+}
+function onMouseLeave() {
+  if (dragging.value) {
+    dragging.value = false
+    if (sliderRef.value) sliderRef.value.style.cursor = ''
   }
   resume()
 }

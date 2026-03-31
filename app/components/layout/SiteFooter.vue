@@ -113,7 +113,7 @@ const { submitSubscribe } = useDirectus()
 const { trackFormSubmit, trackCtaClick } = useAnalytics()
 
 // Pages that have their own CTA sections — hide the footer CTA to avoid doubling
-const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-analysis', '/contact']
+const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-analysis', '/contact', '/industries']
 const showCta = computed(() => {
   const path = route.path
   // Exact match or starts-with for dynamic routes like /creative-services/[slug], /case-studies/[url], /portfolio/[slug]

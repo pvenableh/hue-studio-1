@@ -44,7 +44,8 @@
             <div v-if="item.service">
               <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Services</p>
               <div class="flex flex-wrap gap-1.5">
-                <span class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ item.service.name }}</span>
+                <NuxtLink v-if="item.service.url" :to="`/creative-services/${item.service.url}`" class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]">{{ item.service.name }}</NuxtLink>
+                <span v-else class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ item.service.name }}</span>
                 <template v-if="childServices.length">
                   <span v-for="svc in childServices" :key="svc" class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ svc }}</span>
                 </template>
@@ -100,11 +101,11 @@
         <!-- Single image: full width -->
         <template v-if="allImages.length === 1">
           <p class="hue-label mb-8">Gallery</p>
-          <div class="flex items-center justify-center rounded-sm border border-[var(--silk)] bg-white p-8" style="aspect-ratio: 4/3;">
+          <div class="relative flex items-center justify-center overflow-hidden border border-black/[0.04] bg-white p-4 aspect-[4/3] md:aspect-[16/9] shadow-[0_8px_40px_rgba(0,0,0,0.08)]">
             <img
-              :src="assetUrl(allImages[0].directus_files_id, 'medium-contain')"
+              :src="assetUrl(allImages[0].directus_files_id, 'large-contain')"
               :alt="item.name"
-              class="max-h-full max-w-full object-contain"
+              class="relative max-h-full max-w-full object-contain"
             />
           </div>
         </template>
@@ -127,19 +128,19 @@
           </div>
           <div
             ref="galleryCarouselRef"
-            class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+            class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing"
             @scroll="onGalleryScroll"
+            @mousedown.prevent="startCarouselDrag($event, galleryCarouselRef)"
           >
             <div
               v-for="(img, i) in allImages"
               :key="img.directus_files_id"
-              class="w-full flex-none snap-start flex items-center justify-center rounded-sm border border-[var(--silk)] bg-white p-8"
-              style="aspect-ratio: 4/3;"
+              class="relative w-full flex-none snap-start flex items-center justify-center overflow-hidden border border-black/[0.04] bg-white p-4 aspect-[4/3] md:aspect-[16/9] shadow-[0_8px_40px_rgba(0,0,0,0.08)]"
             >
               <img
-                :src="assetUrl(img.directus_files_id, 'medium-contain')"
+                :src="assetUrl(img.directus_files_id, 'large-contain')"
                 :alt="`${item.name} — image ${i + 1}`"
-                class="max-h-full max-w-full object-contain"
+                class="relative max-h-full max-w-full object-contain"
                 loading="lazy"
               />
             </div>
@@ -227,12 +228,11 @@
             </button>
           </div>
         </div>
-        <div ref="baCarouselRef" class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" :class="beforeAfters.length === 1 ? '' : '-mx-2 px-2'">
+        <div ref="baCarouselRef" :class="['flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing', beforeAfters.length === 1 ? '' : '-mx-2 px-2']" @mousedown.prevent="startCarouselDrag($event, baCarouselRef)">
           <div
             v-for="(ba, idx) in beforeAfters"
             :key="ba.id"
-            class="snap-start"
-            :class="beforeAfters.length === 1 ? 'w-full' : 'w-[85%] flex-none lg:w-[70%]'"
+            :class="beforeAfters.length === 1 ? 'snap-start w-full' : 'snap-start w-[85%] flex-none lg:w-[70%]'"
           >
             <div
               v-if="ba.before_image && ba.after_image"
@@ -286,7 +286,7 @@
             </button>
           </div>
         </div>
-        <div ref="relatedCarouselRef" class="flex gap-5 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory scrollbar-hide">
+        <div ref="relatedCarouselRef" class="flex gap-5 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory scrollbar-hide cursor-grab active:cursor-grabbing" @mousedown.prevent="startCarouselDrag($event, relatedCarouselRef)">
           <component
             :is="sib.url ? NuxtLink : 'div'"
             v-for="sib in siblingProjects"
@@ -307,7 +307,7 @@
     </section>
 
     <!-- Related industry -->
-    <section v-if="validIndustries.length" class="hue-section px-2 md:px-6 py-16">
+    <section v-if="validIndustries.length" class="px-2 md:px-6 py-8">
       <div class="hue-container">
         <div class="flex flex-wrap items-center gap-4">
           <p class="hue-label">More in this industry</p>
@@ -317,6 +317,42 @@
             :to="`/industries/${ind.url}`"
             class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
           >{{ ind.name }}</NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Work -->
+    <section v-if="relatedWork?.length" class="px-2 md:px-6 pt-8 pb-16">
+      <div class="hue-container">
+        <div class="mb-8 flex items-end justify-between">
+          <p class="hue-label">Related Work</p>
+          <div class="hidden gap-2 sm:flex">
+            <button
+              class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--silver)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+              aria-label="Previous"
+              @click="scrollRelatedWork(-1)"
+            ><Icon name="lucide:chevron-left" class="size-4" /></button>
+            <button
+              class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--silver)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]"
+              aria-label="Next"
+              @click="scrollRelatedWork(1)"
+            ><Icon name="lucide:chevron-right" class="size-4" /></button>
+          </div>
+        </div>
+        <div
+          ref="relatedWorkRef"
+          class="scrollbar-hide -mx-2 flex snap-x snap-mandatory gap-5 overflow-x-auto px-2 scroll-smooth cursor-grab active:cursor-grabbing"
+          @mousedown.prevent="startCarouselDrag($event, relatedWorkRef)"
+        >
+          <PortfolioCard
+            v-for="rw in relatedWork"
+            :key="rw.id"
+            :item="rw"
+            :image-src="relatedImgUrl(rw)"
+            aspect-ratio="3/2"
+            compact
+            class="w-[75vw] flex-none snap-start sm:w-[45%] lg:w-[30%] overflow-hidden rounded-sm border border-[var(--silk)]"
+          />
         </div>
       </div>
     </section>
@@ -345,7 +381,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 const route = useRoute()
 const slug = route.params.slug as string
 const { trackBeforeAfterInteraction } = useAnalytics()
-const { fetchPortfolioItem, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
+const { fetchPortfolioItem, fetchPortfolio, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 
@@ -444,6 +480,25 @@ function scrollBaCarousel(dir: number) {
   el.scrollBy({ left: dir * (card?.offsetWidth ?? 600), behavior: 'smooth' })
 }
 
+/** Generic carousel mouse drag */
+function startCarouselDrag(e: MouseEvent, container: HTMLElement | null) {
+  if (!container) return
+  const startX = e.clientX
+  const startScroll = container.scrollLeft
+  container.style.scrollSnapType = 'none'
+
+  const onMove = (ev: MouseEvent) => {
+    container.scrollLeft = startScroll - (ev.clientX - startX)
+  }
+  const onUp = () => {
+    container.style.scrollSnapType = ''
+    window.removeEventListener('mousemove', onMove)
+    window.removeEventListener('mouseup', onUp)
+  }
+  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mouseup', onUp)
+}
+
 /** Client name — handle both M2O object and plain string */
 const clientName = computed(() => {
   const c = item.value?.client
@@ -534,6 +589,39 @@ const childServices = computed(() => {
 function childImgUrl(child: DirectusPortfolioItem) {
   const id = primaryImageId(child)
   return id ? assetUrl(id, 'medium-contain') : null
+}
+
+// Related work — same service or industry
+const { data: allPortfolio } = await useAsyncData('portfolio-all-for-related', () => fetchPortfolio({ limit: 100, parentOnly: true }))
+
+const relatedWork = computed(() => {
+  if (!item.value || !allPortfolio.value) return []
+  const currentId = item.value.id
+  const serviceId = item.value.service?.id
+  const industryIds = new Set((item.value.industries ?? []).map((i) => i.industries_id?.id).filter(Boolean))
+
+  return allPortfolio.value
+    .filter((p) => {
+      if (p.id === currentId) return false
+      const sameService = serviceId && p.service?.id === serviceId
+      const sameIndustry = (p.industries ?? []).some((i) => industryIds.has(i.industries_id?.id))
+      return sameService || sameIndustry
+    })
+    .slice(0, 12)
+})
+
+function relatedImgUrl(p: DirectusPortfolioItem) {
+  const id = primaryImageId(p)
+  return id ? assetUrl(id, 'medium-contain') : null
+}
+
+const relatedWorkRef = ref<HTMLElement | null>(null)
+
+function scrollRelatedWork(dir: number) {
+  const el = relatedWorkRef.value
+  if (!el) return
+  const card = el.querySelector('.snap-start') as HTMLElement
+  el.scrollBy({ left: dir * (card?.offsetWidth ?? 400), behavior: 'smooth' })
 }
 
 const ogImg = computed(() => {

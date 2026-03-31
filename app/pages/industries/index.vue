@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark relative overflow-x-clip px-2 md:px-6 py-28 md:py-36">
+    <section class="hue-section-dark relative overflow-x-clip px-2 md:px-6 pb-16 pt-24 md:pt-32">
       <SectionWatermark word="Industries" :dark="true" />
       <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
@@ -20,7 +20,7 @@
     </section>
 
     <!-- Industry grid -->
-    <section class="hue-section px-2 md:px-6 py-16">
+    <section class="hue-section !bg-transparent px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
           <NuxtLink
