@@ -69,7 +69,7 @@
             :alt="cs.title ?? ''"
             class="h-full w-full object-cover"
           />
-          <div class="absolute inset-0 bg-black/65" />
+          <div ref="imageOverlayRef" class="absolute inset-0 bg-black" style="opacity: 0;" />
         </div>
       </div>
 
@@ -83,7 +83,7 @@
           <section v-if="narrativeChallenge" class="py-20">
             <div class="hue-container max-w-3xl">
               <span class="text-[0.625rem] tracking-widest text-white/20">01</span>
-              <p class="hue-label mt-1 mb-6 text-white/50">The Challenge</p>
+              <p class="mt-2 mb-3 text-[1.75rem] font-light text-white/50 lg:text-[2.5rem]" style="font-family: var(--font-editorial);">The Challenge</p>
               <div class="hue-body-lg text-white/80" v-html="narrativeChallenge" />
             </div>
           </section>
@@ -92,7 +92,7 @@
           <section v-if="narrativeApproach" class="py-20">
             <div class="hue-container max-w-3xl">
               <span class="text-[0.625rem] tracking-widest text-white/20">02</span>
-              <p class="hue-label mt-1 mb-6 text-white/50">Our Approach</p>
+              <p class="mt-2 mb-3 text-[1.75rem] font-light text-white/50 lg:text-[2.5rem]" style="font-family: var(--font-editorial);">Our Approach</p>
               <div class="hue-body-lg text-white/80" v-html="narrativeApproach" />
             </div>
           </section>
@@ -361,7 +361,7 @@
     </section>
 
     <!-- Videos — carousel if multiple -->
-    <section v-if="videos.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-20">
+    <section v-if="videos.length && !childProjects.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-20">
       <div class="hue-container">
         <div class="mb-8 flex items-end justify-between">
           <p class="hue-label">Video</p>
@@ -451,6 +451,29 @@ const bgWordRef = ref<HTMLElement | null>(null)
 const heroLabel = ref<HTMLElement | null>(null)
 const heroTitle = ref<HTMLElement | null>(null)
 const heroDesc = ref<HTMLElement | null>(null)
+const narrativeWrapRef = ref<HTMLElement | null>(null)
+const imageOverlayRef = ref<HTMLElement | null>(null)
+
+// Animate overlay opacity on scroll — transparent → 70% as challenge comes into view
+onMounted(async () => {
+  await nextTick()
+  if (!imageOverlayRef.value || !narrativeWrapRef.value || import.meta.server) return
+
+  const { gsap } = await import('gsap')
+  const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+  gsap.registerPlugin(ScrollTrigger)
+
+  gsap.to(imageOverlayRef.value, {
+    opacity: 0.7,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: narrativeWrapRef.value,
+      start: 'top top',
+      end: '40% top',
+      scrub: true,
+    },
+  })
+})
 
 const { data: cs } = await useAsyncData(`case-study-${url}`, () => fetchCaseStudyByUrl(url))
 
