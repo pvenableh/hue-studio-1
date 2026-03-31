@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section relative overflow-hidden px-2 md:px-6 pb-12 pt-20 md:pt-28">
-      <SectionWatermark word="Work" top="1rem" />
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-12 pt-20 md:pt-28">
+      <SectionWatermark word="Work" />
       <div class="hue-container relative">
         <p class="hue-label mb-4">Our Work</p>
         <h1 class="hue-display-xl mb-5">
@@ -12,8 +12,8 @@
       </div>
     </section>
 
-    <!-- Filters -->
-    <PortfolioFilters
+    <!-- Filters (hidden for now) -->
+    <!-- <PortfolioFilters
       :service-filters="serviceFilters"
       :industries="dynamicIndustries"
       :active-service="activeService"
@@ -21,7 +21,7 @@
       :count="filtered.length"
       @update:service="activeService = $event"
       @update:industry="activeIndustry = $event"
-    />
+    /> -->
 
     <!-- Featured Case Studies -->
     <section v-if="activeService === 'All' && activeIndustry === 'All' && featuredItems.length" class="px-2 md:px-6 pt-12">
@@ -103,39 +103,15 @@
 
         <!-- Projects -->
         <div v-else class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <NuxtLink
+          <PortfolioCard
             v-for="item in gridItems"
             :key="item.id"
-            :to="`/portfolio/${item.url}`"
-            class="group relative block overflow-hidden bg-white transition-colors hover:bg-[var(--snow)]"
-          >
-            <!-- Image -->
-            <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 3/2">
-              <img
-                v-if="imgUrl(item)"
-                :src="imgUrl(item)"
-                :alt="item.name"
-                class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-                loading="lazy"
-              />
-              <div v-else class="flex h-full w-full items-center justify-center bg-white">
-                <span class="hue-label-sm">{{ item.client?.name || item.name }}</span>
-              </div>
-              <!-- Hover overlay -->
-              <div class="absolute inset-0 flex flex-col justify-center bg-[var(--color-accent)]/90 p-7 opacity-0 transition-opacity duration-250 group-hover:opacity-100">
-                <p class="mb-3 text-[0.75rem] font-medium uppercase tracking-[0.12em] text-white">{{ item.name }}</p>
-                <p v-if="item.synopsis" class="mb-4 line-clamp-3 text-[0.8125rem] leading-relaxed text-white/80" v-html="stripTags(item.synopsis)" />
-                <span class="inline-block border-b border-white/40 pb-0.5 text-[0.625rem] uppercase tracking-widest text-white">View Case Study →</span>
-              </div>
-            </div>
-
-            <!-- Info -->
-            <div class="p-5">
-              <p class="hue-label-sm mb-1.5" style="color: var(--color-accent);">{{ item.service?.name }}{{ industryName(item) ? ` · ${industryName(item)}` : '' }}</p>
-              <h2 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em] leading-snug">{{ item.name }}</h2>
-              <p v-if="item.client" class="mt-1 text-[0.75rem] text-[var(--grey)]">{{ item.client.name }}</p>
-            </div>
-          </NuxtLink>
+            :item="item"
+            :image-src="imgUrl(item)"
+            aspect-ratio="3/2"
+            compact
+            overlay
+          />
         </div>
       </div>
     </section>

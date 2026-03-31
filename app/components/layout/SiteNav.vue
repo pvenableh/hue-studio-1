@@ -6,13 +6,13 @@
       scrolled ? 'shadow-[0_1px_8px_rgba(0,0,0,0.06)]' : ''
     ]"
   >
-    <!-- Audit announcement bar -->
-    <NuxtLink to="/brand-audit" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
+    <!-- Analysis announcement bar -->
+    <NuxtLink to="/brand-analysis" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
       <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-2.5">
           <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
           <p class="text-[0.78rem] text-white/80">
-            <strong class="font-medium text-white">Brand Perception Audit</strong>
+            <strong class="font-medium text-white">Brand Perception Analysis</strong>
             <span class="hidden sm:inline"> — 10 questions. 15 minutes. Custom presentation in 5 days.</span>
           </p>
         </div>
@@ -24,7 +24,7 @@
     </NuxtLink>
 
     <!-- Main nav -->
-    <nav class="bg-white/70 backdrop-blur-xl overflow-hidden">
+    <nav class="bg-white/70 backdrop-blur-xl">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
         <NuxtLink to="/" class="absolute bottom-[1px] -left-[10px] md:left-0 z-10 shrink-0">
           <LayoutLogo size="18px" class="w-32" />
@@ -46,33 +46,63 @@
 
         <!-- Mobile menu toggle -->
         <button
-          class="ml-auto mr-1 flex h-9 w-9 items-center justify-center md:hidden"
+          class="mobile-toggle ml-auto mr-1 flex h-9 w-9 items-center justify-center md:hidden"
+          :class="mobileOpen ? 'is-open' : ''"
           @click="mobileOpen = !mobileOpen"
           aria-label="Toggle menu"
         >
-          <Icon :name="mobileOpen ? 'lucide:x' : 'lucide:menu'" class="size-4" />
+          <span class="hamburger-lines">
+            <span />
+            <span />
+            <span />
+          </span>
         </button>
       </div>
-
-      <!-- Mobile menu -->
-      <Transition name="mobile-menu">
-        <div v-if="mobileOpen" class="border-t border-[var(--silk)] bg-white px-2 md:px-6 py-4 md:hidden">
-          <div class="flex flex-col gap-4">
-            <NuxtLink
-              v-for="link in navLinks"
-              :key="link.to"
-              :to="link.to"
-              class="text-[0.8125rem] uppercase tracking-wider text-[var(--color-text-secondary)]"
-              @click="mobileOpen = false"
-            >
-              {{ link.label }}
-            </NuxtLink>
-            <MeetingRequest class="self-start" />
-          </div>
-        </div>
-      </Transition>
     </nav>
   </header>
+
+  <!-- Mobile menu overlay — rendered outside header to overlay the entire page -->
+  <Teleport to="body">
+    <Transition name="mobile-overlay">
+      <div v-if="mobileOpen" class="fixed inset-0 z-[60] md:hidden" @click.self="mobileOpen = false">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-[var(--near-black)]/80 backdrop-blur-sm" @click="mobileOpen = false" />
+
+        <!-- Menu panel — full width, drops from top -->
+        <div class="mobile-panel absolute inset-x-0 top-0 bg-[var(--near-black)] px-6 pb-10 pt-20">
+          <!-- Close button -->
+          <button
+            class="absolute right-5 top-5 flex h-9 w-9 items-center justify-center text-white/40 transition-colors hover:text-white"
+            @click="mobileOpen = false"
+            aria-label="Close menu"
+          >
+            <Icon name="lucide:x" class="size-5" />
+          </button>
+
+          <nav class="flex flex-col gap-10">
+            <div class="flex flex-col gap-5">
+              <NuxtLink
+                v-for="(link, i) in navLinks"
+                :key="link.to"
+                :to="link.to"
+                class="mobile-link text-[0.625rem] font-medium uppercase tracking-[0.3em] text-white/50 transition-all duration-300 hover:text-white hover:tracking-[0.35em]"
+                :style="{ transitionDelay: `${80 + i * 40}ms` }"
+                active-class="!text-white"
+                @click="mobileOpen = false"
+              >
+                {{ link.label }}
+              </NuxtLink>
+            </div>
+
+            <div class="flex items-center gap-6">
+              <MeetingRequest class="mobile-cta !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
+              <p class="text-[0.5rem] uppercase tracking-[0.3em] text-white/20">Miami Beach · New York</p>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -94,6 +124,12 @@ const navLinks = [
 const route = useRoute()
 watch(() => route.path, () => { mobileOpen.value = false })
 
+// Lock body scroll when mobile menu open
+watch(mobileOpen, (open) => {
+  if (import.meta.server) return
+  document.body.style.overflow = open ? 'hidden' : ''
+})
+
 // Hide nav on scroll down, show on scroll up
 onMounted(() => {
   let lastY = 0
@@ -114,13 +150,63 @@ onMounted(() => {
   }
 
   window.addEventListener('scroll', onScroll, { passive: true })
-  onUnmounted(() => window.removeEventListener('scroll', onScroll))
+  onUnmounted(() => {
+    window.removeEventListener('scroll', onScroll)
+    document.body.style.overflow = ''
+  })
 })
 </script>
 
 <style scoped>
-.mobile-menu-enter-active,
-.mobile-menu-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
-.mobile-menu-enter-from,
-.mobile-menu-leave-to { opacity: 0; transform: translateY(-8px); }
+/* ── Hamburger icon with animated lines ── */
+.hamburger-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 16px;
+}
+.hamburger-lines span {
+  display: block;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  transform-origin: center;
+}
+.mobile-toggle.is-open .hamburger-lines span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+.mobile-toggle.is-open .hamburger-lines span:nth-child(2) {
+  opacity: 0;
+}
+.mobile-toggle.is-open .hamburger-lines span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* ── Overlay transitions ── */
+.mobile-overlay-enter-active,
+.mobile-overlay-leave-active {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-overlay-enter-active .mobile-panel,
+.mobile-overlay-leave-active .mobile-panel {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-overlay-enter-from,
+.mobile-overlay-leave-to {
+  opacity: 0;
+}
+.mobile-overlay-enter-from .mobile-panel,
+.mobile-overlay-leave-to .mobile-panel {
+  transform: translateY(-100%);
+}
+
+/* ── Staggered link entrance ── */
+.mobile-overlay-enter-active .mobile-link {
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-overlay-enter-from .mobile-link {
+  opacity: 0;
+  transform: translateY(-10px);
+}
 </style>

@@ -190,7 +190,7 @@ export default defineEventHandler(async (event) => {
   const isAudit = body.type === 'audit'
   const estimatedValue = body.budget ? budgetMap[body.budget] ?? null : null
   const priority = isAudit ? 'medium' : (estimatedValue && estimatedValue >= 30000 ? 'high' : 'medium')
-  const projectType = isAudit ? 'Brand Audit' : (body.project || 'General Inquiry')
+  const projectType = isAudit ? 'Brand Analysis' : (body.project || 'General Inquiry')
 
   // Step 2: Create lead
   const nextFollowUp = new Date()
@@ -215,10 +215,10 @@ export default defineEventHandler(async (event) => {
     contact: contactId,
     activity_type: isAudit ? 'note' : 'email received',
     activity_date: new Date().toISOString(),
-    subject: isAudit ? 'Brand Audit Request via Website' : 'Strategy Session Request via Website',
-    description: body.explanation || `${body.first_name || 'Visitor'} submitted a ${isAudit ? 'brand audit' : 'contact'} form from the website.`,
+    subject: isAudit ? 'Brand Analysis Request via Website' : 'Strategy Session Request via Website',
+    description: body.explanation || `${body.first_name || 'Visitor'} submitted a ${isAudit ? 'brand analysis' : 'contact'} form from the website.`,
     outcome: 'positive',
-    next_action: isAudit ? 'Review audit answers and prepare response' : 'Schedule strategy session',
+    next_action: isAudit ? 'Review analysis answers and prepare response' : 'Schedule strategy session',
     next_action_date: nextFollowUp.toISOString().split('T')[0],
   })
 

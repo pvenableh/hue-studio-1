@@ -216,7 +216,7 @@ export const alacarteServices: AlacarteService[] = [
   { icon: 'lucide:printer', name: 'Trade Show Booth', price: 'From $6,000', description: 'Design + production management for your next event.' },
   { icon: 'lucide:bar-chart', name: 'Annual Report', price: 'From $5,000', description: 'Data-rich, designed for credibility with key stakeholders.' },
   { icon: 'lucide:mail', name: 'Email Campaign', price: 'From $1,500', description: 'Template design + 3-email drip sequence.' },
-  { icon: 'lucide:search', name: 'Brand Audit', price: 'Free', description: '8 questions, 15 min, custom presentation in 5 days.' },
+  { icon: 'lucide:search', name: 'Brand Analysis', price: 'Free', description: '8 questions, 15 min, custom presentation in 5 days.' },
 ]
 
 // ── SERVICE DETAILS ───────────────────────────────────────────────────────

@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
-      <SectionWatermark word="Services" top="2rem" />
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="Services"  />
       <div class="hue-container relative">
         <p ref="heroLabel" class="hue-label mb-5 opacity-0">Creative Services</p>
         <h1 ref="heroTitle" class="hue-display-xl max-w-3xl opacity-0">
@@ -26,8 +26,8 @@
     </section>
 
     <!-- Packages -->
-    <section id="packages" class="hue-section relative overflow-hidden px-2 md:px-6 py-24 md:py-32">
-      <SectionWatermark word="Packages" top="2rem" />
+    <section id="packages" class="hue-section relative overflow-x-clip px-2 md:px-6 py-24 md:py-32">
+      <SectionWatermark word="Packages"  />
       <div class="hue-container relative">
         <div class="mb-14 text-center">
           <p class="hue-label mb-3">Packages</p>
@@ -101,8 +101,8 @@
     </section>
 
     <!-- Service detail list -->
-    <section class="hue-section-alt relative overflow-hidden px-2 md:px-6 py-24 md:py-32">
-      <SectionWatermark word="Disciplines" top="1rem" />
+    <section class="hue-section-alt relative overflow-x-clip px-2 md:px-6 py-24 md:py-32">
+      <SectionWatermark word="Disciplines"  />
       <div class="hue-container relative">
         <div class="mb-14">
           <p class="hue-label mb-3">All Services</p>
@@ -328,11 +328,11 @@
         <div class="bg-[#111110] p-10 text-center">
           <p class="mb-3 text-[0.625rem] font-medium uppercase tracking-[0.25em] text-white/25">Not sure yet</p>
           <h3 class="mb-4 text-[1.5rem] font-light text-white" style="font-family: var(--font-editorial);">
-            Start with a free audit.
+            Start with a free analysis.
           </h3>
           <p class="mx-auto mb-6 max-w-xs text-[0.8125rem] text-white/35">8 questions. 15 minutes. A custom Brand Perception Presentation in 5 days.</p>
-          <NuxtLink to="/brand-audit" class="hue-btn-ghost">
-            Free Brand Audit
+          <NuxtLink to="/brand-analysis" class="hue-btn-ghost">
+            Free Brand Analysis
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>

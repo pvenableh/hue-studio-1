@@ -1,7 +1,8 @@
 <template>
   <div>
-    <section class="hue-section px-2 md:px-6 pb-0 pt-24 md:pt-32">
-      <div class="hue-container grid gap-16 lg:grid-cols-2">
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-0 pt-24 md:pt-32">
+      <SectionWatermark word="Contact" />
+      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5">Let's Talk</p>
           <h1 class="hue-display-lg mb-6">
@@ -34,9 +35,9 @@
           </div>
 
           <div class="mt-10 border-t border-[var(--silk)] pt-10">
-            <p class="hue-label-sm mb-4 text-[var(--silver)]">Prefer to start with a free audit?</p>
-            <NuxtLink to="/brand-audit" class="hue-btn-outline">
-              Free Brand Perception Audit
+            <p class="hue-label-sm mb-4 text-[var(--silver)]">Prefer to start with a free analysis?</p>
+            <NuxtLink to="/brand-analysis" class="hue-btn-outline">
+              Free Brand Perception Analysis
               <Icon name="lucide:arrow-right" class="size-3.5" />
             </NuxtLink>
           </div>

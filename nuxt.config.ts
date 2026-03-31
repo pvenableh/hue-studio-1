@@ -78,6 +78,11 @@ export default defineNuxtConfig({
     sources: ['/api/__sitemap'],
   },
 
+  // Redirects
+  routeRules: {
+    '/brand-audit': { redirect: { to: '/brand-analysis', statusCode: 301 } },
+  },
+
   // Robots.txt
   robots: {
     disallow: ['/api/', '/_nuxt/'],

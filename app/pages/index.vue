@@ -1,35 +1,7 @@
 <template>
   <div>
-    <!-- ═══ HERO ═══ -->
-    <section ref="homeHeroRef" class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
-      <div class="hue-container relative z-10 grid gap-16 lg:grid-cols-2">
-        <div>
-          <p ref="heroLabel" class="hue-label mb-5 text-white/40 opacity-0">
-            Brand Strategy &amp; Creative Agency · Miami Beach &amp; New York
-          </p>
-          <h1 ref="heroTitle" class="hue-display-xl text-white opacity-0">
-            Design with
-            <span style="font-family: var(--font-editorial); font-style: italic;">Purpose.</span>
-          </h1>
-          <p ref="heroSub" class="mt-7 max-w-lg text-[1.0625rem] leading-relaxed text-white/45 opacity-0">
-            Strategic brand positioning and creative execution for growth-stage companies. Built on 20 years of experience shaping brands that command attention and generate results.
-          </p>
-          <div ref="heroCta" class="mt-12 flex flex-col gap-4 opacity-0 sm:flex-row">
-            <NuxtLink to="/contact" class="hue-btn-ghost">
-              Schedule a Discovery Call
-              <Icon name="lucide:arrow-right" class="size-3.5" />
-            </NuxtLink>
-            <NuxtLink to="/creative-services" class="inline-flex items-center gap-1.5 text-[0.75rem] font-medium uppercase tracking-wider text-white/50 transition-all hover:gap-2 hover:text-white/70">
-              View Packages &amp; Pricing
-              <Icon name="lucide:arrow-right" class="size-3.5" />
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-      <div class="pointer-events-none absolute inset-0 overflow-hidden">
-        <div class="absolute -bottom-1/2 left-1/2 h-[900px] w-[900px] -translate-x-1/2 rounded-full bg-white/[0.015] blur-3xl" />
-      </div>
-    </section>
+    <!-- ═══ HERO SLIDER ═══ -->
+    <HomeHeroSlider />
 
     <!-- ═══ PHILOSOPHY ═══ -->
     <section class="hue-section px-2 md:px-6 py-24 md:py-32">
@@ -102,31 +74,16 @@
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <NuxtLink
-            v-for="cs in caseStudies.slice(0, 3)"
+        <div class="space-y-12">
+          <CaseStudiesCaseStudyCard
+            v-for="(cs, i) in caseStudies.slice(0, 3)"
             :key="cs.id"
-            :to="`/case-studies/${cs.url}`"
-            class="group hue-card flex flex-col overflow-hidden"
-          >
-            <div class="aspect-[16/10] bg-[var(--snow)] flex items-center justify-center p-6">
-              <img
-                v-if="csHomeImage(cs)"
-                :src="csHomeImage(cs)!"
-                :alt="cs.title"
-                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-              <div v-else class="text-[var(--silver)]">
-                <Icon name="lucide:image" class="size-12" />
-              </div>
-            </div>
-            <div class="flex flex-1 flex-col p-6">
-              <p v-if="cs.organization?.name" class="hue-label-sm mb-2 text-[var(--silver)]">{{ cs.organization.name }}</p>
-              <h3 class="mb-2 text-[0.75rem] font-medium uppercase tracking-[0.08em]">{{ cs.title }}</h3>
-              <p v-if="cs.excerpt" class="mt-auto pt-3 text-[0.8125rem] font-sans leading-relaxed text-[var(--color-text-muted)] line-clamp-2">{{ cs.excerpt }}</p>
-            </div>
-          </NuxtLink>
+            :cs="cs"
+            :image-src="csHomeImage(cs)"
+            :eager="i === 0"
+            :number="String(i + 1).padStart(2, '0')"
+            :reverse="i % 2 === 1"
+          />
         </div>
         <div class="mt-8 text-center sm:hidden">
           <NuxtLink to="/case-studies" class="hue-link">
@@ -284,12 +241,12 @@
         <div class="hue-grid-bordered grid-cols-1 lg:grid-cols-3">
           <div class="col-span-2 p-10 lg:p-14">
             <span class="mb-5 inline-flex items-center rounded-full bg-[var(--near-black)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-white">Free</span>
-            <h2 class="hue-display-lg mb-5">Brand Perception Audit</h2>
+            <h2 class="hue-display-lg mb-5">Brand Perception Analysis</h2>
             <p class="hue-body-lg mb-8 max-w-lg">
               Not sure where your brand stands? In 8 questions and 15 minutes, we'll assess your current positioning and deliver a custom presentation in 5 business days. Free, confidential, no obligation.
             </p>
-            <NuxtLink to="/brand-audit" class="hue-btn">
-              Start Your Free Audit
+            <NuxtLink to="/brand-analysis" class="hue-btn">
+              Start Your Free Analysis
               <Icon name="lucide:arrow-right" class="size-3.5" />
             </NuxtLink>
           </div>
@@ -319,10 +276,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
-import { gsap } from 'gsap'
-
-const homeHeroRef = ref<HTMLElement | null>(null)
 import { packages, processSteps } from '~/data/services'
 import { industries } from '~/data/industries'
 
@@ -386,19 +339,5 @@ const auditStats = [
   { value: '$0', label: 'Cost' },
 ]
 
-const heroLabel = ref<HTMLElement | null>(null)
-const heroTitle = ref<HTMLElement | null>(null)
-const heroSub   = ref<HTMLElement | null>(null)
-const heroCta   = ref<HTMLElement | null>(null)
-
 useScrollReveal()
-
-onMounted(async () => {
-  await nextTick()
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-  tl.fromTo(heroLabel.value, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 })
-    .fromTo(heroTitle.value, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1.1 }, '-=0.4')
-    .fromTo(heroSub.value,   { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
-    .fromTo(heroCta.value,   { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-})
 </script>

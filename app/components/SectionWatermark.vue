@@ -1,19 +1,55 @@
 <template>
   <span
-    class="pointer-events-none absolute select-none text-[clamp(6rem,15vw,14rem)] uppercase leading-[0.85] italic opacity-[0.06]"
+    ref="wordRef"
+    class="pointer-events-none absolute select-none italic opacity-[0.04]"
     :class="[
       dark ? 'text-white' : 'text-[var(--near-black)]',
       right ? 'right-0' : 'left-0',
     ]"
-    :style="`font-family: var(--font-editorial); top: ${top ?? '-0.5rem'};`"
+    :style="positionStyle"
+    style="font-family: var(--font-editorial);"
   >{{ word }}</span>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = withDefaults(defineProps<{
   word: string
   dark?: boolean
   right?: boolean
   top?: string
-}>()
+}>(), {
+  dark: false,
+  right: false,
+})
+
+const wordRef = ref<HTMLElement | null>(null)
+
+const positionStyle = computed(() => ({
+  bottom: '0',
+  fontSize: 'clamp(8rem, 18vw, 20rem)',
+  lineHeight: '1',
+  fontWeight: '300',
+  transform: 'translateY(0.2em)',
+}))
+
+// Parallax effect — word scrolls at a slower rate
+onMounted(async () => {
+  await nextTick()
+  if (!wordRef.value || import.meta.server) return
+
+  const { gsap } = await import('gsap')
+  const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+  gsap.registerPlugin(ScrollTrigger)
+
+  gsap.to(wordRef.value, {
+    yPercent: 80,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: wordRef.value.parentElement,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+    },
+  })
+})
 </script>

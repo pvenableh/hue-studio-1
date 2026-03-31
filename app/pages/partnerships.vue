@@ -1,7 +1,8 @@
 <template>
   <div>
-    <section class="hue-section px-2 md:px-6 pb-16 pt-24 md:pt-32">
-      <div class="hue-container">
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-16 pt-24 md:pt-32">
+      <SectionWatermark word="Partners" />
+      <div class="hue-container relative">
         <p class="hue-label mb-4">Partnerships</p>
         <h1 class="hue-display-xl mb-6 max-w-2xl">
           Let's build something

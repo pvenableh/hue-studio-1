@@ -1,10 +1,11 @@
 <template>
   <div>
-    <section class="hue-section px-2 md:px-6 pb-16 pt-24 md:pt-32">
-      <div class="hue-container grid gap-16 lg:grid-cols-2">
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-16 pt-24 md:pt-32">
+      <SectionWatermark word="Analysis" />
+      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <span class="mb-5 inline-flex items-center rounded-full bg-[var(--near-black)] px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-white">Free</span>
-          <h1 class="hue-display-lg mt-4 mb-5">Brand Perception<br>Audit</h1>
+          <h1 class="hue-display-lg mt-4 mb-5">Brand Perception<br>Analysis</h1>
           <p class="hue-body-lg mb-8 max-w-md">
             Not sure where your brand stands? In 10 questions and 15 minutes, we'll assess your current positioning and deliver a custom Brand Perception Presentation in 5 business days. Free. Confidential. No obligation.
           </p>
@@ -25,7 +26,7 @@
 
         <!-- Form -->
         <div class="hue-card p-8 md:p-10">
-          <p class="hue-label mb-8">Start your audit</p>
+          <p class="hue-label mb-8">Start your analysis</p>
           <form @submit.prevent="submitForm" class="space-y-5">
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
@@ -118,7 +119,7 @@
             </div>
             <button type="submit" class="hue-btn w-full justify-center" :disabled="submitting">
               <span v-if="submitting">Submitting…</span>
-              <span v-else>Submit Audit Request</span>
+              <span v-else>Submit Analysis Request</span>
               <Icon v-if="!submitting" name="lucide:arrow-right" class="size-3.5" />
             </button>
             <p class="text-center text-[0.75rem] text-[var(--color-text-muted)]">Confidential. No spam. We'll follow up within 1 business day.</p>
@@ -126,7 +127,7 @@
 
           <div v-if="submitted" class="mt-6 rounded-lg border border-[var(--silk)] bg-[var(--snow)] p-6 text-center">
             <Icon name="lucide:check-circle" class="mx-auto mb-3 size-8 text-[var(--near-black)]" />
-            <p class="font-medium">Audit request received.</p>
+            <p class="font-medium">Analysis request received.</p>
             <p class="mt-1 text-[0.875rem] text-[var(--color-text-muted)]">We'll deliver your Brand Perception Presentation within 5 business days.</p>
           </div>
         </div>
@@ -145,11 +146,11 @@
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Free Brand Perception Audit | Hue Creative Agency',
+  title: 'Free Brand Perception Analysis | Hue Creative Agency',
   description: '8 questions. 15 minutes. A custom Brand Perception Presentation delivered in 5 business days. Free, confidential, no obligation.',
 })
 
-defineOgImage({ component: 'HueOg', props: { title: 'Free Brand Perception Audit', description: '8 questions. 15 minutes. Custom presentation in 5 days.', label: 'Free Audit' } })
+defineOgImage({ component: 'HueOg', props: { title: 'Free Brand Perception Analysis', description: '8 questions. 15 minutes. Custom presentation in 5 days.', label: 'Free Analysis' } })
 
 const stats = [
   { value: '10', label: 'Questions' },

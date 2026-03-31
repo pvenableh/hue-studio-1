@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
-      <SectionWatermark word="About" :dark="true" top="2rem" />
+    <section class="hue-section-dark relative overflow-x-clip px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="About" :dark="true" />
       <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">About Hue</p>
@@ -90,8 +90,8 @@
     </section>
 
     <!-- Team — Camila & Peter -->
-    <section class="hue-section relative overflow-hidden px-2 md:px-6 py-24">
-      <SectionWatermark word="Team" top="1rem" />
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 py-24">
+      <SectionWatermark word="Team" />
       <div class="hue-container relative">
         <p class="hue-label mb-14">The Team</p>
         <div class="grid gap-16 lg:grid-cols-2">
@@ -215,10 +215,10 @@
     <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
       <div class="mx-auto max-w-md">
         <h2 class="hue-display-lg mb-5 text-white">Ready to work together?</h2>
-        <p class="mb-8 text-[0.9375rem] text-white/40">Start with a free brand audit or book a discovery call.</p>
+        <p class="mb-8 text-[0.9375rem] text-white/40">Start with a free brand analysis or book a discovery call.</p>
         <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <NuxtLink to="/brand-audit" class="hue-btn-ghost">
-            Free Brand Audit <Icon name="lucide:arrow-right" class="size-3.5" />
+          <NuxtLink to="/brand-analysis" class="hue-btn-ghost">
+            Free Brand Analysis <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
           <NuxtLink to="/contact" class="hue-link">
             Book a Call <Icon name="lucide:arrow-right" class="size-3.5" />

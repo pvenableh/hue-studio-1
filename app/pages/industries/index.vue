@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section-dark relative overflow-hidden px-2 md:px-6 py-28 md:py-36">
-      <SectionWatermark word="Industries" :dark="true" top="2rem" />
+    <section class="hue-section-dark relative overflow-x-clip px-2 md:px-6 py-28 md:py-36">
+      <SectionWatermark word="Industries" :dark="true" />
       <div class="hue-container relative grid gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">Industries</p>

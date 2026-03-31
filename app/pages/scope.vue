@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- Hero -->
-    <section class="hue-section px-2 md:px-6 pb-12 pt-24 md:pt-32">
-      <div class="hue-container grid gap-12 lg:grid-cols-2">
+    <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-12 pt-24 md:pt-32">
+      <SectionWatermark word="Scope" />
+      <div class="hue-container relative grid gap-12 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5">Project Scope Builder</p>
           <h1 class="hue-display-lg mb-5">

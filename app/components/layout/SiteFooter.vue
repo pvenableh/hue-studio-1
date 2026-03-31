@@ -67,7 +67,7 @@
             <li><NuxtLink to="/creative-services#retainers" class="footer-link">Monthly Retainers</NuxtLink></li>
             <li><NuxtLink to="/creative-services#alacarte" class="footer-link">À La Carte</NuxtLink></li>
             <li><NuxtLink to="/scope" class="footer-link">Scope Builder</NuxtLink></li>
-            <li><NuxtLink to="/brand-audit" class="footer-link">Free Brand Audit</NuxtLink></li>
+            <li><NuxtLink to="/brand-analysis" class="footer-link">Free Brand Analysis</NuxtLink></li>
           </ul>
         </div>
 
@@ -113,7 +113,7 @@ const { submitSubscribe } = useDirectus()
 const { trackFormSubmit, trackCtaClick } = useAnalytics()
 
 // Pages that have their own CTA sections — hide the footer CTA to avoid doubling
-const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-audit', '/contact']
+const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-analysis', '/contact']
 const showCta = computed(() => {
   const path = route.path
   // Exact match or starts-with for dynamic routes like /creative-services/[slug], /case-studies/[url], /portfolio/[slug]
