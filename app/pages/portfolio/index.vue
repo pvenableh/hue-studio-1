@@ -31,7 +31,7 @@
           <NuxtLink
             v-for="(item, i) in featuredItems"
             :key="item.id"
-            :to="`/portfolio/${item.slug || item.url}`"
+            :to="`/portfolio/${item.url}`"
             class="group grid overflow-hidden md:grid-cols-2"
             :class="i % 2 === 1 ? 'md:[direction:rtl]' : ''"
           >
@@ -106,7 +106,7 @@
           <NuxtLink
             v-for="item in gridItems"
             :key="item.id"
-            :to="`/portfolio/${item.slug || item.url}`"
+            :to="`/portfolio/${item.url}`"
             class="group relative block overflow-hidden bg-white transition-colors hover:bg-[var(--snow)]"
           >
             <!-- Image -->

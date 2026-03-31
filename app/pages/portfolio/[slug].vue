@@ -7,12 +7,12 @@
       </NuxtLink>
     </div>
 
-    <!-- Hero (pinned) -->
-    <section ref="heroRef" class="relative overflow-hidden bg-white px-2 md:px-6 py-16 lg:py-20">
+    <!-- Hero -->
+    <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">
       <span
         ref="bgWordRef"
         class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[1] opacity-[0.04] select-none translate-y-[0.2em]"
-      >{{ item.client?.name?.split(' ')[0] || item.name?.split(' ')[0] }}</span>
+      >{{ bgWord }}</span>
       <div class="hue-container relative">
         <div class="grid gap-12 lg:grid-cols-[1fr_320px]">
           <div>
@@ -26,15 +26,20 @@
 
           <!-- Meta card -->
           <div class="space-y-4 lg:pt-10">
-            <div v-if="item.client">
+            <div v-if="clientName">
               <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Client</p>
-              <p class="text-[0.75rem] uppercase tracking-[0.1em]">{{ item.client.name }}</p>
+              <p class="text-[0.75rem] uppercase tracking-[0.1em]">{{ clientName }}</p>
             </div>
-            <div v-for="ind in validIndustries" :key="ind.id">
-              <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Industry</p>
-              <NuxtLink :to="`/industries/${ind.url}`" class="text-[0.875rem] hover:text-[var(--color-accent)]">
-                {{ ind.name }}
-              </NuxtLink>
+            <div v-if="validIndustries.length">
+              <p class="hue-label-sm mb-1.5 text-[var(--silver)]">{{ validIndustries.length === 1 ? 'Industry' : 'Industries' }}</p>
+              <div class="flex flex-wrap gap-x-3 gap-y-1">
+                <NuxtLink
+                  v-for="ind in validIndustries"
+                  :key="ind.id"
+                  :to="`/industries/${ind.url}`"
+                  class="text-[0.75rem] uppercase tracking-[0.1em] hover:text-[var(--color-accent)]"
+                >{{ ind.name }}</NuxtLink>
+              </div>
             </div>
             <div v-if="item.service">
               <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Services</p>
@@ -45,23 +50,19 @@
                 </template>
               </div>
             </div>
-            <!-- Year/duration hidden for now -->
-            <!-- <div v-if="item.project_year || item.project_duration" class="flex gap-8">
-              <div v-if="item.project_year">
-                <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Year</p>
-                <p class="text-[0.875rem]">{{ item.project_year }}</p>
-              </div>
-              <div v-if="item.project_duration">
-                <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Duration</p>
-                <p class="text-[0.875rem]">{{ item.project_duration }}</p>
-              </div>
-            </div> -->
+            <!-- Case study link -->
+            <div v-if="linkedCaseStudy">
+              <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Case Study</p>
+              <NuxtLink :to="`/case-studies/${linkedCaseStudy.url}`" class="text-[0.75rem] uppercase tracking-[0.1em] hover:text-[var(--color-accent)]">
+                {{ linkedCaseStudy.title }} →
+              </NuxtLink>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Featured image -->
+    <!-- Featured image (only if item has featured_image set) -->
     <section v-if="item.featured_image" class="border-b border-[var(--silk)]">
       <img
         :src="assetUrl(item.featured_image, 'hero')"
@@ -78,40 +79,104 @@
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">01</span>
           <p class="hue-label mt-1">The Challenge</p>
         </div>
-        <div>
-          <div class="hue-body-lg max-w-2xl" v-html="item.challenge" />
-        </div>
+        <div class="hue-body-lg max-w-2xl" v-html="item.challenge" />
       </div>
     </section>
 
-    <!-- Creation / Process -->
+    <!-- Approach -->
     <section v-if="item.creation" class="hue-section px-2 md:px-6 py-20">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">02</span>
           <p class="hue-label mt-1">Our Approach</p>
         </div>
-        <div>
-          <div class="hue-body-lg max-w-2xl" v-html="item.creation" />
-        </div>
+        <div class="hue-body-lg max-w-2xl" v-html="item.creation" />
       </div>
     </section>
 
-    <!-- Image gallery -->
-    <section v-if="galleryImages.length > 1" class="px-2 md:px-6 py-16">
+    <!-- Image gallery — hidden if item has videos -->
+    <section v-if="allImages.length && !itemVideos.length" class="px-2 md:px-6 py-16">
       <div class="hue-container">
-        <p class="hue-label mb-8">Gallery</p>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)]"
-          :class="galleryImages.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'"
-        >
-          <img
-            v-for="(img, i) in galleryImages"
-            :key="img.directus_files_id"
-            :src="assetUrl(img.directus_files_id, 'medium-contain')"
-            :alt="`${item.name} — image ${i + 1}`"
-            class="w-full object-cover"
-            loading="lazy"
-          />
+        <!-- Single image: full width -->
+        <template v-if="allImages.length === 1">
+          <p class="hue-label mb-8">Gallery</p>
+          <div class="flex items-center justify-center rounded-sm border border-[var(--silk)] bg-white p-8" style="aspect-ratio: 4/3;">
+            <img
+              :src="assetUrl(allImages[0].directus_files_id, 'medium-contain')"
+              :alt="item.name"
+              class="max-h-full max-w-full object-contain"
+            />
+          </div>
+        </template>
+
+        <!-- Multiple images: slideshow carousel -->
+        <template v-else>
+          <div class="mb-8 flex items-end justify-between">
+            <p class="hue-label">Gallery</p>
+            <div class="flex items-center gap-3">
+              <span class="text-[0.625rem] tracking-[0.08em] text-[var(--silver)]">{{ galleryIndex + 1 }} / {{ allImages.length }}</span>
+              <div class="flex gap-2">
+                <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollGallery(-1)">
+                  <Icon name="lucide:arrow-left" class="size-3.5" />
+                </button>
+                <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollGallery(1)">
+                  <Icon name="lucide:arrow-right" class="size-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            ref="galleryCarouselRef"
+            class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+            @scroll="onGalleryScroll"
+          >
+            <div
+              v-for="(img, i) in allImages"
+              :key="img.directus_files_id"
+              class="w-full flex-none snap-start flex items-center justify-center rounded-sm border border-[var(--silk)] bg-white p-8"
+              style="aspect-ratio: 4/3;"
+            >
+              <img
+                :src="assetUrl(img.directus_files_id, 'medium-contain')"
+                :alt="`${item.name} — image ${i + 1}`"
+                class="max-h-full max-w-full object-contain"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <!-- Videos -->
+    <section v-if="itemVideos.length" class="px-2 md:px-6 py-16">
+      <div class="hue-container">
+        <p class="hue-label mb-8">Video</p>
+        <div :class="itemVideos.length === 1 ? '' : 'flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-2 px-2'">
+          <div
+            v-for="video in itemVideos"
+            :key="video.id"
+            :class="itemVideos.length === 1 ? 'w-full' : 'w-[85%] flex-none snap-start lg:w-[70%]'"
+          >
+            <div class="overflow-hidden rounded-sm" style="aspect-ratio: 16/9;">
+              <iframe
+                v-if="video.platform === 'youtube'"
+                :src="`https://www.youtube.com/embed/${extractVideoId(video.link, 'youtube')}`"
+                class="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+              <iframe
+                v-else-if="video.platform === 'vimeo'"
+                :src="`https://player.vimeo.com/video/${extractVideoId(video.link, 'vimeo')}`"
+                class="h-full w-full"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+            <p v-if="video.title" class="mt-3 text-[0.6875rem] font-medium uppercase tracking-[0.1em]">{{ video.title }}</p>
+            <p v-if="video.description" class="mt-1 text-[0.625rem] uppercase tracking-[0.08em] text-[var(--grey)]">{{ video.description }}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -121,20 +186,21 @@
       <div class="hue-container">
         <p class="hue-label mb-8">Project Deliverables</p>
         <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
-          <NuxtLink
+          <component
+            :is="child.url ? NuxtLink : 'div'"
             v-for="child in item.projects"
             :key="child.id"
-            :to="`/portfolio/${child.slug || child.url}`"
+            v-bind="child.url ? { to: `/portfolio/${child.url}` } : {}"
             class="group block bg-white transition-colors hover:bg-[var(--snow)]"
           >
-            <div v-if="childImgUrl(child)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
-              <img :src="childImgUrl(child)!" :alt="child.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+            <div v-if="childImgUrl(child)" class="flex items-center justify-center overflow-hidden bg-white p-8" style="aspect-ratio: 4/3;">
+              <img :src="childImgUrl(child)!" :alt="child.name" class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
             </div>
             <div class="p-5">
               <p v-if="child.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ child.service.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ child.name }}</h3>
             </div>
-          </NuxtLink>
+          </component>
         </div>
       </div>
     </section>
@@ -147,57 +213,95 @@
       </div>
     </section>
 
-    <!-- Before / After -->
+    <!-- Before / After — carousel if multiple -->
     <section v-if="beforeAfters.length" class="px-2 md:px-6 py-20">
       <div class="hue-container">
-        <p class="hue-label mb-10">Before &amp; After</p>
-        <div
-          v-for="(ba, idx) in beforeAfters"
-          :key="ba.id"
-          class="mb-8"
-        >
-          <!-- Interactive slider -->
+        <div class="mb-10 flex items-end justify-between">
+          <p class="hue-label">Before &amp; After</p>
+          <div v-if="beforeAfters.length > 1" class="flex gap-2">
+            <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollBaCarousel(-1)">
+              <Icon name="lucide:arrow-left" class="size-3.5" />
+            </button>
+            <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollBaCarousel(1)">
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </button>
+          </div>
+        </div>
+        <div ref="baCarouselRef" class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" :class="beforeAfters.length === 1 ? '' : '-mx-2 px-2'">
           <div
-            v-if="ba.before_image && ba.after_image"
-            :ref="(el) => { if (el) sliderRefs[idx] = el as HTMLElement }"
-            class="group relative cursor-col-resize select-none overflow-hidden rounded-sm bg-[var(--snow)]"
-            style="aspect-ratio: 16/9;"
-            @mousedown.prevent="startDrag(idx, $event)"
-            @touchstart.prevent="startDrag(idx, $event)"
+            v-for="(ba, idx) in beforeAfters"
+            :key="ba.id"
+            class="snap-start"
+            :class="beforeAfters.length === 1 ? 'w-full' : 'w-[85%] flex-none lg:w-[70%]'"
           >
-            <!-- After image (full background) -->
-            <div class="absolute inset-0 flex items-center justify-center p-12 md:p-20">
-              <img :src="assetUrl(ba.after_image, 'medium-contain')" class="max-h-[60%] max-w-[50%] object-contain" :alt="`${item?.name} — after`" />
+            <div
+              v-if="ba.before_image && ba.after_image"
+              :ref="(el) => { if (el) sliderRefs[idx] = el as HTMLElement }"
+              class="group relative cursor-col-resize select-none overflow-hidden rounded-sm bg-[var(--snow)]"
+              style="aspect-ratio: 16/9;"
+              @mousedown.prevent="startDrag(idx, $event)"
+              @touchstart.prevent="startDrag(idx, $event)"
+            >
+              <!-- Before image (clipped to left of divider) -->
+              <div class="absolute inset-0 flex items-center justify-center" :class="ba.is_logo ? 'p-12 md:p-20' : 'p-4 md:p-8'" :style="{ clipPath: `inset(0 ${100 - (sliderPositions[idx] ?? 50)}% 0 0)` }">
+                <img :src="assetUrl(ba.before_image, 'medium-contain')" :class="ba.is_logo ? 'max-h-[60%] max-w-[50%]' : 'max-h-[90%] max-w-[90%]'" class="object-contain" :alt="`${item?.name} — before`" />
+              </div>
+              <!-- After image (clipped to right of divider) -->
+              <div class="absolute inset-0 flex items-center justify-center" :class="ba.is_logo ? 'p-12 md:p-20' : 'p-4 md:p-8'" :style="{ clipPath: `inset(0 0 0 ${sliderPositions[idx] ?? 50}%)` }">
+                <img :src="assetUrl(ba.after_image, 'medium-contain')" :class="ba.is_logo ? 'max-h-[60%] max-w-[50%]' : 'max-h-[90%] max-w-[90%]'" class="object-contain" :alt="`${item?.name} — after`" />
+              </div>
+              <div class="absolute top-0 bottom-0 z-10 -ml-px w-[2px] bg-[var(--near-black)]/20 transition-colors group-hover:bg-[var(--near-black)]/40" :style="{ left: `${sliderPositions[idx] ?? 50}%` }">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-transform group-hover:scale-110">
+                  <Icon name="lucide:arrow-left-right" class="size-4 text-[var(--grey)]" />
+                </div>
+              </div>
+              <span class="absolute top-4 left-4 hue-label-sm text-[var(--grey)] transition-opacity duration-200" :style="{ opacity: (sliderPositions[idx] ?? 50) < 15 ? 0 : 1 }">where it started</span>
+              <span class="absolute top-4 right-4 hue-label-sm text-[var(--near-black)] transition-opacity duration-200" :style="{ opacity: (sliderPositions[idx] ?? 50) > 85 ? 0 : 1 }">how it finished</span>
             </div>
-
-            <!-- Before image (clipped by slider) -->
-            <div class="absolute inset-0 flex items-center justify-center p-12 md:p-20" :style="{ clipPath: `inset(0 ${100 - (sliderPositions[idx] ?? 50)}% 0 0)` }">
-              <img :src="assetUrl(ba.before_image, 'medium-contain')" class="max-h-[60%] max-w-[50%] object-contain" :alt="`${item?.name} — before`" />
-            </div>
-
-            <!-- Slider handle -->
-            <div class="absolute top-0 bottom-0 z-10 -ml-px w-[2px] bg-[var(--near-black)]/20 transition-colors group-hover:bg-[var(--near-black)]/40" :style="{ left: `${sliderPositions[idx] ?? 50}%` }">
-              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-transform group-hover:scale-110">
-                <Icon name="lucide:arrow-left-right" class="size-4 text-[var(--grey)]" />
+            <div v-else class="grid gap-8 md:grid-cols-2">
+              <div v-if="ba.before_image" class="flex items-center justify-center rounded-sm bg-[var(--snow)]" :class="ba.is_logo ? 'p-12' : 'p-4'" style="aspect-ratio: 4/3;">
+                <img :src="assetUrl(ba.before_image, 'medium-contain')" :class="ba.is_logo ? 'max-h-[50%] max-w-[50%]' : 'max-h-[90%] max-w-[90%]'" class="object-contain" :alt="`${item?.name} — before`" />
+              </div>
+              <div v-if="ba.after_image" class="flex items-center justify-center rounded-sm bg-[var(--snow)]" :class="ba.is_logo ? 'p-12' : 'p-4'" style="aspect-ratio: 4/3;">
+                <img :src="assetUrl(ba.after_image, 'medium-contain')" :class="ba.is_logo ? 'max-h-[50%] max-w-[50%]' : 'max-h-[90%] max-w-[90%]'" class="object-contain" :alt="`${item?.name} — after`" />
               </div>
             </div>
-
-            <!-- Labels -->
-            <span class="absolute top-4 left-4 hue-label-sm text-[var(--grey)]">where it started</span>
-            <span class="absolute top-4 right-4 hue-label-sm text-[var(--near-black)]">how it finished</span>
+            <p v-if="ba.caption || ba.title" class="mt-4 text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--grey)]">{{ ba.caption || ba.title }}</p>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Fallback: side by side if only one image -->
-          <div v-else class="grid gap-8 md:grid-cols-2">
-            <div v-if="ba.before_image" class="flex items-center justify-center rounded-sm bg-[var(--snow)] p-12" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.before_image, 'medium-contain')" class="max-h-[50%] max-w-[50%] object-contain" :alt="`${item?.name} — before`" />
-            </div>
-            <div v-if="ba.after_image" class="flex items-center justify-center rounded-sm bg-[var(--snow)] p-12" style="aspect-ratio: 4/3;">
-              <img :src="assetUrl(ba.after_image, 'medium-contain')" class="max-h-[50%] max-w-[50%] object-contain" :alt="`${item?.name} — after`" />
-            </div>
+    <!-- Related work from same case study -->
+    <section v-if="siblingProjects.length" class="hue-section-alt px-2 md:px-6 py-20">
+      <div class="hue-container">
+        <div class="mb-8 flex items-end justify-between">
+          <p class="hue-label">Related Work</p>
+          <div v-if="siblingProjects.length > 3" class="flex gap-2">
+            <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollRelatedCarousel(-1)">
+              <Icon name="lucide:arrow-left" class="size-3.5" />
+            </button>
+            <button class="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--silk)] text-[var(--grey)] transition-colors hover:border-[var(--near-black)] hover:text-[var(--near-black)]" @click="scrollRelatedCarousel(1)">
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </button>
           </div>
-
-          <p v-if="ba.caption || ba.title" class="mt-4 text-[0.8125rem] text-[var(--grey)]">{{ ba.caption || ba.title }}</p>
+        </div>
+        <div ref="relatedCarouselRef" class="flex gap-5 overflow-x-auto pb-4 -mx-2 px-2 snap-x snap-mandatory scrollbar-hide">
+          <component
+            :is="sib.url ? NuxtLink : 'div'"
+            v-for="sib in siblingProjects"
+            :key="sib.id"
+            v-bind="sib.url ? { to: `/portfolio/${sib.url}` } : {}"
+            class="group flex-none snap-start w-[75vw] sm:w-[45%] lg:w-[30%] overflow-hidden rounded-sm border border-[var(--silk)] bg-white transition-colors hover:bg-[var(--snow)]"
+          >
+            <div v-if="childImgUrl(sib)" class="flex items-center justify-center bg-white p-6" style="aspect-ratio: 4/3;">
+              <img :src="childImgUrl(sib)!" :alt="sib.name" class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+            </div>
+            <div class="p-5">
+              <p v-if="sib.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ sib.service.name }}</p>
+              <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ sib.name }}</h3>
+            </div>
+          </component>
         </div>
       </div>
     </section>
@@ -218,23 +322,10 @@
     </section>
 
     <!-- CTA -->
-    <!-- Inline capture -->
-    <InlineCapture
-      :dark="true"
-      label="Start a Conversation"
-      headline="Interested in similar results for your brand?"
-      button-text="Send"
-      :context="item.name ?? 'Case Study'"
-    />
-
-    <section class="px-2 md:px-6 py-20" style="background: var(--color-accent);">
-      <div class="hue-container flex flex-col items-center justify-between gap-8 md:flex-row">
-        <h2 class="text-[1.75rem] font-light text-white" style="font-family:var(--font-editorial);">
-          Ready for your own<br><em>before &amp; after?</em>
-        </h2>
-        <NuxtLink to="/contact" class="inline-block rounded-sm border-[1.5px] border-white px-7 py-3.5 text-[0.6875rem] uppercase tracking-wider text-white transition-colors hover:bg-white hover:text-[var(--color-accent)]">
-          Book a Strategy Session →
-        </NuxtLink>
+    <section class="px-2 md:px-6 py-24" style="background: var(--color-accent);">
+      <div class="hue-container flex flex-col items-center text-center gap-8">
+        <h2 class="text-[2.5rem] md:text-[3.5rem] font-light leading-[1.05] text-white" style="font-family:var(--font-editorial);" v-html="ctaHeadline" />
+        <ShimmerButton to="/contact" text="Book a Discovery Call" />
       </div>
     </section>
   </div>
@@ -249,11 +340,12 @@
 
 <script setup lang="ts">
 import type { DirectusPortfolioItem } from '~/composables/useDirectus'
+const NuxtLink = resolveComponent('NuxtLink')
 
 const route = useRoute()
 const slug = route.params.slug as string
 const { trackBeforeAfterInteraction } = useAnalytics()
-const { fetchPortfolioItem, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
+const { fetchPortfolioItem, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 
@@ -277,47 +369,150 @@ const validIndustries = computed(() =>
 
 const industryLabel = computed(() => primaryIndustryName(item.value!))
 
-const galleryImages = computed(() => item.value?.images ?? [])
+/** Videos from this portfolio item */
+const itemVideos = computed(() => (item.value?.videos ?? []).filter((v: any) => v.id && v.link))
 
+/** Extract video ID from URL */
+function extractVideoId(url: string, platform: string): string {
+  if (platform === 'youtube') {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([^?&\s]+)/)
+    return match?.[1] ?? ''
+  }
+  if (platform === 'vimeo') {
+    const match = url.match(/vimeo\.com\/(\d+)/)
+    return match?.[1] ?? ''
+  }
+  return ''
+}
+
+/** Background word — skip articles */
+const bgWord = computed(() => {
+  const articles = new Set(['the', 'a', 'an'])
+  const source = (typeof item.value?.client === 'object' && item.value.client?.name)
+    ? item.value.client.name
+    : item.value?.name ?? ''
+  const words = source.split(/\s+/)
+  const meaningful = words.find((w) => !articles.has(w.toLowerCase()))
+  return meaningful ?? words[0] ?? ''
+})
+
+/** Contextual CTA headline based on portfolio content */
+const ctaHeadline = computed(() => {
+  if (beforeAfters.value.length) return 'Ready for your own<br><em>before &amp; after?</em>'
+  if (itemVideos.value.length) return 'Ready to tell<br><em>your story?</em>'
+  const svc = item.value?.service?.name?.toLowerCase() ?? ''
+  if (svc.includes('brand')) return 'Ready to build<br><em>your brand?</em>'
+  if (svc.includes('digital') || svc.includes('web')) return 'Ready for a<br><em>digital presence?</em>'
+  if (svc.includes('print') || svc.includes('graphic')) return 'Ready to make<br><em>an impression?</em>'
+  if (svc.includes('event')) return 'Ready to create<br><em>an experience?</em>'
+  if (svc.includes('corporate') || svc.includes('data')) return 'Ready to elevate<br><em>your message?</em>'
+  return 'Like what you see?<br><em>Let\u2019s talk.</em>'
+})
+
+/** Carousel refs */
+const relatedCarouselRef = ref<HTMLElement | null>(null)
+const baCarouselRef = ref<HTMLElement | null>(null)
+const galleryCarouselRef = ref<HTMLElement | null>(null)
+const galleryIndex = ref(0)
+
+function scrollGallery(dir: number) {
+  const el = galleryCarouselRef.value
+  if (!el) return
+  const card = el.querySelector('.snap-start') as HTMLElement
+  el.scrollBy({ left: dir * (card?.offsetWidth ?? el.offsetWidth), behavior: 'smooth' })
+}
+
+function onGalleryScroll() {
+  const el = galleryCarouselRef.value
+  if (!el) return
+  const card = el.querySelector('.snap-start') as HTMLElement
+  if (!card) return
+  galleryIndex.value = Math.round(el.scrollLeft / card.offsetWidth)
+}
+
+function scrollRelatedCarousel(dir: number) {
+  const el = relatedCarouselRef.value
+  if (!el) return
+  const card = el.querySelector('.snap-start') as HTMLElement
+  el.scrollBy({ left: dir * (card?.offsetWidth ?? 400), behavior: 'smooth' })
+}
+
+function scrollBaCarousel(dir: number) {
+  const el = baCarouselRef.value
+  if (!el) return
+  const card = el.querySelector('.snap-start') as HTMLElement
+  el.scrollBy({ left: dir * (card?.offsetWidth ?? 600), behavior: 'smooth' })
+}
+
+/** Client name — handle both M2O object and plain string */
+const clientName = computed(() => {
+  const c = item.value?.client
+  if (!c) return null
+  if (typeof c === 'object' && c.name) return c.name
+  // If string but looks like a UUID, don't show it
+  if (typeof c === 'string' && /^[0-9a-f-]{36}$/i.test(c)) return null
+  if (typeof c === 'string') return c
+  return null
+})
+
+/** All images from the item */
+const allImages = computed(() => item.value?.images ?? [])
+
+/** Before & afters — only from the current item */
 const beforeAfters = computed(() => item.value ? resolvedBeforeAfters(item.value) : [])
+
+/** Find a case study that links to this portfolio item */
+const { data: allCaseStudies } = await useAsyncData('all-case-studies-for-portfolio', () => fetchCaseStudies({ limit: 50 }))
+
+const linkedCaseStudy = computed(() => {
+  const itemId = item.value?.id
+  const parentId = item.value?.parent_id
+  if (!itemId) return null
+  return (allCaseStudies.value ?? []).find((cs: any) =>
+    (cs.portfolio_items ?? []).some((pi: any) =>
+      pi.portfolio_id?.id === itemId || pi.portfolio_id?.id === parentId
+    )
+  ) ?? null
+})
+
+/** Sibling projects from the same case study (excluding current item) */
+const siblingProjects = computed(() => {
+  if (!linkedCaseStudy.value) return []
+  const currentId = item.value?.id
+  return (linkedCaseStudy.value.portfolio_items ?? [])
+    .map((pi: any) => pi.portfolio_id)
+    .filter((p: any) => p && p.id !== currentId)
+})
 
 // Before/After slider
 const sliderPositions = reactive<Record<number, number>>({})
 const sliderRefs = reactive<Record<number, HTMLElement>>({})
-
 const sliderTracked = new Set<number>()
 
 function startDrag(idx: number, e: MouseEvent | TouchEvent) {
   const el = sliderRefs[idx]
   if (!el) return
-
-  // Track once per before/after per page view
   if (!sliderTracked.has(idx)) {
     sliderTracked.add(idx)
     trackBeforeAfterInteraction(item.value?.name ?? 'Unknown', 'drag')
   }
-
   const updatePosition = (clientX: number) => {
     const rect = el.getBoundingClientRect()
     const pct = Math.max(5, Math.min(95, ((clientX - rect.left) / rect.width) * 100))
     sliderPositions[idx] = pct
   }
-
   const onMove = (ev: MouseEvent | TouchEvent) => {
     const clientX = 'touches' in ev ? ev.touches[0].clientX : ev.clientX
     updatePosition(clientX)
   }
-
   const onUp = () => {
     window.removeEventListener('mousemove', onMove)
     window.removeEventListener('mouseup', onUp)
     window.removeEventListener('touchmove', onMove)
     window.removeEventListener('touchend', onUp)
   }
-
   const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
   updatePosition(clientX)
-
   window.addEventListener('mousemove', onMove)
   window.addEventListener('mouseup', onUp)
   window.addEventListener('touchmove', onMove)
@@ -358,3 +553,8 @@ if (!ogImg.value) {
   defineOgImage({ component: 'HueOg', props: { title: item.value?.name ?? 'Project', description: ogDesc.value, label: 'Portfolio' } })
 }
 </script>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

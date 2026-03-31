@@ -30,7 +30,7 @@
             placeholder="your@email.com"
             class="flex-1 rounded-none border-0 border-b border-white/20 bg-transparent px-1 py-2 text-[0.875rem] text-white placeholder-white/25 outline-none transition focus:border-white/40"
           />
-          <button type="submit" class="hue-btn shrink-0 text-[0.6875rem]" :disabled="subscribing">
+          <button type="submit" class="hue-btn-ghost shrink-0 text-[0.6875rem]" :disabled="subscribing">
             <span v-if="subscribing">…</span>
             <span v-else>Subscribe</span>
           </button>

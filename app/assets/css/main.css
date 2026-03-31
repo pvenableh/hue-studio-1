@@ -32,6 +32,91 @@
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
 
+/* Animated shimmer CTA button */
+@keyframes shimmer-slide {
+  to { transform: translate(calc(100cqw - 100%), 0); }
+}
+
+@keyframes shimmer-spin {
+  0% { transform: translateZ(0) rotate(0); }
+  15%, 35% { transform: translateZ(0) rotate(90deg); }
+  65%, 85% { transform: translateZ(0) rotate(270deg); }
+  100% { transform: translateZ(0) rotate(360deg); }
+}
+
+.cta-shimmer-btn {
+  --shimmer-speed: 3s;
+  --shimmer-spread: 90deg;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 9999px;
+  background: transparent;
+  transition: border-color 0.3s;
+}
+
+.cta-shimmer-btn:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* Shimmer glow layer */
+.cta-shimmer-btn .shimmer-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: visible;
+  filter: blur(2px);
+}
+
+.cta-shimmer-btn .shimmer-glow-inner {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: 1;
+  height: 100cqh;
+  animation: shimmer-slide var(--shimmer-speed) ease-in-out infinite alternate;
+}
+
+.cta-shimmer-btn .shimmer-glow-spin {
+  position: absolute;
+  inset: -100%;
+  width: auto;
+  background: conic-gradient(
+    from calc(270deg - (var(--shimmer-spread) * 0.5)),
+    transparent 0,
+    rgba(255,255,255,0.7) var(--shimmer-spread),
+    transparent var(--shimmer-spread)
+  );
+  animation: shimmer-spin calc(var(--shimmer-speed) * 2) infinite linear;
+}
+
+/* Inner shadow for depth */
+.cta-shimmer-btn .shimmer-depth {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  box-shadow: inset 0 -8px 10px rgba(255,255,255,0.12);
+  transition: box-shadow 0.3s;
+}
+
+/* Inner fill to mask the glow, leaving only the edge */
+.cta-shimmer-btn .shimmer-bg {
+  position: absolute;
+  inset: 1.5px;
+  z-index: -2;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  transition: background 0.3s;
+}
+
+.cta-shimmer-btn:hover .shimmer-depth {
+  box-shadow: inset 0 -6px 10px rgba(255,255,255,0.25);
+}
+
+.cta-shimmer-btn:hover .shimmer-bg {
+  background: color-mix(in srgb, var(--color-accent), white 8%);
+}
+
 /* Hero scroll-over shadow — the content section that scrolls over a pinned hero */
 .hero-scroll-over {
   position: relative;

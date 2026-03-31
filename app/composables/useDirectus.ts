@@ -325,6 +325,7 @@ export function useDirectus() {
     'before_and_afters.before_and_afters_id.caption',
     'before_and_afters.before_and_afters_id.before_image',
     'before_and_afters.before_and_afters_id.after_image',
+    'before_and_afters.before_and_afters_id.is_logo',
     'projects.id', 'projects.name', 'projects.slug', 'projects.url', 'projects.status',
     'projects.caption', 'projects.featured_image',
     'projects.service.id', 'projects.service.name', 'projects.service.url',
@@ -345,11 +346,21 @@ export function useDirectus() {
     return res.data ?? []
   }
 
-  async function fetchPortfolioItem(slug: string): Promise<DirectusPortfolioItem | null> {
+  async function fetchPortfolioItem(url: string): Promise<DirectusPortfolioItem | null> {
     const params = new URLSearchParams({
       fields: PORTFOLIO_FIELDS,
-      'filter[slug][_eq]': slug,
+      'filter[url][_eq]': url,
       'filter[status][_eq]': 'published',
+      limit: '1',
+    })
+    const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
+    return res.data?.[0] ?? null
+  }
+
+  async function fetchPortfolioItemById(id: string): Promise<DirectusPortfolioItem | null> {
+    const params = new URLSearchParams({
+      fields: PORTFOLIO_FIELDS,
+      'filter[id][_eq]': id,
       limit: '1',
     })
     const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
@@ -392,6 +403,7 @@ export function useDirectus() {
         'before_and_afters.before_and_afters_id.title',
         'before_and_afters.before_and_afters_id.before_image',
         'before_and_afters.before_and_afters_id.after_image',
+    'before_and_afters.before_and_afters_id.is_logo',
         'projects.id', 'projects.name', 'projects.slug', 'projects.url',
         'projects.featured_image', 'projects.service.name',
         'projects.images.directus_files_id',
@@ -461,7 +473,7 @@ export function useDirectus() {
     const params = new URLSearchParams({
       fields: [
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
-        'challenge', 'solution', 'results', 'client', 'project_year',
+        'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'tags', 'featured', 'date_created',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon',
@@ -497,6 +509,9 @@ export function useDirectus() {
     'portfolio_items.portfolio_id.slug',
     'portfolio_items.portfolio_id.url',
     'portfolio_items.portfolio_id.featured_image',
+    'portfolio_items.portfolio_id.parent_id',
+    'portfolio_items.portfolio_id.client.id',
+    'portfolio_items.portfolio_id.client.name',
     'portfolio_items.portfolio_id.service.id',
     'portfolio_items.portfolio_id.service.name',
     'portfolio_items.portfolio_id.images.directus_files_id',
@@ -521,7 +536,7 @@ export function useDirectus() {
     const params = new URLSearchParams({
       fields: [
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
-        'challenge', 'solution', 'results', 'client', 'project_year',
+        'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'project_url', 'tags', 'featured', 'date_created',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon', 'organization.website',
@@ -544,7 +559,7 @@ export function useDirectus() {
     const params = new URLSearchParams({
       fields: [
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
-        'challenge', 'solution', 'results', 'client', 'project_year',
+        'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'tags', 'featured', 'date_created',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon',
@@ -564,7 +579,7 @@ export function useDirectus() {
     const params = new URLSearchParams({
       fields: [
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
-        'challenge', 'solution', 'results', 'client', 'project_year',
+        'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'project_url', 'tags', 'featured', 'date_created',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon', 'organization.website',
@@ -776,6 +791,7 @@ export function useDirectus() {
     assetUrl,
     fetchPortfolio,
     fetchPortfolioItem,
+    fetchPortfolioItemById,
     fetchFeaturedPortfolio,
     fetchIndustries,
     fetchIndustryByUrl,

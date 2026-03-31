@@ -7,7 +7,7 @@
     </div>
 
     <!-- Hero (pinned) -->
-    <section ref="heroRef" class="relative overflow-hidden bg-white px-2 md:px-6 py-16 lg:py-20">
+    <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">
       <span
         ref="bgWordRef"
         class="pointer-events-none absolute bottom-0 left-0 font-serif italic font-light text-[8rem] md:text-[14rem] lg:text-[20rem] leading-[1] opacity-[0.04] select-none translate-y-[0.2em]"
@@ -194,7 +194,7 @@ const allWork = computed<WorkCard[]>(() => {
       type: 'portfolio',
       name: p.name ?? '',
       excerpt: null,
-      to: `/portfolio/${p.slug || p.url}`,
+      to: `/portfolio/${p.url}`,
       image: imgUrl(p),
       service: p.service?.name ?? null,
       client: p.client?.name ?? null,
