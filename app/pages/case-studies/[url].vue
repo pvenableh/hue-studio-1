@@ -59,8 +59,54 @@
       </div>
     </section>
 
-    <!-- Featured image -->
-    <section v-if="heroImage" class="border-b border-[var(--silk)]">
+    <!-- ═══ DESKTOP: Sticky featured image with narrative overlay ═══ -->
+    <div v-if="heroImage && (narrativeChallenge || narrativeApproach)" ref="narrativeWrapRef" class="relative hidden lg:block">
+      <!-- Fixed background image — clipped to this wrapper -->
+      <div class="clip-to-parent">
+        <div class="fixed inset-0 h-screen w-full">
+          <img
+            :src="heroImage"
+            :alt="cs.title ?? ''"
+            class="h-full w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-black/65" />
+        </div>
+      </div>
+
+      <!-- Scrolling narrative content -->
+      <div class="relative z-10">
+        <!-- Spacer so content starts below fold -->
+        <div class="h-[60vh]" />
+
+        <div class="px-2 md:px-6">
+          <!-- Challenge -->
+          <section v-if="narrativeChallenge" class="py-20">
+            <div class="hue-container max-w-3xl">
+              <span class="text-[0.625rem] tracking-widest text-white/20">01</span>
+              <p class="hue-label mt-1 mb-6 text-white/50">The Challenge</p>
+              <div class="hue-body-lg text-white/80" v-html="narrativeChallenge" />
+            </div>
+          </section>
+
+          <!-- Approach -->
+          <section v-if="narrativeApproach" class="py-20">
+            <div class="hue-container max-w-3xl">
+              <span class="text-[0.625rem] tracking-widest text-white/20">02</span>
+              <p class="hue-label mt-1 mb-6 text-white/50">Our Approach</p>
+              <div class="hue-body-lg text-white/80" v-html="narrativeApproach" />
+            </div>
+          </section>
+
+          <!-- Bottom spacer for scroll breathing room -->
+          <div class="h-[30vh]" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ MOBILE + NO-IMAGE FALLBACK ═══ -->
+
+    <!-- Featured image (mobile only, or when no narrative) -->
+    <section v-if="heroImage" class="border-b border-[var(--silk)] lg:hidden">
       <img
         :src="heroImage"
         :alt="cs.title ?? ''"
@@ -69,8 +115,8 @@
       />
     </section>
 
-    <!-- Challenge -->
-    <section v-if="narrativeChallenge" class="hue-section px-2 md:px-6 py-20">
+    <!-- Challenge (mobile, or no image on desktop) -->
+    <section v-if="narrativeChallenge" class="hue-section px-2 md:px-6 py-20" :class="heroImage && (narrativeChallenge || narrativeApproach) ? 'lg:hidden' : ''">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">01</span>
@@ -80,8 +126,8 @@
       </div>
     </section>
 
-    <!-- Approach (solution or creation) -->
-    <section v-if="narrativeApproach" class="hue-section px-2 md:px-6 py-20">
+    <!-- Approach (mobile, or no image on desktop) -->
+    <section v-if="narrativeApproach" class="hue-section px-2 md:px-6 py-20" :class="heroImage && (narrativeChallenge || narrativeApproach) ? 'lg:hidden' : ''">
       <div class="hue-container grid gap-12 lg:grid-cols-[220px_1fr]">
         <div>
           <span class="text-[0.625rem] tracking-widest text-[var(--silk)]">02</span>
@@ -134,22 +180,47 @@
           <div class="py-20">
             <p class="hue-label mb-8">Project Deliverables</p>
             <div class="flex flex-col gap-6">
-              <component
-                :is="item.url ? NuxtLink : 'div'"
+              <div
                 v-for="item in childProjects"
                 :key="item.id"
-                v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
-                class="group block overflow-hidden border border-[var(--silk)] bg-white transition-colors hover:bg-[var(--snow)]"
+                class="group block overflow-hidden border border-[var(--silk)] bg-white"
               >
-                <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 16/9;">
-                  <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+                <!-- Embedded video -->
+                <div v-if="itemVideo(item)" class="overflow-hidden" style="aspect-ratio: 16/9;">
+                  <iframe
+                    v-if="itemVideo(item)!.platform === 'youtube'"
+                    :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideo(item)!.link)}`"
+                    class="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                  />
+                  <iframe
+                    v-else-if="itemVideo(item)!.platform === 'vimeo'"
+                    :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideo(item)!.link)}`"
+                    class="h-full w-full"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy"
+                  />
                 </div>
+                <!-- Image fallback -->
+                <component
+                  v-else
+                  :is="item.url ? NuxtLink : 'div'"
+                  v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
+                  class="block transition-colors hover:bg-[var(--snow)]"
+                >
+                  <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 16/9;">
+                    <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+                  </div>
+                </component>
                 <div class="p-5">
                   <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
                   <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
                 </div>
-              </component>
+              </div>
             </div>
           </div>
         </div>
@@ -178,21 +249,46 @@
       <div class="hue-container">
         <p class="hue-label mb-8">Project Deliverables</p>
         <div class="grid gap-px overflow-hidden border border-[var(--silk)] bg-[var(--silk)] grid-cols-2">
-          <component
-            :is="item.url ? NuxtLink : 'div'"
+          <div
             v-for="item in childProjects"
             :key="item.id"
-            v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
-            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
+            class="group bg-white"
           >
-            <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
-              <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+            <!-- Embedded video -->
+            <div v-if="itemVideo(item)" class="overflow-hidden" style="aspect-ratio: 4/3;">
+              <iframe
+                v-if="itemVideo(item)!.platform === 'youtube'"
+                :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideo(item)!.link)}`"
+                class="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
+              <iframe
+                v-else-if="itemVideo(item)!.platform === 'vimeo'"
+                :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideo(item)!.link)}`"
+                class="h-full w-full"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                loading="lazy"
+              />
             </div>
+            <!-- Image fallback -->
+            <component
+              v-else
+              :is="item.url ? NuxtLink : 'div'"
+              v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
+              class="block transition-colors hover:bg-[var(--snow)]"
+            >
+              <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+                <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+              </div>
+            </component>
             <div class="p-4">
               <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
             </div>
-          </component>
+          </div>
         </div>
       </div>
     </section>
@@ -536,6 +632,12 @@ function portfolioImgUrl(item: DirectusPortfolioItem): string | null {
   return id ? assetUrl(id, 'medium-contain') : null
 }
 
+/** First video from a portfolio item (if any) */
+function itemVideo(item: DirectusPortfolioItem): { platform: string; link: string } | null {
+  const v = (item as any).videos?.[0]
+  return v?.link ? { platform: v.platform, link: v.link } : null
+}
+
 function extractYouTubeId(url: string): string {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([^?&\s]+)/)
   return match?.[1] ?? ''
@@ -568,4 +670,13 @@ if (!csOgImg.value) {
 <style scoped>
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Clip fixed-position children to this container's bounds */
+.clip-to-parent {
+  clip: rect(0, auto, auto, 0);
+  clip-path: inset(0);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
 </style>

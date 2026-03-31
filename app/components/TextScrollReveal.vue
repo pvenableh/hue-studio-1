@@ -5,7 +5,7 @@
       :key="i"
       :ref="(el) => { if (el) wordEls[i] = el as HTMLElement }"
       class="inline-block transition-opacity duration-100"
-      style="opacity: 0.15"
+      style="opacity: 0.06"
     >{{ word }}&nbsp;</span>
   </p>
 </template>
