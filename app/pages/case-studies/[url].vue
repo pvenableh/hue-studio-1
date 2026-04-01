@@ -185,24 +185,41 @@
                 :key="item.id"
                 class="group block overflow-hidden border border-[var(--silk)] bg-white"
               >
-                <!-- Embedded video -->
-                <div v-if="itemVideo(item)" class="overflow-hidden" style="aspect-ratio: 16/9;">
-                  <iframe
-                    v-if="itemVideo(item)!.platform === 'youtube'"
-                    :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideo(item)!.link)}`"
-                    class="h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    loading="lazy"
-                  />
-                  <iframe
-                    v-else-if="itemVideo(item)!.platform === 'vimeo'"
-                    :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideo(item)!.link)}`"
-                    class="h-full w-full"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowfullscreen
-                    loading="lazy"
-                  />
+                <!-- Video carousel -->
+                <div v-if="itemVideos(item).length" class="relative overflow-hidden bg-black" style="aspect-ratio: 16/9;">
+                  <Transition name="video-fade" mode="out-in">
+                    <iframe
+                      v-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'youtube'"
+                      :key="`yt-${item.id}-${currentVideoIndex(item.id)}`"
+                      :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                      class="absolute inset-0 h-full w-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                      loading="lazy"
+                    />
+                    <iframe
+                      v-else-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'vimeo'"
+                      :key="`vi-${item.id}-${currentVideoIndex(item.id)}`"
+                      :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                      class="absolute inset-0 h-full w-full"
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      allowfullscreen
+                      loading="lazy"
+                    />
+                  </Transition>
+                  <!-- Carousel nav -->
+                  <div v-if="itemVideos(item).length > 1" class="pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <button class="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)] transition-colors hover:bg-white hover:text-[var(--near-black)]" @click="stepVideo(item.id, -1, itemVideos(item).length)">
+                      <Icon name="lucide:chevron-left" class="size-4" />
+                    </button>
+                    <button class="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)] transition-colors hover:bg-white hover:text-[var(--near-black)]" @click="stepVideo(item.id, 1, itemVideos(item).length)">
+                      <Icon name="lucide:chevron-right" class="size-4" />
+                    </button>
+                  </div>
+                  <!-- Dots indicator -->
+                  <div v-if="itemVideos(item).length > 1" class="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 flex gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span v-for="(_, vi) in itemVideos(item)" :key="vi" class="block h-1.5 w-1.5 rounded-full transition-colors" :class="vi === currentVideoIndex(item.id) ? 'bg-white' : 'bg-white/40'" />
+                  </div>
                 </div>
                 <!-- Image fallback -->
                 <component
@@ -215,7 +232,12 @@
                     <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
                   </div>
                 </component>
-                <div class="p-5">
+                <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-5 transition-colors hover:bg-[var(--snow)]">
+                  <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+                  <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
+                  <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+                </NuxtLink>
+                <div v-else class="p-5">
                   <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
                   <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
@@ -254,24 +276,41 @@
             :key="item.id"
             class="group bg-white"
           >
-            <!-- Embedded video -->
-            <div v-if="itemVideo(item)" class="overflow-hidden" style="aspect-ratio: 4/3;">
-              <iframe
-                v-if="itemVideo(item)!.platform === 'youtube'"
-                :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideo(item)!.link)}`"
-                class="h-full w-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              />
-              <iframe
-                v-else-if="itemVideo(item)!.platform === 'vimeo'"
-                :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideo(item)!.link)}`"
-                class="h-full w-full"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowfullscreen
-                loading="lazy"
-              />
+            <!-- Video carousel -->
+            <div v-if="itemVideos(item).length" class="relative overflow-hidden bg-black" style="aspect-ratio: 4/3;">
+              <Transition name="video-fade" mode="out-in">
+                <iframe
+                  v-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'youtube'"
+                  :key="`m-yt-${item.id}-${currentVideoIndex(item.id)}`"
+                  :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                  class="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                />
+                <iframe
+                  v-else-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'vimeo'"
+                  :key="`m-vi-${item.id}-${currentVideoIndex(item.id)}`"
+                  :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                  class="absolute inset-0 h-full w-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                />
+              </Transition>
+              <!-- Carousel nav -->
+              <div v-if="itemVideos(item).length > 1" class="pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <button class="pointer-events-auto flex h-6 w-6 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)]" @click="stepVideo(item.id, -1, itemVideos(item).length)">
+                  <Icon name="lucide:chevron-left" class="size-3" />
+                </button>
+                <button class="pointer-events-auto flex h-6 w-6 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)]" @click="stepVideo(item.id, 1, itemVideos(item).length)">
+                  <Icon name="lucide:chevron-right" class="size-3" />
+                </button>
+              </div>
+              <!-- Dots indicator -->
+              <div v-if="itemVideos(item).length > 1" class="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 flex gap-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span v-for="(_, vi) in itemVideos(item)" :key="vi" class="block h-1 w-1 rounded-full" :class="vi === currentVideoIndex(item.id) ? 'bg-white' : 'bg-white/40'" />
+              </div>
             </div>
             <!-- Image fallback -->
             <component
@@ -284,7 +323,11 @@
                 <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
               </div>
             </component>
-            <div class="p-4">
+            <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-4 transition-colors hover:bg-[var(--snow)]">
+              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
+            </NuxtLink>
+            <div v-else class="p-4">
               <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
             </div>
@@ -655,10 +698,22 @@ function portfolioImgUrl(item: DirectusPortfolioItem): string | null {
   return id ? assetUrl(id, 'medium-contain') : null
 }
 
+/** All videos from a portfolio item */
+function itemVideos(item: DirectusPortfolioItem): { platform: string; link: string }[] {
+  return ((item as any).videos ?? []).filter((v: any) => v?.link).map((v: any) => ({ platform: v.platform, link: v.link }))
+}
+
 /** First video from a portfolio item (if any) */
 function itemVideo(item: DirectusPortfolioItem): { platform: string; link: string } | null {
-  const v = (item as any).videos?.[0]
-  return v?.link ? { platform: v.platform, link: v.link } : null
+  return itemVideos(item)[0] ?? null
+}
+
+/** Per-item video carousel index */
+const videoIndexes = reactive<Record<string, number>>({})
+function currentVideoIndex(itemId: string): number { return videoIndexes[itemId] ?? 0 }
+function stepVideo(itemId: string, dir: number, total: number) {
+  const cur = currentVideoIndex(itemId)
+  videoIndexes[itemId] = (cur + dir + total) % total
 }
 
 function extractYouTubeId(url: string): string {
@@ -693,6 +748,12 @@ if (!csOgImg.value) {
 <style scoped>
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Video carousel crossfade */
+.video-fade-enter-active,
+.video-fade-leave-active { transition: opacity 0.35s ease; }
+.video-fade-enter-from,
+.video-fade-leave-to { opacity: 0; }
 
 /* Clip fixed-position children to this container's bounds */
 .clip-to-parent {
