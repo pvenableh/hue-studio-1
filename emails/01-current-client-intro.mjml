@@ -1,0 +1,86 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="gold-eyebrow" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#D4973A" letter-spacing="2px" text-transform="uppercase" />
+      <mj-class name="heading" font-family="Georgia, 'Times New Roman', serif" font-size="36px" color="#F0EDE8" line-height="1.15" />
+      <mj-class name="body-text" font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="muted" font-size="14px" color="#8A8278" line-height="1.6" />
+    </mj-attributes>
+    <mj-preview>We've added something new — and your data is already halfway there.</mj-preview>
+    <mj-style>
+      a { color: #D4973A; text-decoration: underline; }
+      .feature-card { background-color: #1C1A17 !important; border-top: 3px solid #D4973A; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#0B0A09">
+    <!-- Header -->
+    <mj-include path="./partials/header.mjml" />
+
+    <!-- Hero -->
+    <mj-section background-color="#0B0A09" padding="40px 40px 10px">
+      <mj-column>
+        <mj-text mj-class="gold-eyebrow" padding-bottom="20px">Introducing Hue Intelligence</mj-text>
+        <mj-text mj-class="heading" padding-bottom="24px">Your data is ready. Let's make it intelligent.</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">Hi {{first_name}},</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">We've been building something we're excited to share with you.</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">You already run Directus. Your data is structured, live, and accessible. What you don't have yet — but are extremely close to — is an AI layer that lets you and your team actually talk to that data.</mj-text>
+        <mj-text mj-class="body-text">We're calling it Hue Intelligence.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- 3-column features -->
+    <mj-section background-color="#0B0A09" padding="30px 30px 10px">
+      <mj-column padding="10px" css-class="feature-card">
+        <mj-text align="center" font-size="24px" color="#D4973A" padding="20px 15px 8px">&#10022;</mj-text>
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding="0 15px 8px">Ask anything</mj-text>
+        <mj-text align="center" font-size="13px" color="#8A8278" line-height="1.5" padding="0 15px 20px">Query your collections in plain English. No exports, no dashboards, no waiting.</mj-text>
+      </mj-column>
+      <mj-column padding="10px" css-class="feature-card">
+        <mj-text align="center" font-size="24px" color="#D4973A" padding="20px 15px 8px">&#10227;</mj-text>
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding="0 15px 8px">Automate the repetitive</mj-text>
+        <mj-text align="center" font-size="13px" color="#8A8278" line-height="1.5" padding="0 15px 20px">Data changes trigger actions. Emails write themselves. Reports generate on schedule.</mj-text>
+      </mj-column>
+      <mj-column padding="10px" css-class="feature-card">
+        <mj-text align="center" font-size="24px" color="#D4973A" padding="20px 15px 8px">&#9672;</mj-text>
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding="0 15px 8px">Content from your data</mj-text>
+        <mj-text align="center" font-size="13px" color="#8A8278" line-height="1.5" padding="0 15px 20px">Newsletters, reports, proposals — drafted from what's already in your system.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Track A callout -->
+    <mj-section background-color="#0D2622" padding="30px 40px" border-radius="2px">
+      <mj-column>
+        <mj-text font-size="15px" color="#3ABFB8" line-height="1.65">
+          Because you're already on Directus, you qualify for our Track A onboarding — the fastest path to live AI capability. We can typically have your AI Insight Assistant running within one week of kickoff.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#0B0A09" padding="30px 40px 10px">
+      <mj-column>
+        <mj-button background-color="#D4973A" color="#0B0A09" font-family="Arial, Helvetica, sans-serif" font-size="13px" font-weight="bold" letter-spacing="1px" text-transform="uppercase" border-radius="2px" inner-padding="14px 28px" href="{{booking_url}}">
+          Book a 30-minute call
+        </mj-button>
+        <mj-text align="center" mj-class="muted" font-size="12px" padding-top="12px">
+          No commitment. We'll show you a live demo on your own data.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- PS -->
+    <mj-section background-color="#0B0A09" padding="20px 40px 30px">
+      <mj-column>
+        <mj-text font-size="14px" color="#8A8278" line-height="1.6" font-style="italic">
+          P.S. — We're doing a limited number of Track A onboardings this quarter at a founding-client rate. If you want to be in that cohort, let me know by {{deadline_date}} and we'll hold a spot.<br/><br/>
+          <span style="color: #F0EDE8;">— Peter</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>

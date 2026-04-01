@@ -1,0 +1,14 @@
+<mj-section background-color="#0B0A09" padding="20px 40px">
+  <mj-column>
+    <mj-text align="left" font-family="Georgia, 'Times New Roman', serif" font-size="16px" color="#F0EDE8" padding="0">
+      <span style="letter-spacing: 0.08em; font-weight: 400;">HUE STUDIOS</span>
+      <span style="color: #3D3A35; margin: 0 8px;">&middot;</span>
+      <span style="color: #D4973A; font-size: 14px; letter-spacing: 0.06em;">Intelligence</span>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#0B0A09" padding="0 40px">
+  <mj-column>
+    <mj-divider border-color="#D4973A" border-width="1px" padding="0" />
+  </mj-column>
+</mj-section>

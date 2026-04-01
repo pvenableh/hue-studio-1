@@ -1,0 +1,384 @@
+/* ================================================================
+   HUE INTELLIGENCE — PAGE-SPECIFIC STYLES
+   Uses the site's existing design system (hue-theme.css) with
+   semantic dark-mode variables. Fonts: Avenir Next, Bauer Bodoni,
+   Proxima Nova — same as the rest of the site.
+
+   Track-specific accent colors (teal, purple) are Intelligence-only.
+   ================================================================ */
+
+/* ── Intelligence-specific accent tokens ───────── */
+
+.intel-dark {
+  --intel-teal:       #3ABFB8;
+  --intel-purple:     #9B8FD4;
+}
+
+/* ── Grain overlay ─────────────────────────────── */
+
+.intel-dark::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── TYPOGRAPHY ────────────────────────────────── */
+
+.intel-h1 {
+  font-family: var(--font-editorial);
+  font-weight: 500;
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 1.05;
+  color: var(--color-text);
+}
+
+.intel-h2 {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.intel-h2-italic {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.intel-h3 {
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.intel-eyebrow {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.intel-body-lg {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.intel-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.intel-body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* ── BUTTONS ───────────────────────────────────── */
+
+.intel-btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), gap var(--duration) var(--ease);
+}
+.intel-btn-gold:hover { background: var(--color-accent-hover); gap: 0.7rem; }
+
+.intel-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease), gap var(--duration) var(--ease);
+}
+.intel-btn-ghost:hover { border-color: var(--color-accent); color: var(--color-accent); gap: 0.7rem; }
+
+.intel-btn-outline-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.875rem 2rem;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease), gap var(--duration) var(--ease);
+}
+.intel-btn-outline-gold:hover { background: var(--color-accent); color: var(--color-bg); gap: 0.7rem; }
+
+/* ── LINK STYLES ───────────────────────────────── */
+
+.intel-link-teal {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--intel-teal);
+  text-decoration: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.intel-link-teal:hover { opacity: 0.7; }
+
+.intel-link-purple {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--intel-purple);
+  text-decoration: none;
+  transition: opacity var(--duration) var(--ease);
+}
+.intel-link-purple:hover { opacity: 0.7; }
+
+.intel-link-ghost {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.intel-link-ghost:hover { border-color: var(--color-text-muted); color: var(--color-text); }
+
+/* ── CARDS ─────────────────────────────────────── */
+
+.intel-card {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: transform var(--duration-slow) var(--ease-out), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.intel-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
+}
+
+.intel-card-surface2 {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.intel-stat-card {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-left: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform var(--duration-slow) var(--ease-out), box-shadow var(--duration) var(--ease);
+}
+.intel-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── PILL BADGES ───────────────────────────────── */
+
+.intel-pill-teal {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.875rem;
+  border-radius: 980px;
+  background: rgba(58, 191, 184, 0.12);
+  color: var(--intel-teal);
+}
+
+.intel-pill-purple {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.875rem;
+  border-radius: 980px;
+  background: rgba(155, 143, 212, 0.12);
+  color: var(--intel-purple);
+}
+
+.intel-pill-gold {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.375rem 0.875rem;
+  border-radius: 980px;
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+}
+
+/* ── FORM ──────────────────────────────────────── */
+
+.intel-input {
+  width: 100%;
+  padding: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color var(--duration) var(--ease);
+}
+.intel-input:focus { border-color: var(--color-accent); }
+.intel-input::placeholder { color: var(--color-text-muted); }
+
+.intel-select {
+  width: 100%;
+  padding: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  transition: border-color var(--duration) var(--ease);
+}
+.intel-select:focus { border-color: var(--color-accent); }
+
+/* ── SECTION HELPERS ───────────────────────────── */
+
+.intel-section {
+  padding: 5rem 1rem;
+}
+@media (min-width: 768px) {
+  .intel-section { padding: 7rem 1.5rem; }
+}
+
+.intel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.intel-container-sm {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── DIVIDER ───────────────────────────────────── */
+
+.intel-divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.intel-divider-gold {
+  height: 1px;
+  background: var(--color-accent);
+  opacity: 0.2;
+}
+
+/* ── SCROLL CHEVRON ────────────────────────────── */
+
+@keyframes intel-pulse-down {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 0.8; transform: translateY(6px); }
+}
+
+.intel-scroll-indicator {
+  animation: intel-pulse-down 2s ease-in-out infinite;
+}
+
+/* ── MARQUEE ───────────────────────────────────── */
+
+@keyframes intel-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.intel-marquee {
+  animation: intel-marquee 30s linear infinite;
+}
+
+/* ── SERVICE STEPPER ───────────────────────────── */
+
+.intel-step-number {
+  font-family: var(--font-editorial);
+  font-weight: 400;
+  font-size: 3rem;
+  color: var(--color-border-light);
+  line-height: 1;
+  transition: color var(--duration-slow) var(--ease);
+}
+
+/* ── FOCUS STATES (accessibility) ──────────────── */
+
+.intel-dark :focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── REDUCED MOTION ────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .intel-scroll-indicator { animation: none; opacity: 0.5; }
+  .intel-marquee { animation: none; }
+  .intel-card:hover { transform: none; }
+  .intel-stat-card:hover { transform: none; }
+}

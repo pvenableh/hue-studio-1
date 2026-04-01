@@ -1,0 +1,100 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="gold-eyebrow" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#D4973A" letter-spacing="2px" text-transform="uppercase" />
+      <mj-class name="heading" font-family="Georgia, 'Times New Roman', serif" font-size="32px" color="#F0EDE8" line-height="1.15" />
+      <mj-class name="body-text" font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="muted" font-size="14px" color="#8A8278" line-height="1.6" />
+    </mj-attributes>
+    <mj-preview>Most organizations are sitting on years of untapped data. Here's what that could look like.</mj-preview>
+    <mj-style>
+      a { color: #D4973A; text-decoration: underline; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#0B0A09">
+    <!-- Header -->
+    <mj-include path="./partials/header.mjml" />
+
+    <!-- Hero -->
+    <mj-section background-color="#0B0A09" padding="40px 40px 10px">
+      <mj-column>
+        <mj-text mj-class="gold-eyebrow" padding-bottom="20px">Hue Intelligence — AI for Growing Organizations</mj-text>
+        <mj-text mj-class="heading" padding-bottom="24px">Your organization probably has more useful data than it realizes.</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">Hi {{first_name}},</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">Most small and mid-sized organizations have years of structured data — member records, project histories, donor databases, customer files.</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">Most of it answers no questions. Writes no reports. Reminds no one.</mj-text>
+        <mj-text mj-class="body-text">We fix that.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Problem / Solution two-column -->
+    <mj-section background-color="#0B0A09" padding="30px 30px">
+      <mj-column padding="10px" background-color="#1A1010" border-radius="2px">
+        <mj-text font-size="14px" color="#F0EDE8" line-height="1.8" padding="20px">
+          &#10060;&nbsp; Manual reports that take hours<br/>
+          &#10060;&nbsp; Follow-up emails that never get sent<br/>
+          &#10060;&nbsp; Data buried in spreadsheets and email<br/>
+          &#10060;&nbsp; No time to turn information into content
+        </mj-text>
+      </mj-column>
+      <mj-column padding="10px" background-color="#1A1508" border-radius="2px">
+        <mj-text font-size="14px" color="#F0EDE8" line-height="1.8" padding="20px">
+          &#10003;&nbsp; Ask questions, get answers instantly<br/>
+          &#10003;&nbsp; Automations that act when data changes<br/>
+          &#10003;&nbsp; AI-drafted content from your own collections<br/>
+          &#10003;&nbsp; A team that builds it and keeps it running
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Industry callout (conditional) -->
+    <mj-section background-color="#131210" padding="25px 40px" border-radius="2px">
+      <mj-column>
+        <mj-text font-size="14px" color="#F0EDE8" line-height="1.65">
+          {{#if industry_architecture}}We've built AI systems that track RFI status, draft proposal sections, and generate project case studies from structured data. Your project history is a goldmine.{{/if}}{{#if industry_chamber}}We've built AI systems that handle member reporting, renewal automation, and newsletter generation — giving small-staff chambers enterprise capabilities.{{/if}}{{#if industry_ngo}}We've built AI systems that turn program data into grant narratives and donor impact reports — reducing reporting time by hours per cycle.{{/if}}{{#unless industry_specific}}We work with organizations across industries to turn structured data into AI-powered workflows — reports, automations, content, and dashboards.{{/unless}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- How it starts — 3 steps -->
+    <mj-section background-color="#0B0A09" padding="30px 40px 10px">
+      <mj-column>
+        <mj-text font-family="Georgia, 'Times New Roman', serif" font-size="22px" color="#F0EDE8" padding-bottom="20px">How it starts</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#0B0A09" padding="0 30px">
+      <mj-column padding="10px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="28px" color="#D4973A" padding-bottom="8px">1</mj-text>
+        <mj-text align="center" font-size="14px" font-weight="bold" color="#F0EDE8" padding-bottom="6px">Free 30-min audit</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" line-height="1.5">We map your data landscape and identify your highest-impact opportunity.</mj-text>
+      </mj-column>
+      <mj-column padding="10px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="28px" color="#D4973A" padding-bottom="8px">2</mj-text>
+        <mj-text align="center" font-size="14px" font-weight="bold" color="#F0EDE8" padding-bottom="6px">We build your first win</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" line-height="1.5">One automation or AI insight tool, live within 2 weeks.</mj-text>
+      </mj-column>
+      <mj-column padding="10px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="28px" color="#D4973A" padding-bottom="8px">3</mj-text>
+        <mj-text align="center" font-size="14px" font-weight="bold" color="#F0EDE8" padding-bottom="6px">You decide what's next</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" line-height="1.5">No long contracts. Expand at the pace that makes sense.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#0B0A09" padding="30px 40px 10px">
+      <mj-column>
+        <mj-button background-color="#D4973A" color="#0B0A09" font-family="Arial, Helvetica, sans-serif" font-size="13px" font-weight="bold" letter-spacing="1px" text-transform="uppercase" border-radius="2px" inner-padding="14px 28px" href="{{booking_url}}">
+          Start with a free audit conversation
+        </mj-button>
+        <mj-text align="center" mj-class="muted" font-size="12px" padding-top="12px">
+          No cost, no commitment. Just a clear picture of what's possible.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>

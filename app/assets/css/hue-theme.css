@@ -61,6 +61,37 @@
   --radius: 2px;  /* Sleek, straight edges — luxury editorial feel */
 }
 
+/* ── DARK MODE ─────────────────────────────────────
+   Flips semantic variables. Raw neutrals (--near-black, --white, etc.)
+   stay the same so .hue-section-dark and footer keep their explicit
+   near-black backgrounds in both modes.
+   ──────────────────────────────────────────────────── */
+
+html.dark {
+  --color-bg:             var(--near-black);
+  --color-bg-alt:         #161618;
+  --color-bg-dark:        var(--near-black);
+  --color-text:           #F0EDE8;
+  --color-text-secondary: #a1a1a6;
+  --color-text-muted:     var(--grey);
+  --color-text-inverse:   var(--near-black);
+  --color-border:         #2c2c2e;
+  --color-border-light:   #3a3a3c;
+  --color-accent:         var(--accent-on-dark);
+  --color-accent-tint:    rgba(196, 151, 59, 0.1);
+  --color-accent-hover:   #E0B85C;
+  --color-accent-on-dark: var(--accent-on-dark);
+
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+
+  color-scheme: dark;
+}
+
+/* In dark mode, selection inverts */
+html.dark ::selection { background: var(--accent-on-dark); color: var(--near-black); }
+
 @layer base {
   html {
     font-size: 16px;
@@ -277,19 +308,19 @@
 .hue-section     { background: var(--color-bg); }
 .hue-section-alt { background: var(--color-bg-alt); }
 .hue-section-dark {
-  background: var(--color-bg-dark);
-  color: var(--color-text-inverse);
+  background: var(--near-black);
+  color: var(--white);
 }
 
 /* ── CARDS ────────────────────────────────────── */
 
 .hue-card {
-  background: var(--white);
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   transition: box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
 }
-.hue-card:hover { box-shadow: var(--shadow-md); border-color: var(--silk); }
+.hue-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-border-light); }
 
 .hue-card-featured {
   background: var(--near-black);
@@ -306,12 +337,12 @@
 .hue-grid-bordered {
   display: grid;
   gap: 1px;
-  background: var(--silk);
-  border: 1px solid var(--silk);
+  background: var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: hidden;
 }
-.hue-grid-bordered > * { background: var(--white); }
+.hue-grid-bordered > * { background: var(--color-bg); }
 
 /* ── FOOTER ───────────────────────────────────── */
 
@@ -333,7 +364,7 @@
   padding: 0.625rem 0.125rem;
   font-family: var(--font);
   font-size: 0.9375rem;
-  color: var(--near-black);
+  color: var(--color-text);
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--color-border-light);
@@ -341,8 +372,8 @@
   outline: none;
   transition: border-color var(--duration) var(--ease);
 }
-.hue-input:focus { border-bottom-color: var(--near-black); }
-.hue-input::placeholder { color: var(--silver); }
+.hue-input:focus { border-bottom-color: var(--color-text); }
+.hue-input::placeholder { color: var(--color-text-muted); }
 
 .hue-label-field {
   display: block;

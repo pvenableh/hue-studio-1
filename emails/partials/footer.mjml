@@ -1,0 +1,18 @@
+<mj-section background-color="#0B0A09" padding="30px 40px 10px">
+  <mj-column>
+    <mj-divider border-color="#2A2720" border-width="1px" padding="0 0 20px 0" />
+  </mj-column>
+</mj-section>
+<mj-section background-color="#0B0A09" padding="0 40px 40px">
+  <mj-column>
+    <mj-text align="center" font-family="Arial, Helvetica, sans-serif" font-size="12px" color="#8A8278" line-height="1.6" padding="0 0 10px 0">
+      Hue Studios, LLC &middot; 605 Lincoln Road &middot; Miami Beach, FL 33139
+    </mj-text>
+    <mj-text align="center" font-family="Arial, Helvetica, sans-serif" font-size="11px" color="#3D3A35" padding="0 0 10px 0">
+      <a href="{{unsubscribe_url}}" style="color: #8A8278; text-decoration: underline;">Unsubscribe</a>
+    </mj-text>
+    <mj-text align="center" font-family="Arial, Helvetica, sans-serif" font-size="11px" color="#3D3A35" padding="0">
+      &copy; 2025 Hue Studios, LLC. All rights reserved.
+    </mj-text>
+  </mj-column>
+</mj-section>

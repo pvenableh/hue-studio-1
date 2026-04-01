@@ -7,7 +7,8 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "emails:build": "npx mjml emails/*.mjml -o emails/compiled/"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.39",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "mjml": "^4.18.0",
     "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@9.4.0"

@@ -99,6 +99,7 @@ export default defineNuxtConfig({
     families: [
       { name: 'DM Sans', weights: [200, 300, 400, 500] },
       { name: 'Cormorant Garamond', weights: [400, 500], styles: ['normal', 'italic'] },
+      { name: 'Syne', weights: [400, 500, 600, 700] },
     ],
   },
 

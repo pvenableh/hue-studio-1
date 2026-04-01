@@ -15,7 +15,7 @@ const HUE_ORG_ID = '423f5e7e-e14c-4348-9fea-89ba5c6b9d96'
 const DEFAULT_MAILING_LIST_ID = 1
 
 interface SubmitPayload {
-  type: 'contact' | 'audit' | 'subscribe' | 'meeting'
+  type: 'contact' | 'audit' | 'subscribe' | 'meeting' | 'intelligence'
   first_name?: string
   last_name?: string
   email: string
@@ -30,6 +30,8 @@ interface SubmitPayload {
   audit_answers?: Record<string, string>
   // Subscribe-specific
   list_id?: number
+  // Intelligence-specific
+  organization_type?: string
   // Meeting-specific
   meeting_type?: string
   preferred_date?: string
@@ -175,6 +177,54 @@ export default defineEventHandler(async (event) => {
     } catch { /* already subscribed */ }
 
     return { success: true, type: 'meeting', leadId: lead.id, contactId }
+  }
+
+  // Intelligence audit: high-intent AI services inquiry
+  if (body.type === 'intelligence') {
+    const lead = await directusCreate('leads', {
+      status: 'new',
+      priority: 'high',
+      lead_score: 70,
+      source: 'website_intelligence',
+      project_type: 'AI Intelligence Audit',
+      notes: body.organization_type ? `Organization type: ${body.organization_type}` : null,
+      related_contact: contactId,
+      next_follow_up: new Date().toISOString().split('T')[0],
+    })
+
+    await directusCreate('lead_activities', {
+      lead: lead.id,
+      contact: contactId,
+      activity_type: 'note',
+      activity_date: new Date().toISOString(),
+      subject: 'AI Intelligence Audit Request via Website',
+      description: `${body.first_name || 'Visitor'} requested a free AI Readiness audit from the Intelligence landing page. Organization type: ${body.organization_type || 'not specified'}.`,
+      outcome: 'positive',
+      next_action: 'Schedule 30-minute AI Readiness conversation',
+      next_action_date: new Date().toISOString().split('T')[0],
+    })
+
+    await directusCreate('requests', {
+      status: 'published',
+      first_name: body.first_name || null,
+      email: body.email,
+      project: ['AI & Automation'],
+      explanation: `AI Intelligence audit request. Organization type: ${body.organization_type || 'not specified'}`,
+      date_submitted: new Date().toISOString(),
+    })
+
+    // Subscribe to newsletter
+    try {
+      await directusCreate('mailing_list_contacts', {
+        list_id: DEFAULT_MAILING_LIST_ID,
+        contact_id: contactId,
+        subscribed: true,
+        date_subscribed: new Date().toISOString(),
+        source: 'website_intelligence',
+      })
+    } catch { /* already subscribed */ }
+
+    return { success: true, type: 'intelligence', leadId: lead.id, contactId }
   }
 
   // For contact + audit: create lead, request, and log activity

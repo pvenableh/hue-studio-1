@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./fonts.css";
 @import "./hue-theme.css";
+@import "./intelligence.css";
 
 @theme {
   --font-sans: 'Avenir Next', 'DM Sans', 'Helvetica Neue', sans-serif;

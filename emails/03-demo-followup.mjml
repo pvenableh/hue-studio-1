@@ -1,0 +1,120 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="gold-eyebrow" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#D4973A" letter-spacing="2px" text-transform="uppercase" />
+      <mj-class name="heading" font-family="Georgia, 'Times New Roman', serif" font-size="30px" color="#F0EDE8" line-height="1.2" />
+      <mj-class name="body-text" font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="muted" font-size="14px" color="#8A8278" line-height="1.6" />
+    </mj-attributes>
+    <mj-preview>A quick recap and your next step options.</mj-preview>
+    <mj-style>
+      a { color: #D4973A; text-decoration: underline; }
+      .discussed-list { background-color: #1C1A17 !important; border-left: 3px solid #D4973A; }
+      .track-a-callout { background-color: #0D2622 !important; }
+      .track-b-callout { background-color: #15112A !important; }
+      .quick-win-callout { background-color: #1A1508 !important; }
+      .step-row-odd { background-color: #131210 !important; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#0B0A09">
+    <!-- Header -->
+    <mj-include path="./partials/header.mjml" />
+
+    <!-- Personal opener -->
+    <mj-section background-color="#0B0A09" padding="40px 40px 10px">
+      <mj-column>
+        <mj-text mj-class="heading" padding-bottom="24px">Here's what we discussed — and what's possible next</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">Hi {{first_name}},</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="8px">It was great connecting today about {{org_name}}.</mj-text>
+        <mj-text mj-class="body-text">Based on what we discussed, here's a quick summary of what stood out and what we'd recommend as your next step.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- What we discussed -->
+    <mj-section background-color="#0B0A09" padding="20px 40px">
+      <mj-column>
+        <mj-text font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding-bottom="12px">What we discussed</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="0 40px 10px" background-color="#0B0A09">
+      <mj-column css-class="discussed-list" padding="16px 20px">
+        <mj-text font-size="14px" color="#F0EDE8" line-height="1.8">
+          <span style="color: #D4973A;">&bull;</span>&nbsp; {{discussed_item_1}}<br/>
+          <span style="color: #D4973A;">&bull;</span>&nbsp; {{discussed_item_2}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Recommended track callout (conditional) -->
+    <mj-section padding="20px 40px" background-color="#0B0A09">
+      <mj-column>
+        <mj-text font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding-bottom="12px">Our recommendation</mj-text>
+      </mj-column>
+    </mj-section>
+    <!-- Track A -->
+    <mj-section padding="0 40px 10px" background-color="#0B0A09">
+      <mj-column css-class="{{recommended_track_class}}" padding="20px" border-radius="2px">
+        <mj-text font-size="15px" line-height="1.65" color="#F0EDE8">
+          <span style="color: {{recommended_track_color}};">{{recommended_track_text}}</span>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Proposed next steps -->
+    <mj-section background-color="#0B0A09" padding="20px 40px 5px">
+      <mj-column>
+        <mj-text font-family="Georgia, 'Times New Roman', serif" font-size="18px" color="#F0EDE8" padding-bottom="12px">Next steps</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#131210" padding="12px 30px">
+      <mj-column width="10%">
+        <mj-text font-size="13px" font-weight="bold" color="#D4973A" padding="4px 0">1</mj-text>
+      </mj-column>
+      <mj-column width="55%">
+        <mj-text font-size="13px" color="#F0EDE8" padding="4px 0">Send formal proposal</mj-text>
+      </mj-column>
+      <mj-column width="35%">
+        <mj-text font-size="12px" color="#8A8278" padding="4px 0">Within 2 business days</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#0B0A09" padding="12px 30px">
+      <mj-column width="10%">
+        <mj-text font-size="13px" font-weight="bold" color="#D4973A" padding="4px 0">2</mj-text>
+      </mj-column>
+      <mj-column width="55%">
+        <mj-text font-size="13px" color="#F0EDE8" padding="4px 0">Kickoff call to align on scope</mj-text>
+      </mj-column>
+      <mj-column width="35%">
+        <mj-text font-size="12px" color="#8A8278" padding="4px 0">Week of {{kickoff_date}}</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#131210" padding="12px 30px">
+      <mj-column width="10%">
+        <mj-text font-size="13px" font-weight="bold" color="#D4973A" padding="4px 0">3</mj-text>
+      </mj-column>
+      <mj-column width="55%">
+        <mj-text font-size="13px" color="#F0EDE8" padding="4px 0">First deliverable live</mj-text>
+      </mj-column>
+      <mj-column width="35%">
+        <mj-text font-size="12px" color="#8A8278" padding="4px 0">2-4 weeks from kickoff</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#0B0A09" padding="30px 40px 10px">
+      <mj-column>
+        <mj-button background-color="#D4973A" color="#0B0A09" font-family="Arial, Helvetica, sans-serif" font-size="13px" font-weight="bold" letter-spacing="1px" text-transform="uppercase" border-radius="2px" inner-padding="14px 28px" href="{{confirm_url}}">
+          Confirm we're moving forward
+        </mj-button>
+        <mj-text align="center" mj-class="muted" font-size="12px" padding-top="12px">
+          Or just reply to this email — that's enough to get started.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>

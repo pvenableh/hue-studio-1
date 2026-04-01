@@ -6,8 +6,8 @@
       scrolled ? 'shadow-[0_1px_8px_rgba(0,0,0,0.06)]' : ''
     ]"
   >
-    <!-- Analysis announcement bar -->
-    <NuxtLink to="/brand-analysis" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
+    <!-- Analysis announcement bar (hidden on Intelligence page) -->
+    <NuxtLink v-if="!isIntelligencePage" to="/brand-analysis" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
       <div class="flex items-center justify-between gap-4">
         <div class="flex items-center gap-2.5">
           <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
@@ -24,7 +24,7 @@
     </NuxtLink>
 
     <!-- Main nav -->
-    <nav class="bg-white/70 backdrop-blur-xl overflow-hidden">
+    <nav :class="isDarkNav ? (scrolled ? 'bg-[var(--color-bg)]/90 backdrop-blur-xl' : 'bg-transparent backdrop-blur-none') : 'bg-[var(--color-bg)]/70 backdrop-blur-xl'" class="overflow-hidden transition-colors duration-300">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
         <NuxtLink to="/" class="absolute bottom-[-1px] left-0 md:-bottom-[2px] md:left-0 z-10 shrink-0">
           <LayoutLogo size="18px" :animate="true" class="w-32" />
@@ -37,12 +37,21 @@
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-[0.5rem] font-medium uppercase tracking-[0.3em] text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-text)]"
-            active-class="!text-[var(--near-black)]"
+            class="text-[0.5rem] font-medium uppercase tracking-[0.3em] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+            active-class="!text-[var(--color-text)]"
           >
             {{ link.label }}
           </NuxtLink>
         </div>
+
+        <!-- Dark mode toggle (desktop) -->
+        <button
+          class="ml-4 hidden h-7 w-7 items-center justify-center rounded-full transition-colors md:flex text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+          aria-label="Toggle dark mode"
+          @click="toggleDarkMode"
+        >
+          <Icon :name="isDarkNav ? 'lucide:sun' : 'lucide:moon'" class="size-3.5" />
+        </button>
 
         <!-- Mobile menu toggle -->
         <button
@@ -107,7 +116,16 @@
             </div>
 
             <div class="flex flex-col gap-4">
-              <MeetingRequest class="mobile-cta self-start !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
+              <div class="flex items-center gap-3">
+                <MeetingRequest class="mobile-cta self-start !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
+                <button
+                  class="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/50 transition-colors hover:border-white/40 hover:text-white"
+                  aria-label="Toggle dark mode"
+                  @click="toggleDarkMode"
+                >
+                  <Icon :name="isDarkNav ? 'lucide:sun' : 'lucide:moon'" class="size-3.5" />
+                </button>
+              </div>
               <p class="text-[0.5rem] uppercase tracking-[0.3em] text-white/20">Miami Beach · New York</p>
             </div>
           </nav>
@@ -127,10 +145,18 @@ const navLinks = [
   { label: 'Portfolio',     to: '/portfolio' },
   { label: 'Industries',    to: '/industries' },
   { label: 'Case Studies',  to: '/case-studies' },
+  { label: 'Intelligence',  to: '/intelligence' },
   { label: 'Magazine',      to: '/magazine' },
   { label: 'Partnerships',  to: '/partnerships' },
   { label: 'About',         to: '/about' },
 ]
+
+// Dark mode state — nav adapts to site-wide toggle
+const { isDark, toggle: toggleDarkMode } = useDarkMode()
+const isDarkNav = isDark
+
+// Intelligence page hides the announcement bar
+const isIntelligencePage = computed(() => route.path.startsWith('/intelligence'))
 
 // Close mobile menu on route change
 const route = useRoute()

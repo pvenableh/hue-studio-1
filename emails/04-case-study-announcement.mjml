@@ -1,0 +1,88 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="gold-eyebrow" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#D4973A" letter-spacing="2px" text-transform="uppercase" />
+      <mj-class name="heading" font-family="Georgia, 'Times New Roman', serif" font-size="32px" color="#F0EDE8" line-height="1.15" />
+      <mj-class name="body-text" font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="muted" font-size="14px" color="#8A8278" line-height="1.6" />
+    </mj-attributes>
+    <mj-preview>A real example from a client like you — with results.</mj-preview>
+    <mj-style>
+      a { color: #D4973A; text-decoration: underline; }
+      .case-study-card { background-color: #1C1A17 !important; }
+      .quote-block { background-color: #131210 !important; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#0B0A09">
+    <!-- Header -->
+    <mj-include path="./partials/header.mjml" />
+
+    <!-- Intro -->
+    <mj-section background-color="#0B0A09" padding="40px 40px 10px">
+      <mj-column>
+        <mj-text mj-class="gold-eyebrow" padding-bottom="20px">Client Story</mj-text>
+        <mj-text mj-class="heading" padding-bottom="16px">From spreadsheets to instant answers: {{client_industry}} case study</mj-text>
+        <mj-text mj-class="body-text">Here's a look at what Hue Intelligence looks like in practice — for an organization very similar to yours.</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Case study summary card -->
+    <mj-section padding="20px 40px" background-color="#0B0A09">
+      <mj-column css-class="case-study-card" padding="30px" border-radius="2px">
+        <mj-text font-size="11px" color="#D4973A" letter-spacing="1px" text-transform="uppercase" padding-bottom="12px">Organization type</mj-text>
+        <mj-text font-size="15px" color="#F0EDE8" padding-bottom="20px">{{organization_type}}</mj-text>
+
+        <mj-text font-size="11px" color="#D4973A" letter-spacing="1px" text-transform="uppercase" padding-bottom="8px">Challenge</mj-text>
+        <mj-text font-size="14px" color="#8A8278" line-height="1.6" padding-bottom="20px">{{challenge_text}}</mj-text>
+
+        <mj-text font-size="11px" color="#D4973A" letter-spacing="1px" text-transform="uppercase" padding-bottom="8px">What we built</mj-text>
+        <mj-text font-size="14px" color="#8A8278" line-height="1.6" padding-bottom="4px">{{solution_text}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Results — 3 stat columns -->
+    <mj-section background-color="#0B0A09" padding="10px 30px 20px">
+      <mj-column padding="10px" background-color="#1C1A17" border-radius="2px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="36px" color="#D4973A" padding="16px 10px 4px">8 hrs/week</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" padding="0 10px 16px">Saved on member reporting</mj-text>
+      </mj-column>
+      <mj-column padding="10px" background-color="#1C1A17" border-radius="2px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="36px" color="#D4973A" padding="16px 10px 4px">3 days &rarr; 20 min</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" padding="0 10px 16px">Grant narrative drafting</mj-text>
+      </mj-column>
+      <mj-column padding="10px" background-color="#1C1A17" border-radius="2px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="36px" color="#D4973A" padding="16px 10px 4px">100%</mj-text>
+        <mj-text align="center" font-size="12px" color="#8A8278" padding="0 10px 16px">Follow-up automation rate</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Pull quote -->
+    <mj-section padding="10px 40px 20px" background-color="#0B0A09">
+      <mj-column css-class="quote-block" padding="30px" border-radius="2px">
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="20px" color="#F0EDE8" font-style="italic" line-height="1.4" padding-bottom="12px">
+          "{{client_quote}}"
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#D4973A" letter-spacing="1px">
+          — {{client_name}}, {{client_title}}, {{client_org}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#0B0A09" padding="20px 40px 10px">
+      <mj-column>
+        <mj-text align="center" font-family="Georgia, 'Times New Roman', serif" font-size="20px" color="#F0EDE8" padding-bottom="16px">
+          Is your organization ready for this?
+        </mj-text>
+        <mj-button background-color="#D4973A" color="#0B0A09" font-family="Arial, Helvetica, sans-serif" font-size="13px" font-weight="bold" letter-spacing="1px" text-transform="uppercase" border-radius="2px" inner-padding="14px 28px" href="{{cta_url}}">
+          See if this applies to you
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>
