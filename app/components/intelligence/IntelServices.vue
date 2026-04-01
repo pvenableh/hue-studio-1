@@ -1,10 +1,12 @@
 <template>
   <section id="services" class="intel-section" style="background: var(--color-bg-alt);">
-    <div class="intel-container px-6 md:px-10">
-      <p class="intel-eyebrow mb-4 reveal">What We Build</p>
-      <h2 class="intel-h2 mb-14 reveal reveal-delay-1">
-        Five layers of AI capability, deployed in sequence.
-      </h2>
+    <div class="intel-container px-6 md:px-10 lg:grid lg:grid-cols-[1fr_1.5fr] lg:gap-16">
+      <div class="intel-services-heading mb-14 lg:mb-0">
+        <p class="intel-eyebrow mb-4 reveal">What We Build</p>
+        <h2 class="intel-h2 reveal reveal-delay-1">
+          Five layers of AI capability, deployed in sequence.
+        </h2>
+      </div>
 
       <div class="flex flex-col gap-2">
         <div

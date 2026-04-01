@@ -321,6 +321,16 @@
   margin: 0 auto;
 }
 
+/* ── STICKY SERVICES HEADING (lg+) ────────────── */
+
+@media (min-width: 1024px) {
+  .intel-services-heading {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+  }
+}
+
 /* ── DIVIDER ───────────────────────────────────── */
 
 .intel-divider {

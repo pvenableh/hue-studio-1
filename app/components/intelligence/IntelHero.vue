@@ -1,9 +1,9 @@
 <template>
-  <section class="relative flex min-h-screen items-center overflow-hidden" style="background: var(--color-bg);">
+  <section ref="sectionEl" class="relative flex min-h-screen items-center overflow-hidden" style="background: var(--color-bg);">
     <!-- Radial gradient bloom -->
     <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(ellipse 60% 50% at 75% 20%, rgba(196, 151, 59, 0.05), transparent 70%);" />
 
-    <div class="intel-container relative z-10 flex w-full flex-col lg:flex-row lg:items-center lg:justify-between px-6 md:px-10 py-20">
+    <div ref="contentEl" class="intel-container relative z-10 flex w-full flex-col lg:flex-row lg:items-center lg:justify-between px-6 md:px-10 py-20">
       <!-- Text block -->
       <div class="max-w-[720px]">
         <p ref="eyebrowEl" class="intel-eyebrow mb-6">Introducing Hue&reg; Intelligence</p>
@@ -30,9 +30,9 @@
         </div>
       </div>
 
-      <!-- Geometric SVG grid -->
-      <div ref="gridEl" class="mt-16 hidden lg:block lg:mt-0" aria-hidden="true">
-        <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Geometric SVG grid — behind text on small screens, beside on lg -->
+      <div ref="gridEl" class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.06] lg:pointer-events-auto lg:relative lg:inset-auto lg:mt-0 lg:block lg:opacity-100" aria-hidden="true">
+        <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[300px] h-[300px] lg:w-[400px] lg:h-[400px]">
           <g v-for="row in 10" :key="'r'+row">
             <rect
               v-for="col in 10"
@@ -42,9 +42,9 @@
               width="32"
               height="32"
               rx="2"
-              :fill="isGoldCell(row, col) ? '#D4973A' : '#F0EDE8'"
+              :fill="isGoldCell(row, col) ? '#8A8A8A' : '#2A2A2A'"
               :opacity="cellOpacity(row, col)"
-              class="intel-grid-cell"
+              :class="isGoldCell(row, col) ? 'intel-grid-cell intel-lit-cell' : 'intel-grid-cell'"
               :style="{ transitionDelay: `${(row + col) * 40}ms` }"
             />
           </g>
@@ -63,12 +63,16 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+const sectionEl = ref<HTMLElement | null>(null)
+const contentEl = ref<HTMLElement | null>(null)
 const eyebrowEl = ref<HTMLElement | null>(null)
 const h1El = ref<HTMLElement | null>(null)
 const subEl = ref<HTMLElement | null>(null)
 const ctaEl = ref<HTMLElement | null>(null)
 const gridEl = ref<HTMLElement | null>(null)
 const scrollEl = ref<HTMLElement | null>(null)
+
+defineExpose({ sectionEl, contentEl })
 
 // Gold-highlighted cells in the grid
 const goldCells = new Set(['3-5', '3-6', '4-5', '5-7', '6-6', '7-4', '7-5', '8-6'])
@@ -80,8 +84,8 @@ function isGoldCell(row: number, col: number): boolean {
 function cellOpacity(row: number, col: number): number {
   const cx = 5.5, cy = 5.5
   const dist = Math.sqrt((row - cy) ** 2 + (col - cx) ** 2)
-  if (isGoldCell(row, col)) return 0.6 + ((row * 7 + col * 13) % 10) * 0.03
-  return Math.max(0.03, 0.25 - dist * 0.035)
+  if (isGoldCell(row, col)) return 0.7 + ((row * 7 + col * 13) % 10) * 0.025
+  return Math.max(0.08, 0.4 - dist * 0.05)
 }
 
 const { staggerEntrance } = useHeroAnimations()
@@ -91,9 +95,10 @@ onMounted(async () => {
   await nextTick()
   if (import.meta.server) return
 
-  // Animate grid cells in
+  // Animate grid cells in, then pulse lit cells continuously
   if (gridEl.value) {
     const cells = gridEl.value.querySelectorAll('.intel-grid-cell')
+    const litCells = gridEl.value.querySelectorAll('.intel-lit-cell')
     gsap.fromTo(cells, { opacity: 0 }, {
       opacity: (i: number) => {
         const el = cells[i] as SVGRectElement
@@ -104,6 +109,33 @@ onMounted(async () => {
       delay: 0.5,
       ease: 'power2.out',
     })
+
+    // Continuous ambient animation — smooth, overlapping, organic
+    const allCells = Array.from(cells)
+    const litSet = new Set(Array.from(litCells))
+    setInterval(() => {
+      const darkCells = allCells.filter((c) => !litSet.has(c))
+      const count = 2 + Math.floor(Math.random() * 2)
+      for (let n = 0; n < count; n++) {
+        const rand = darkCells[Math.floor(Math.random() * darkCells.length)]
+        if (rand) {
+          const peakOpacity = 0.3 + Math.random() * 0.3
+          const riseTime = 1.2 + Math.random() * 1.0
+          const holdTime = 0.5 + Math.random() * 1.0
+          const fadeTime = 1.5 + Math.random() * 1.0
+          const baseOpacity = parseFloat(rand.getAttribute('opacity') || '0.1')
+          gsap.to(rand, { fill: '#6A6A6A', opacity: peakOpacity, duration: riseTime, ease: 'sine.inOut' })
+          gsap.to(rand, { fill: '#2A2A2A', opacity: baseOpacity, duration: fadeTime, delay: riseTime + holdTime, ease: 'sine.inOut' })
+        }
+      }
+      const litArr = Array.from(litCells)
+      const litRand = litArr[Math.floor(Math.random() * litArr.length)]
+      if (litRand) {
+        const dim = 0.35 + Math.random() * 0.2
+        gsap.to(litRand, { opacity: dim, duration: 1.5, ease: 'sine.inOut' })
+        gsap.to(litRand, { opacity: 0.7 + Math.random() * 0.1, duration: 1.8, delay: 1.8, ease: 'sine.inOut' })
+      }
+    }, 1200)
   }
 
   // Hide scroll indicator on scroll

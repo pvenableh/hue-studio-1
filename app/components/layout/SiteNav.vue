@@ -44,13 +44,16 @@
           </NuxtLink>
         </div>
 
-        <!-- Dark mode toggle (desktop) -->
+        <!-- Dark mode toggle switch (desktop) -->
         <button
-          class="ml-4 hidden h-7 w-7 items-center justify-center rounded-full transition-colors md:flex text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+          class="dark-switch ml-4 hidden md:flex"
+          :class="{ 'is-on': isDarkNav }"
+          role="switch"
+          :aria-checked="isDarkNav ? 'true' : 'false'"
           aria-label="Toggle dark mode"
           @click="toggleDarkMode"
         >
-          <Icon :name="isDarkNav ? 'lucide:sun' : 'lucide:moon'" class="size-3.5" />
+          <span class="dark-switch-thumb" />
         </button>
 
         <!-- Mobile menu toggle -->
@@ -88,6 +91,21 @@
             <Icon name="lucide:x" class="size-5" />
           </button>
 
+          <!-- Dark mode toggle — level with close button -->
+          <div class="absolute left-6 top-5 z-10 flex h-9 items-center gap-2">
+            <button
+              class="dark-switch dark-switch-mobile"
+              :class="{ 'is-on': isDarkNav }"
+              role="switch"
+              :aria-checked="isDarkNav ? 'true' : 'false'"
+              aria-label="Toggle dark mode"
+              @click="toggleDarkMode"
+            >
+              <span class="dark-switch-thumb" />
+            </button>
+            <span class="text-[0.5rem] font-medium uppercase tracking-[0.2em] text-white/25">{{ isDarkNav ? 'Dark' : 'Light' }}</span>
+          </div>
+
           <!-- Logo watermark -->
           <LayoutLogo color="rgba(255,255,255,0.04)" class="menu-watermark pointer-events-none absolute bottom-0 w-[103%] -left-2 select-none" />
 
@@ -118,13 +136,6 @@
             <div class="flex flex-col gap-4">
               <div class="flex items-center gap-3">
                 <MeetingRequest class="mobile-cta self-start !bg-transparent !border !border-white/20 !text-white/70 hover:!border-white/40 hover:!text-white" />
-                <button
-                  class="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/50 transition-colors hover:border-white/40 hover:text-white"
-                  aria-label="Toggle dark mode"
-                  @click="toggleDarkMode"
-                >
-                  <Icon :name="isDarkNav ? 'lucide:sun' : 'lucide:moon'" class="size-3.5" />
-                </button>
               </div>
               <p class="text-[0.5rem] uppercase tracking-[0.3em] text-white/20">Miami Beach · New York</p>
             </div>
@@ -274,5 +285,58 @@ onMounted(() => {
 .mobile-overlay-leave-to .menu-watermark {
   opacity: 0;
   transform: translateY(20px) scale(0.98);
+}
+
+/* ── Dark mode toggle switch ── */
+.dark-switch {
+  position: relative;
+  width: 28px;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--color-text-muted, #999);
+  opacity: 0.35;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.25s ease, opacity 0.25s ease;
+}
+.dark-switch:hover { opacity: 0.6; }
+.dark-switch.is-on { background: rgba(255,255,255,0.4); opacity: 0.5; }
+.dark-switch.is-on:hover { opacity: 0.7; }
+
+.dark-switch-thumb {
+  position: absolute;
+  top: 1.5px;
+  left: 1.5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #333;
+}
+.dark-switch.is-on .dark-switch-thumb {
+  transform: translateX(14px);
+  color: #1a1a1a;
+}
+
+.dark-switch-mobile {
+  width: 32px;
+  height: 16px;
+  border-radius: 8px;
+  opacity: 0.5;
+}
+.dark-switch-mobile .dark-switch-thumb {
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+}
+.dark-switch-mobile.is-on .dark-switch-thumb {
+  transform: translateX(16px);
 }
 </style>

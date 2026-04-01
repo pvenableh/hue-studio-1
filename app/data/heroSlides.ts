@@ -56,24 +56,24 @@ export const heroSlides: HeroSlide[] = [
     },
   },
   {
-    id: 'ai-automation',
+    id: 'intelligence',
     type: 'service',
-    label: 'New Service',
-    title: 'AI &',
-    titleAccent: 'Automation.',
-    description: 'Your content should work as hard as your team. We build platforms that are natively AI-ready — through MCP integrations, structured content architecture, and intelligent automation workflows.',
+    label: 'Hue Intelligence',
+    title: 'Your data,',
+    titleAccent: 'working.',
+    description: 'AI-powered intelligence and automation for growing organizations — built on your existing data, delivered by a boutique team that understands design as much as technology.',
     ctas: [
-      { text: 'Explore AI Services', to: '/creative-services/ai-automation-mcp', style: 'primary' },
+      { text: 'Explore Hue Intelligence', to: '/intelligence', style: 'primary' },
     ],
     background: {
-      color: '#0D0D1A',
-      gradient: 'radial-gradient(ellipse at 70% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 60%)',
+      color: '#110F0A',
+      gradient: 'radial-gradient(ellipse at 70% 40%, rgba(212, 151, 58, 0.06) 0%, transparent 60%)',
     },
     animation: {
-      label: { offset: 25, duration: 0.5, ease: 'power2.out' },
-      title: { offset: 100, duration: 1.6, ease: 'power4.out' },
-      sub: { offset: 50, duration: 1.0, delay: 0.2 },
-      cta: { offset: 20, duration: 0.7, delay: 0.4 },
+      label: { offset: 20, duration: 0.5, ease: 'power2.out' },
+      title: { offset: 90, duration: 1.4, ease: 'power4.out' },
+      sub: { offset: 45, duration: 1.0, delay: 0.2 },
+      cta: { offset: 15, duration: 0.7, delay: 0.4 },
     },
   },
   {
@@ -89,6 +89,8 @@ export const heroSlides: HeroSlide[] = [
     ],
     background: {
       color: '#1B2A3D',
+      image: 'e6b13e25-0bb7-4f50-ac53-c39f934ac03f',
+      overlay: 0.65,
     },
     animation: {
       label: { offset: 30, duration: 0.7 },
@@ -109,6 +111,8 @@ export const heroSlides: HeroSlide[] = [
     ],
     background: {
       color: '#1A1A0F',
+      image: '5ca81819-f9e7-4163-bb5a-eb674872618b',
+      overlay: 0.6,
     },
     animation: {
       label: { offset: 20, duration: 0.5 },
@@ -126,7 +130,6 @@ export const heroSlides: HeroSlide[] = [
     description: '8 questions. 15 minutes. A clear-eyed assessment of where your brand stands and where it could go — delivered within 5 business days, at no cost.',
     ctas: [
       { text: 'Start Your Brand Analysis', to: '/brand-analysis', style: 'primary' },
-      { text: 'Learn About Our Process', to: '/about', style: 'secondary' },
     ],
     background: {
       color: '#111111',

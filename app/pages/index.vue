@@ -4,7 +4,7 @@
     <HomeHeroSlider />
 
     <!-- ═══ PHILOSOPHY ═══ -->
-    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container max-w-3xl mx-auto text-center">
         <div class="mx-auto mb-10 h-px w-10 bg-[var(--silk)]" />
         <p class="hue-editorial-lg mb-7 reveal">
@@ -21,16 +21,16 @@
     </section>
 
     <!-- ═══ SERVICE PACKAGES ═══ -->
-    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 text-center">
+        <div class="mb-8 md:mb-14 text-center">
           <p class="hue-label mb-3">What We Do</p>
           <h2 class="hue-display-lg">Service Packages</h2>
           <p class="mx-auto mt-4 max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
             Three tiers designed to scale with your growth. Every package is strategic, measurable, and built to generate results.
           </p>
         </div>
-        <div class="grid items-start gap-5 lg:grid-cols-3">
+        <div class="grid items-start gap-3 md:gap-5 lg:grid-cols-3">
           <div
             v-for="(pkg, i) in packages"
             :key="pkg.id"
@@ -62,9 +62,9 @@
     </section>
 
     <!-- ═══ CASE STUDIES ═══ -->
-    <section v-if="caseStudies?.length" class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <section v-if="caseStudies?.length" class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 flex items-end justify-between">
+        <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
             <p class="hue-label mb-3">Case Studies</p>
             <h2 class="hue-display-lg">Results that speak<br>for themselves.</h2>
@@ -74,7 +74,7 @@
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
-        <div class="space-y-12">
+        <div class="space-y-6 md:space-y-12">
           <CaseStudiesCaseStudyCard
             v-for="(cs, i) in caseStudies.slice(0, 3)"
             :key="cs.id"
@@ -95,13 +95,13 @@
     </section>
 
     <!-- ═══ HOW WE WORK ═══ -->
-    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14">
+        <div class="mb-8 md:mb-14">
           <p class="hue-label mb-3">How We Work</p>
           <h2 class="hue-display-lg">From first call to final delivery.</h2>
         </div>
-        <NumberedGrid :items="processGridItems" :cols="4" />
+        <NumberedGrid :items="processGridItems" :cols="4" :mobile-carousel="true" />
         <div class="mt-8 text-center">
           <NuxtLink to="/creative-services" class="hue-link">
             View all services
@@ -112,9 +112,9 @@
     </section>
 
     <!-- ═══ SERVICES CAROUSEL ═══ -->
-    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 flex items-end justify-between">
+        <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
             <p class="hue-label mb-3">Our Services</p>
             <h2 class="hue-display-lg">What we do.</h2>
@@ -129,9 +129,9 @@
     </section>
 
     <!-- ═══ FEATURED WORK ═══ -->
-    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 flex items-end justify-between">
+        <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
             <p class="hue-label mb-3">Portfolio</p>
             <h2 class="hue-display-lg">Creating impact<br>through visual excellence.</h2>
@@ -146,16 +146,16 @@
     </section>
 
     <!-- ═══ INDUSTRIES ═══ -->
-    <section class="hue-section-alt px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-14 text-center">
+        <div class="mb-8 md:mb-14 text-center">
           <p class="hue-label mb-3">Industries</p>
           <h2 class="hue-display-lg">Industries We Serve</h2>
           <p class="mx-auto mt-4 max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
             We specialize in sectors where credibility, trust, and professional presence drive decisions — from B2B growth companies to government and community organizations.
           </p>
         </div>
-        <NumberedGrid :items="industryGridItems" :cols="4" />
+        <NumberedGrid :items="industryGridItems" :cols="4" :mobile-carousel="true" />
         <div class="mt-8 text-center">
           <NuxtLink to="/industries" class="hue-link">All industries <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
         </div>
@@ -163,8 +163,8 @@
     </section>
 
     <!-- ═══ ABOUT STRIP ═══ -->
-    <section class="hue-section-dark px-2 md:px-6 py-24 md:py-32">
-      <div class="hue-container grid gap-16 lg:grid-cols-2">
+    <section class="hue-section-dark px-5 md:px-6 py-14 md:py-32">
+      <div class="hue-container grid gap-10 md:gap-16 lg:grid-cols-2">
         <div>
           <p class="hue-label mb-5 text-white/40">About Hue</p>
           <h2 class="hue-display-lg mb-6 text-white">
@@ -180,7 +180,7 @@
           </NuxtLink>
         </div>
         <div class="grid grid-cols-2 content-center gap-px overflow-hidden rounded-sm bg-white/5">
-          <div v-for="stat in agencyStats" :key="stat.label" class="bg-[var(--near-black)] p-10 text-center">
+          <div v-for="stat in agencyStats" :key="stat.label" class="bg-[var(--near-black)] p-6 md:p-10 text-center">
             <p class="hue-editorial-xl text-white">{{ stat.value }}</p>
             <p class="hue-label-sm mt-2 text-white/30">{{ stat.label }}</p>
           </div>
@@ -188,55 +188,55 @@
       </div>
     </section>
 
-    <!-- ═══ AI & MCP CALLOUT ═══ -->
-    <section class="relative overflow-hidden bg-[#1a1225] px-2 md:px-6 py-24 md:py-32">
+    <!-- ═══ HUE INTELLIGENCE CALLOUT ═══ -->
+    <section class="relative overflow-hidden bg-[#110F0A] px-5 md:px-6 py-14 md:py-32">
       <!-- Subtle gradient glow -->
       <div class="pointer-events-none absolute inset-0">
-        <div class="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#8B5CF6]/[0.06] blur-[120px]" />
-        <div class="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-x-1/2 rounded-full bg-[#8B5CF6]/[0.04] blur-[100px]" />
+        <div class="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-[#D4973A]/[0.05] blur-[120px]" />
+        <div class="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-x-1/2 rounded-full bg-[#D4973A]/[0.03] blur-[100px]" />
       </div>
-      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
+      <div class="hue-container relative grid gap-10 md:gap-16 lg:grid-cols-2">
         <div>
-          <p class="hue-label mb-5 text-[#8B5CF6]/60">AI & Automation</p>
+          <p class="hue-label mb-5 text-[#D4973A]/60">Hue Intelligence</p>
           <h2 class="hue-display-lg mb-6 text-white">
-            Your content should<br>talk to
-            <span style="font-family:var(--font-editorial);font-style:italic;">AI.</span>
+            Your data,<br>
+            <span style="font-family:var(--font-editorial);font-style:italic;">finally</span> working for you.
           </h2>
           <p class="mb-8 text-[1.0625rem] leading-relaxed text-white/40">
-            We build content platforms that are natively AI-ready. Through MCP integrations and structured content architecture, your brand becomes queryable, composable, and actionable by AI tools — today, not someday.
+            AI-powered intelligence and automation for small and mid-sized organizations. We turn your existing data into actionable reports, automated workflows, and AI-ready dashboards — delivered by a boutique team.
           </p>
-          <NuxtLink to="/creative-services/ai-automation-mcp" class="inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 px-5 py-2.5 text-[0.75rem] font-medium uppercase tracking-wider text-[#8B5CF6]/80 transition-all hover:border-[#8B5CF6]/60 hover:text-[#8B5CF6]">
-            Explore AI Services
+          <NuxtLink to="/intelligence" class="inline-flex items-center gap-2 rounded-full border border-[#D4973A]/30 px-5 py-2.5 text-[0.75rem] font-medium uppercase tracking-wider text-[#D4973A]/80 transition-all hover:border-[#D4973A]/60 hover:text-[#D4973A]">
+            Explore Hue Intelligence
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
         <div class="grid grid-cols-2 content-center gap-3">
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
-            <Icon name="lucide:bot" class="mb-3 size-5 text-[#8B5CF6]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">MCP Integration</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">AI tools query your content natively via Model Context Protocol.</p>
+            <Icon name="lucide:bot" class="mb-3 size-5 text-[#D4973A]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">AI Insight Assistant</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Ask your data anything in plain English — instant answers, no SQL.</p>
           </div>
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
-            <Icon name="lucide:sparkles" class="mb-3 size-5 text-[#8B5CF6]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Content Intelligence</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">Automated tagging, classification, and enrichment powered by AI.</p>
-          </div>
-          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
-            <Icon name="lucide:workflow" class="mb-3 size-5 text-[#8B5CF6]/60" />
+            <Icon name="lucide:workflow" class="mb-3 size-5 text-[#D4973A]/60" />
             <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Smart Workflows</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">AI-assisted content creation and approval pipelines in your CMS.</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Automated actions triggered by your data — emails, reports, alerts.</p>
           </div>
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
-            <Icon name="lucide:zap" class="mb-3 size-5 text-[#8B5CF6]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Automation</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">Event-driven pipelines connecting your content to any service.</p>
+            <Icon name="lucide:sparkles" class="mb-3 size-5 text-[#D4973A]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Content Engine</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">AI-generated newsletters, reports, and proposals from your collections.</p>
+          </div>
+          <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
+            <Icon name="lucide:layout-dashboard" class="mb-3 size-5 text-[#D4973A]/60" />
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Custom Dashboard</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">A branded command center with live KPIs and AI summaries.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ═══ BRAND AUDIT CTA ═══ -->
-    <section class="hue-section px-2 md:px-6 py-24 md:py-32">
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="hue-grid-bordered grid-cols-1 lg:grid-cols-3">
           <div class="col-span-2 p-10 lg:p-14">
@@ -263,7 +263,7 @@
     </section>
 
     <!-- ═══ CLOSING QUOTE ═══ -->
-    <section class="hue-section-dark px-2 md:px-6 py-32 text-center md:py-44">
+    <section class="hue-section-dark px-5 md:px-6 py-16 text-center md:py-44">
       <div class="hue-container-sm">
         <p class="hue-pullquote reveal text-white">
           "Design is intelligence<br class="hidden md:block"> made visible."

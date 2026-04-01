@@ -3,7 +3,8 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "/Users/peterhoffman/.local/share/fnm/node-versions/v22.22.1/installation/bin/pnpm",
+      "env": { "PATH": "/Users/peterhoffman/.local/share/fnm/node-versions/v22.22.1/installation/bin:/usr/bin:/bin" },
       "runtimeArgs": ["dev", "--port", "3333"],
       "port": 3333
     }

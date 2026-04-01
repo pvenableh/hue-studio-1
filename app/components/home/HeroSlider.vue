@@ -50,7 +50,7 @@
       </div>
 
       <!-- Content -->
-      <div class="relative z-10 flex h-full items-center px-2 md:px-6">
+      <div class="relative z-10 flex h-full items-center px-5 md:px-6">
         <div class="hue-container">
           <div class="grid gap-12 lg:grid-cols-2">
             <div class="max-w-xl">
@@ -98,6 +98,69 @@
                 class="max-h-[60vh] object-contain drop-shadow-2xl"
               />
             </div>
+
+            <!-- Watermark text for brand-analysis slide -->
+            <span
+              v-if="slide.id === 'brand-analysis'"
+              class="hero-watermark pointer-events-none absolute bottom-0 right-0 select-none italic opacity-0"
+              style="font-family: var(--font-editorial); font-size: clamp(4rem, 12vw, 10rem); line-height: 0.72; font-weight: 300; color: rgba(255,255,255,0.04); transform: translateY(0.15em); text-align: right; padding-right: 1rem;"
+              :data-anim="`${i}-watermark`"
+            >Reason<br>creates<br>meaning.</span>
+
+            <!-- Brand animated composition — editorial geometric shapes -->
+            <div
+              v-if="slide.id === 'brand'"
+              class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07] lg:pointer-events-auto lg:relative lg:inset-auto lg:opacity-100"
+              :data-anim="`${i}-grid`"
+            >
+              <svg width="400" height="440" viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[300px] h-[330px] lg:w-[400px] lg:h-[440px]">
+                <!-- Large frame -->
+                <rect class="brand-shape" x="40" y="20" width="240" height="300" rx="2" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" />
+                <!-- Offset filled block -->
+                <rect class="brand-shape" x="120" y="80" width="200" height="240" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                <!-- Small accent square -->
+                <rect class="brand-shape" x="60" y="260" width="80" height="80" rx="2" fill="rgba(255,255,255,0.06)" />
+                <!-- Horizontal rule lines -->
+                <line class="brand-shape" x1="40" y1="380" x2="320" y2="380" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                <line class="brand-shape" x1="40" y1="395" x2="220" y2="395" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+                <line class="brand-shape" x1="40" y1="410" x2="160" y2="410" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <!-- Circle accent -->
+                <circle class="brand-shape" cx="300" cy="60" r="40" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none" />
+                <circle class="brand-shape" cx="300" cy="60" r="4" fill="rgba(255,255,255,0.15)" />
+                <!-- Diagonal accent -->
+                <line class="brand-shape" x1="280" y1="320" x2="360" y2="240" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+                <!-- Vertical measure line -->
+                <line class="brand-shape" x1="370" y1="20" x2="370" y2="320" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                <line class="brand-shape" x1="365" y1="20" x2="375" y2="20" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                <line class="brand-shape" x1="365" y1="320" x2="375" y2="320" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                <!-- Editorial word -->
+                <text class="brand-word" x="70" y="200" font-family="var(--font-editorial)" font-style="italic" font-weight="400" font-size="96" fill="rgba(255,255,255,0.07)" letter-spacing="-0.02em">idea</text>
+              </svg>
+            </div>
+
+            <!-- Intelligence animated grid — behind text on small screens, beside on lg -->
+            <div
+              v-if="slide.id === 'intelligence'"
+              class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.08] lg:pointer-events-auto lg:relative lg:inset-auto lg:opacity-100"
+              :data-anim="`${i}-grid`"
+            >
+              <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[320px] h-[320px] lg:w-[400px] lg:h-[400px]">
+                <g v-for="row in 10" :key="'r'+row">
+                  <rect
+                    v-for="col in 10"
+                    :key="'c'+col"
+                    :x="(col - 1) * 40 + 4"
+                    :y="(row - 1) * 40 + 4"
+                    width="32"
+                    height="32"
+                    rx="2"
+                    :fill="intelGridGold.has(`${row}-${col}`) ? '#8A8A8A' : '#2A2A2A'"
+                    :opacity="intelCellOpacity(row, col)"
+                    :class="intelGridGold.has(`${row}-${col}`) ? 'intel-hero-grid-cell intel-lit-cell' : 'intel-hero-grid-cell'"
+                  />
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -122,16 +185,16 @@
       </button>
     </div>
 
-    <!-- Arrows -->
+    <!-- Arrows (hidden for cleaner look — nav via dots, keyboard, drag/swipe) -->
     <button
-      class="absolute left-4 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 p-3 text-white/40 backdrop-blur-sm transition-all hover:border-white/25 hover:bg-white/10 hover:text-white/70 md:flex"
+      class="hidden"
       aria-label="Previous slide"
       @click="goTo(active - 1)"
     >
       <Icon name="lucide:chevron-left" class="size-5" />
     </button>
     <button
-      class="absolute right-4 top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 p-3 text-white/40 backdrop-blur-sm transition-all hover:border-white/25 hover:bg-white/10 hover:text-white/70 md:flex"
+      class="hidden"
       aria-label="Next slide"
       @click="goTo(active + 1)"
     >
@@ -145,8 +208,22 @@ import { ref, reactive, onMounted, onUnmounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { heroSlides } from '~/data/heroSlides'
 
-const slides = heroSlides
+// A/B test: 50% chance Intelligence slide leads instead of Brand slide
+// Swap is deferred to onMounted to avoid hydration mismatch
+const slides = reactive([...heroSlides])
 const sliderRef = ref<HTMLElement | null>(null)
+
+// Intelligence slide SVG grid helpers
+// Continuous animation timeline for active slide graphics
+let continuousTl: gsap.core.Timeline | null = null
+
+const intelGridGold = new Set(['3-5', '3-6', '4-5', '5-7', '6-6', '7-4', '7-5', '8-6'])
+function intelCellOpacity(row: number, col: number): number {
+  const cx = 5.5, cy = 5.5
+  const dist = Math.sqrt((row - cy) ** 2 + (col - cx) ** 2)
+  if (intelGridGold.has(`${row}-${col}`)) return 0.7 + ((row * 7 + col * 13) % 10) * 0.025
+  return Math.max(0.08, 0.4 - dist * 0.05)
+}
 const slideEls = reactive<Record<number, HTMLElement>>({})
 
 const active = ref(0)
@@ -221,6 +298,135 @@ function animateIn(i: number, done?: () => void) {
       ease: cfg.ease,
     }, cfg.delay)
   })
+
+  // Animate slide-specific graphics on enter
+  const gridEl = slideEls[i]?.querySelector(`[data-anim="${i}-grid"]`)
+  if (gridEl) {
+    // Intelligence grid cells — set hidden first, then animate
+    const cells = gridEl.querySelectorAll('.intel-hero-grid-cell')
+    const litCells = gridEl.querySelectorAll('.intel-lit-cell')
+    if (cells.length) {
+      gsap.set(cells, { opacity: 0 })
+      gsap.fromTo(cells, { opacity: 0 }, {
+        opacity: (idx: number) => {
+          const el = cells[idx] as SVGRectElement
+          return parseFloat(el.getAttribute('opacity') || '0.1')
+        },
+        duration: 0.8,
+        stagger: { each: 0.015, from: 'center' },
+        delay: 0.4,
+        ease: 'power2.out',
+      })
+
+      // Continuous ambient animation — smooth, overlapping, organic
+      if (cells.length) {
+        const allCells = Array.from(cells)
+        const litSet = new Set(Array.from(litCells))
+        let illuminateInterval: ReturnType<typeof setInterval> | null = null
+
+        illuminateInterval = setInterval(() => {
+          // Gently illuminate 2-3 random dark cells with long, overlapping fades
+          const darkCells = allCells.filter((c) => !litSet.has(c))
+          const count = 2 + Math.floor(Math.random() * 2)
+          for (let n = 0; n < count; n++) {
+            const rand = darkCells[Math.floor(Math.random() * darkCells.length)]
+            if (rand) {
+              const peakOpacity = 0.3 + Math.random() * 0.3
+              const riseTime = 1.2 + Math.random() * 1.0
+              const holdTime = 0.5 + Math.random() * 1.0
+              const fadeTime = 1.5 + Math.random() * 1.0
+              const baseOpacity = parseFloat(rand.getAttribute('opacity') || '0.1')
+              gsap.to(rand, { fill: '#6A6A6A', opacity: peakOpacity, duration: riseTime, ease: 'sine.inOut' })
+              gsap.to(rand, { fill: '#2A2A2A', opacity: baseOpacity, duration: fadeTime, delay: riseTime + holdTime, ease: 'sine.inOut' })
+            }
+          }
+          // Gently breathe the lit cells
+          const litArr = Array.from(litCells)
+          const litRand = litArr[Math.floor(Math.random() * litArr.length)]
+          if (litRand) {
+            const dim = 0.35 + Math.random() * 0.2
+            gsap.to(litRand, { opacity: dim, duration: 1.5, ease: 'sine.inOut' })
+            gsap.to(litRand, { opacity: 0.7 + Math.random() * 0.1, duration: 1.8, delay: 1.8, ease: 'sine.inOut' })
+          }
+        }, 1200)
+
+        // Store for cleanup
+        continuousTl = gsap.timeline()
+        ;(continuousTl as any)._illuminateInterval = illuminateInterval
+      }
+    }
+
+    // Brand editorial shapes — stroke draw-in animation
+    const shapes = gridEl.querySelectorAll('.brand-shape')
+    if (shapes.length) {
+      shapes.forEach((shape, idx) => {
+        const el = shape as SVGElement
+        const hasStroke = el.getAttribute('stroke')
+        const hasFill = el.getAttribute('fill') && el.getAttribute('fill') !== 'none'
+
+        if (hasStroke && el instanceof SVGGeometryElement) {
+          // Stroke draw-in: set dasharray to total length, animate dashoffset from full to 0
+          const len = el.getTotalLength()
+          gsap.set(el, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 })
+          gsap.to(el, {
+            strokeDashoffset: 0,
+            duration: 1.4,
+            delay: 0.3 + idx * 0.1,
+            ease: 'power2.inOut',
+          })
+          // Fade in fill after stroke draws
+          if (hasFill) {
+            const origFill = el.getAttribute('fill')!
+            gsap.set(el, { fill: 'transparent' })
+            gsap.to(el, { fill: origFill, duration: 0.6, delay: 0.8 + idx * 0.1, ease: 'power2.out' })
+          }
+        } else if (hasFill) {
+          // Non-stroked filled shapes — fade in
+          gsap.set(el, { opacity: 0 })
+          gsap.to(el, { opacity: 1, duration: 0.8, delay: 0.6 + idx * 0.1, ease: 'power2.out' })
+        }
+      })
+    }
+
+    // Brand editorial word — fade and slide up after shapes draw
+    const word = gridEl.querySelector('.brand-word')
+    if (word) {
+      gsap.set(word, { opacity: 0 })
+      gsap.fromTo(word,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1.4, delay: 1.2, ease: 'power3.out' }
+      )
+    }
+
+    // Continuous subtle animation for brand shapes while slide is visible
+    if (shapes.length) {
+      continuousTl = gsap.timeline({ repeat: -1, yoyo: true, delay: 2.0 })
+      shapes.forEach((shape, idx) => {
+        const el = shape as SVGElement
+        if (el instanceof SVGGeometryElement && el.getAttribute('stroke')) {
+          continuousTl!.to(el, {
+            strokeOpacity: 0.6,
+            duration: 2 + (idx % 3) * 0.5,
+            ease: 'sine.inOut',
+          }, idx * 0.2)
+          continuousTl!.to(el, {
+            strokeOpacity: 1,
+            duration: 2 + (idx % 3) * 0.5,
+            ease: 'sine.inOut',
+          }, idx * 0.2 + 2)
+        }
+      })
+    }
+  }
+
+  // Watermark text — fade and drift up
+  const watermark = slideEls[i]?.querySelector(`[data-anim="${i}-watermark"]`)
+  if (watermark) {
+    gsap.fromTo(watermark,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.6, delay: 0.5, ease: 'power3.out' }
+    )
+  }
 }
 
 // --- Leave animation (horizontal — content drifts out) ---
@@ -236,6 +442,42 @@ function animateOut(i: number, done?: () => void) {
       ease: 'power2.in',
     }, 0)
   })
+
+  // Kill continuous animation + interval
+  if (continuousTl) {
+    if ((continuousTl as any)._illuminateInterval) clearInterval((continuousTl as any)._illuminateInterval)
+    continuousTl.kill()
+    continuousTl = null
+  }
+
+  // Also hide/reverse slide-specific graphics for next animateIn
+  const gridEl = slideEls[i]?.querySelector(`[data-anim="${i}-grid"]`)
+  if (gridEl) {
+    // Brand shapes — draw out strokes, fade fills
+    const shapes = gridEl.querySelectorAll('.brand-shape')
+    shapes.forEach((shape) => {
+      const el = shape as SVGElement
+      if (el instanceof SVGGeometryElement && el.getAttribute('stroke')) {
+        const len = el.getTotalLength()
+        gsap.to(el, { strokeDashoffset: len, duration: 0.4, ease: 'power2.in' })
+        gsap.to(el, { fill: 'transparent', duration: 0.2 })
+      } else {
+        gsap.to(el, { opacity: 0, duration: 0.3 })
+      }
+    })
+
+    // Brand word + intel cells — fade out
+    const others = gridEl.querySelectorAll('.brand-word, .intel-hero-grid-cell')
+    if (others.length) {
+      gsap.to(others, { opacity: 0, duration: 0.3 })
+    }
+  }
+
+  // Watermark — fade out
+  const watermark = slideEls[i]?.querySelector(`[data-anim="${i}-watermark"]`)
+  if (watermark) {
+    gsap.to(watermark, { opacity: 0, duration: 0.3 })
+  }
 }
 
 // --- Go to slide ---
@@ -368,6 +610,18 @@ onMounted(async () => {
   await nextTick()
   calcHeight()
   window.addEventListener('resize', calcHeight)
+
+  // A/B test: 50% chance swap brand & intelligence slides (after hydration)
+  if (Math.random() < 0.5) {
+    const brandIdx = slides.findIndex((s) => s.id === 'brand')
+    const intelIdx = slides.findIndex((s) => s.id === 'intelligence')
+    if (brandIdx !== -1 && intelIdx !== -1) {
+      const temp = slides[brandIdx]
+      slides[brandIdx] = slides[intelIdx]
+      slides[intelIdx] = temp
+    }
+  }
+
   // First slide is visible, animate its content in
   animateIn(0)
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -389,5 +643,15 @@ onUnmounted(() => {
 @keyframes hero-progress {
   from { width: 0%; }
   to { width: 100%; }
+}
+
+/* Hide animated SVG elements until GSAP reveals them */
+.brand-word,
+.intel-hero-grid-cell {
+  opacity: 0;
+}
+/* Brand shapes: stroked ones use dashoffset to hide, fill-only ones use opacity */
+.brand-shape {
+  opacity: 0;
 }
 </style>
