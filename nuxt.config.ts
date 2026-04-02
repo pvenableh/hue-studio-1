@@ -81,6 +81,11 @@ export default defineNuxtConfig({
   // Redirects
   routeRules: {
     '/brand-audit': { redirect: { to: '/brand-analysis', statusCode: 301 } },
+    '/creative-design-portfolio/**': { redirect: { to: '/portfolio', statusCode: 301 } },
+    '/new-york-city-design-construction-portfolio': { redirect: { to: '/portfolio', statusCode: 301 } },
+    '/portfolio-showcase': { redirect: { to: '/portfolio', statusCode: 301 } },
+    '/content/**': { redirect: { to: '/', statusCode: 301 } },
+    '/domains/**': { redirect: { to: '/', statusCode: 301 } },
   },
 
   // Robots.txt

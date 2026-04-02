@@ -32,12 +32,12 @@
         <div class="w-24 shrink-0" /><!-- spacer for logo -->
 
         <!-- Desktop links -->
-        <div class="ml-auto hidden items-end gap-8 md:flex">
+        <div class="ml-auto hidden items-end gap-3 lg:flex xl:gap-5">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-[0.5rem] font-medium uppercase tracking-[0.3em] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+            class="text-[0.5rem] font-medium uppercase tracking-[0.2em] lg:tracking-[0.2em] xl:tracking-[0.3em] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
             active-class="!text-[var(--color-text)]"
           >
             {{ link.label }}
@@ -46,7 +46,7 @@
 
         <!-- Dark mode toggle switch (desktop) -->
         <button
-          class="dark-switch ml-4 hidden md:flex"
+          class="dark-switch ml-4 hidden lg:flex"
           :class="{ 'is-on': isDarkNav }"
           role="switch"
           :aria-checked="isDarkNav ? 'true' : 'false'"
@@ -58,7 +58,7 @@
 
         <!-- Mobile menu toggle -->
         <button
-          class="mobile-toggle ml-auto mr-1 flex h-9 w-9 items-center justify-center md:hidden"
+          class="mobile-toggle ml-auto mr-1 flex h-9 w-9 items-center justify-center lg:hidden"
           :class="mobileOpen ? 'is-open' : ''"
           @click="mobileOpen = !mobileOpen"
           aria-label="Toggle menu"
@@ -76,7 +76,7 @@
   <!-- Mobile menu overlay — rendered outside header to overlay the entire page -->
   <Teleport to="body">
     <Transition name="mobile-overlay">
-      <div v-if="mobileOpen" class="fixed inset-0 z-[60] md:hidden" @click.self="mobileOpen = false">
+      <div v-if="mobileOpen" class="fixed inset-0 z-[60] lg:hidden" @click.self="mobileOpen = false">
         <!-- Backdrop -->
         <div class="absolute inset-0 bg-[var(--near-black)]/80 backdrop-blur-sm" @click="mobileOpen = false" />
 
@@ -207,30 +207,41 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* ── Mobile toggle entrance/exit ── */
+.mobile-toggle {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+.mobile-toggle.is-open {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
 /* ── Hamburger icon with animated lines ── */
 .hamburger-lines {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  width: 16px;
+  gap: 5px;
+  width: 34px;
 }
 .hamburger-lines span {
   display: block;
-  height: 1.5px;
+  height: 1px;
   width: 100%;
   background: currentColor;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   transform-origin: center;
 }
+/* X animation disabled — close button is inside the mobile menu overlay
 .mobile-toggle.is-open .hamburger-lines span:nth-child(1) {
-  transform: translateY(5.5px) rotate(45deg);
+  transform: translateY(6px) rotate(45deg);
 }
 .mobile-toggle.is-open .hamburger-lines span:nth-child(2) {
   opacity: 0;
 }
 .mobile-toggle.is-open .hamburger-lines span:nth-child(3) {
-  transform: translateY(-5.5px) rotate(-45deg);
+  transform: translateY(-6px) rotate(-45deg);
 }
+*/
 
 /* ── Overlay transitions ── */
 .mobile-overlay-enter-active {

@@ -753,6 +753,47 @@ export function useDirectus() {
     return res.data ?? []
   }
 
+  /** Fetch related blog posts by shared services, industries, or categories */
+  const BLOG_CARD_FIELDS = [
+    'id', 'title', 'slug', 'excerpt', 'featured_image',
+    'date_published', 'date_created', 'reading_time',
+    'author.first_name', 'author.last_name',
+    'categories.blog_categories_id.id', 'categories.blog_categories_id.name',
+    'categories.blog_categories_id.slug', 'categories.blog_categories_id.color',
+  ]
+
+  async function fetchRelatedBlogPosts(options: {
+    serviceIds?: string[]
+    industryIds?: string[]
+    categoryIds?: (string | number)[]
+    excludeId?: number
+    limit?: number
+  }): Promise<DirectusBlogPost[]> {
+    const orFilters: string[][] = []
+    for (const id of options.serviceIds ?? []) {
+      orFilters.push(['filter[_or][][services][services_id][_eq]', id])
+    }
+    for (const id of options.industryIds ?? []) {
+      orFilters.push(['filter[_or][][industries][industries_id][_eq]', id])
+    }
+    for (const id of options.categoryIds ?? []) {
+      orFilters.push(['filter[_or][][categories][blog_categories_id][_eq]', String(id)])
+    }
+    if (!orFilters.length) return []
+
+    const params = new URLSearchParams({
+      fields: BLOG_CARD_FIELDS.join(','),
+      'filter[status][_eq]': 'published',
+      sort: '-date_published,-date_created',
+      limit: String(options.limit ?? 3),
+    })
+    if (options.excludeId) params.set('filter[id][_neq]', String(options.excludeId))
+    for (const [key, val] of orFilters) params.append(key, val)
+
+    const res = await directusFetch<{ data: DirectusBlogPost[] }>('items/blog', params)
+    return res.data ?? []
+  }
+
   // ── Team / People ──────────────────────────────────────────────
 
   const TEAM_MEMBER_FIELDS = [
@@ -817,6 +858,7 @@ export function useDirectus() {
     fetchBlogPosts,
     fetchBlogPost,
     fetchBlogCategories,
+    fetchRelatedBlogPosts,
     fetchTeamMember,
     fetchTeamMemberPosts,
   }
