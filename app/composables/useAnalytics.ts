@@ -62,6 +62,21 @@ export function useAnalytics() {
       trackEvent('case_study_view', { case_study_title: title, service })
     },
 
+    /** Video was played */
+    trackVideoPlay(title: string, platform: string, url: string) {
+      trackEvent('video_play', { video_title: title, video_platform: platform, video_url: url })
+    },
+
+    /** Magazine article was viewed */
+    trackArticleView(title: string, category?: string, author?: string) {
+      trackEvent('article_view', { article_title: title, category, author })
+    },
+
+    /** Outbound link was clicked */
+    trackOutboundClick(url: string, label?: string) {
+      trackEvent('outbound_click', { link_url: url, link_label: label })
+    },
+
     /** Generic event pass-through */
     trackEvent,
   }

@@ -61,7 +61,7 @@ export default defineNuxtConfig({
   // Google Analytics 4
   gtag: {
     id: process.env.NUXT_PUBLIC_GTAG_ID || '',
-    initialConsent: false,
+    initialConsent: true,
   },
 
   // OG Image generation

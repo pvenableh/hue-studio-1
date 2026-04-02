@@ -380,7 +380,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 const route = useRoute()
 const slug = route.params.slug as string
-const { trackBeforeAfterInteraction } = useAnalytics()
+const { trackBeforeAfterInteraction, trackPortfolioView } = useAnalytics()
 const { fetchPortfolioItem, fetchPortfolio, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
@@ -394,6 +394,14 @@ const { data: item } = await useAsyncData(`portfolio-${slug}`, () => fetchPortfo
 
 if (!item.value) {
   throw createError({ statusCode: 404, statusMessage: 'Project not found' })
+}
+
+if (import.meta.client) {
+  trackPortfolioView(
+    item.value.name ?? '',
+    item.value.service?.name,
+    primaryIndustryName(item.value),
+  )
 }
 
 parallaxElement(bgWordRef, 0.3)

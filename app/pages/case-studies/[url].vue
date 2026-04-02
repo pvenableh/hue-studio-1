@@ -487,7 +487,7 @@ const route = useRoute()
 const url = route.params.url as string
 const { fetchCaseStudyByUrl, fetchPortfolioItemById, assetUrl, resolvedBeforeAfters } = useDirectus()
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
-const { trackBeforeAfterInteraction } = useAnalytics()
+const { trackBeforeAfterInteraction, trackCaseStudyView } = useAnalytics()
 
 const heroRef = ref<HTMLElement | null>(null)
 const bgWordRef = ref<HTMLElement | null>(null)
@@ -521,6 +521,13 @@ onMounted(async () => {
 const { data: cs } = await useAsyncData(`case-study-${url}`, () => fetchCaseStudyByUrl(url))
 
 if (!cs.value) throw createError({ statusCode: 404, statusMessage: 'Case study not found' })
+
+if (import.meta.client) {
+  trackCaseStudyView(
+    cs.value.title ?? '',
+    cs.value.services?.[0]?.services_id?.name,
+  )
+}
 
 parallaxElement(bgWordRef, 0.3)
 staggerEntrance([heroLabel, heroTitle, heroDesc])

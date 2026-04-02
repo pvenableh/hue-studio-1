@@ -159,6 +159,7 @@
 import type { DirectusPortfolioItem, DirectusCaseStudy } from '~/composables/useDirectus'
 
 const route = useRoute()
+const { trackArticleView } = useAnalytics()
 const { fetchBlogPost, fetchPortfolio, fetchCaseStudies, fetchRelatedBlogPosts, assetUrl } = useDirectus()
 
 const { data: post } = await useAsyncData(
@@ -167,6 +168,15 @@ const { data: post } = await useAsyncData(
 )
 
 if (!post.value) throw createError({ statusCode: 404, statusMessage: 'Article not found' })
+
+if (import.meta.client) {
+  const author = post.value.author ? [post.value.author.first_name, post.value.author.last_name].filter(Boolean).join(' ') : undefined
+  trackArticleView(
+    post.value.title ?? '',
+    post.value.categories?.[0]?.blog_categories_id?.name,
+    author,
+  )
+}
 
 const primaryCategory = computed(() => post.value?.categories?.[0]?.blog_categories_id ?? null)
 
