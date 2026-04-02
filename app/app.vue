@@ -5,6 +5,11 @@
 </template>
 
 <script setup lang="ts">
+// Strip the auto-appended site name — pages set their own full titles
+useHead({
+  titleTemplate: (title) => title || 'Hue — Creative Marketing Studio',
+})
+
 // Global Schema.org — Organization, WebSite, LocalBusiness
 useSchemaOrg([
   {

@@ -107,37 +107,6 @@
               :data-anim="`${i}-watermark`"
             >Reason<br>creates<br>meaning.</span>
 
-            <!-- Brand animated composition — editorial geometric shapes -->
-            <div
-              v-if="slide.id === 'brand'"
-              class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07] lg:pointer-events-auto lg:relative lg:inset-auto lg:opacity-100"
-              :data-anim="`${i}-grid`"
-            >
-              <svg width="400" height="440" viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-[300px] h-[330px] lg:w-[400px] lg:h-[440px]">
-                <!-- Large frame -->
-                <rect class="brand-shape" x="40" y="20" width="240" height="300" rx="2" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none" />
-                <!-- Offset filled block -->
-                <rect class="brand-shape" x="120" y="80" width="200" height="240" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
-                <!-- Small accent square -->
-                <rect class="brand-shape" x="60" y="260" width="80" height="80" rx="2" fill="rgba(255,255,255,0.06)" />
-                <!-- Horizontal rule lines -->
-                <line class="brand-shape" x1="40" y1="380" x2="320" y2="380" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
-                <line class="brand-shape" x1="40" y1="395" x2="220" y2="395" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-                <line class="brand-shape" x1="40" y1="410" x2="160" y2="410" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
-                <!-- Circle accent -->
-                <circle class="brand-shape" cx="300" cy="60" r="40" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none" />
-                <circle class="brand-shape" cx="300" cy="60" r="4" fill="rgba(255,255,255,0.15)" />
-                <!-- Diagonal accent -->
-                <line class="brand-shape" x1="280" y1="320" x2="360" y2="240" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-                <!-- Vertical measure line -->
-                <line class="brand-shape" x1="370" y1="20" x2="370" y2="320" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
-                <line class="brand-shape" x1="365" y1="20" x2="375" y2="20" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
-                <line class="brand-shape" x1="365" y1="320" x2="375" y2="320" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
-                <!-- Editorial word -->
-                <text class="brand-word" x="70" y="200" font-family="var(--font-editorial)" font-style="italic" font-weight="400" font-size="96" fill="rgba(255,255,255,0.07)" letter-spacing="-0.02em">idea</text>
-              </svg>
-            </div>
-
             <!-- Intelligence animated grid — behind text on small screens, beside on lg -->
             <div
               v-if="slide.id === 'intelligence'"
@@ -312,9 +281,9 @@ function animateIn(i: number, done?: () => void) {
           const el = cells[idx] as SVGRectElement
           return parseFloat(el.getAttribute('opacity') || '0.1')
         },
-        duration: 0.8,
-        stagger: { each: 0.015, from: 'center' },
-        delay: 0.4,
+        duration: 0.5,
+        stagger: { each: 0.008, from: 'center' },
+        delay: 0.2,
         ease: 'power2.out',
       })
 
@@ -332,9 +301,9 @@ function animateIn(i: number, done?: () => void) {
             const rand = darkCells[Math.floor(Math.random() * darkCells.length)]
             if (rand) {
               const peakOpacity = 0.3 + Math.random() * 0.3
-              const riseTime = 1.2 + Math.random() * 1.0
-              const holdTime = 0.5 + Math.random() * 1.0
-              const fadeTime = 1.5 + Math.random() * 1.0
+              const riseTime = 0.6 + Math.random() * 0.5
+              const holdTime = 0.2 + Math.random() * 0.5
+              const fadeTime = 0.7 + Math.random() * 0.5
               const baseOpacity = parseFloat(rand.getAttribute('opacity') || '0.1')
               gsap.to(rand, { fill: '#6A6A6A', opacity: peakOpacity, duration: riseTime, ease: 'sine.inOut' })
               gsap.to(rand, { fill: '#2A2A2A', opacity: baseOpacity, duration: fadeTime, delay: riseTime + holdTime, ease: 'sine.inOut' })
@@ -345,10 +314,10 @@ function animateIn(i: number, done?: () => void) {
           const litRand = litArr[Math.floor(Math.random() * litArr.length)]
           if (litRand) {
             const dim = 0.35 + Math.random() * 0.2
-            gsap.to(litRand, { opacity: dim, duration: 1.5, ease: 'sine.inOut' })
-            gsap.to(litRand, { opacity: 0.7 + Math.random() * 0.1, duration: 1.8, delay: 1.8, ease: 'sine.inOut' })
+            gsap.to(litRand, { opacity: dim, duration: 0.7, ease: 'sine.inOut' })
+            gsap.to(litRand, { opacity: 0.7 + Math.random() * 0.1, duration: 0.9, delay: 0.9, ease: 'sine.inOut' })
           }
-        }, 1200)
+        }, 600)
 
         // Store for cleanup
         continuousTl = gsap.timeline()
@@ -356,67 +325,6 @@ function animateIn(i: number, done?: () => void) {
       }
     }
 
-    // Brand editorial shapes — stroke draw-in animation
-    const shapes = gridEl.querySelectorAll('.brand-shape')
-    if (shapes.length) {
-      shapes.forEach((shape, idx) => {
-        const el = shape as SVGElement
-        const hasStroke = el.getAttribute('stroke')
-        const hasFill = el.getAttribute('fill') && el.getAttribute('fill') !== 'none'
-
-        if (hasStroke && el instanceof SVGGeometryElement) {
-          // Stroke draw-in: set dasharray to total length, animate dashoffset from full to 0
-          const len = el.getTotalLength()
-          gsap.set(el, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 })
-          gsap.to(el, {
-            strokeDashoffset: 0,
-            duration: 1.4,
-            delay: 0.3 + idx * 0.1,
-            ease: 'power2.inOut',
-          })
-          // Fade in fill after stroke draws
-          if (hasFill) {
-            const origFill = el.getAttribute('fill')!
-            gsap.set(el, { fill: 'transparent' })
-            gsap.to(el, { fill: origFill, duration: 0.6, delay: 0.8 + idx * 0.1, ease: 'power2.out' })
-          }
-        } else if (hasFill) {
-          // Non-stroked filled shapes — fade in
-          gsap.set(el, { opacity: 0 })
-          gsap.to(el, { opacity: 1, duration: 0.8, delay: 0.6 + idx * 0.1, ease: 'power2.out' })
-        }
-      })
-    }
-
-    // Brand editorial word — fade and slide up after shapes draw
-    const word = gridEl.querySelector('.brand-word')
-    if (word) {
-      gsap.set(word, { opacity: 0 })
-      gsap.fromTo(word,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1.4, delay: 1.2, ease: 'power3.out' }
-      )
-    }
-
-    // Continuous subtle animation for brand shapes while slide is visible
-    if (shapes.length) {
-      continuousTl = gsap.timeline({ repeat: -1, yoyo: true, delay: 2.0 })
-      shapes.forEach((shape, idx) => {
-        const el = shape as SVGElement
-        if (el instanceof SVGGeometryElement && el.getAttribute('stroke')) {
-          continuousTl!.to(el, {
-            strokeOpacity: 0.6,
-            duration: 2 + (idx % 3) * 0.5,
-            ease: 'sine.inOut',
-          }, idx * 0.2)
-          continuousTl!.to(el, {
-            strokeOpacity: 1,
-            duration: 2 + (idx % 3) * 0.5,
-            ease: 'sine.inOut',
-          }, idx * 0.2 + 2)
-        }
-      })
-    }
   }
 
   // Watermark text — fade and drift up
@@ -453,21 +361,8 @@ function animateOut(i: number, done?: () => void) {
   // Also hide/reverse slide-specific graphics for next animateIn
   const gridEl = slideEls[i]?.querySelector(`[data-anim="${i}-grid"]`)
   if (gridEl) {
-    // Brand shapes — draw out strokes, fade fills
-    const shapes = gridEl.querySelectorAll('.brand-shape')
-    shapes.forEach((shape) => {
-      const el = shape as SVGElement
-      if (el instanceof SVGGeometryElement && el.getAttribute('stroke')) {
-        const len = el.getTotalLength()
-        gsap.to(el, { strokeDashoffset: len, duration: 0.4, ease: 'power2.in' })
-        gsap.to(el, { fill: 'transparent', duration: 0.2 })
-      } else {
-        gsap.to(el, { opacity: 0, duration: 0.3 })
-      }
-    })
-
-    // Brand word + intel cells — fade out
-    const others = gridEl.querySelectorAll('.brand-word, .intel-hero-grid-cell')
+    // Intel cells — fade out
+    const others = gridEl.querySelectorAll('.intel-hero-grid-cell')
     if (others.length) {
       gsap.to(others, { opacity: 0, duration: 0.3 })
     }
@@ -622,6 +517,9 @@ onMounted(async () => {
     }
   }
 
+  // Wait for DOM to reflect any A/B swap before animating
+  await nextTick()
+
   // First slide is visible, animate its content in
   animateIn(0)
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -646,12 +544,7 @@ onUnmounted(() => {
 }
 
 /* Hide animated SVG elements until GSAP reveals them */
-.brand-word,
 .intel-hero-grid-cell {
-  opacity: 0;
-}
-/* Brand shapes: stroked ones use dashoffset to hide, fill-only ones use opacity */
-.brand-shape {
   opacity: 0;
 }
 </style>

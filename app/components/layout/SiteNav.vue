@@ -32,21 +32,21 @@
         <div class="w-24 shrink-0" /><!-- spacer for logo -->
 
         <!-- Desktop links -->
-        <div class="ml-auto hidden items-end gap-3 lg:flex xl:gap-5">
+        <div class="ml-auto hidden items-end gap-5 lg:flex xl:gap-7">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="text-[0.5rem] font-medium uppercase tracking-[0.2em] lg:tracking-[0.2em] xl:tracking-[0.3em] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+            class="text-[0.5rem] font-medium uppercase tracking-[0.3em] lg:tracking-[0.35em] xl:tracking-[0.4em] transition-colors text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
             active-class="!text-[var(--color-text)]"
           >
             {{ link.label }}
           </NuxtLink>
         </div>
 
-        <!-- Dark mode toggle switch (desktop) -->
+        <!-- Dark mode toggle switch (desktop) — absolute top-right -->
         <button
-          class="dark-switch ml-4 hidden lg:flex"
+          class="dark-switch absolute right-2 top-3 hidden lg:flex md:right-6"
           :class="{ 'is-on': isDarkNav }"
           role="switch"
           :aria-checked="isDarkNav ? 'true' : 'false'"
@@ -300,7 +300,6 @@ onMounted(() => {
 
 /* ── Dark mode toggle switch ── */
 .dark-switch {
-  position: relative;
   width: 28px;
   height: 14px;
   border-radius: 7px;

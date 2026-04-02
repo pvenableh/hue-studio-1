@@ -47,6 +47,8 @@ export const heroSlides: HeroSlide[] = [
     ],
     background: {
       color: '#111111',
+      image: '4a330103-c090-4dff-867f-3077f0470af9',
+      overlay: 0.55,
     },
     animation: {
       label: { offset: 15, duration: 0.6 },

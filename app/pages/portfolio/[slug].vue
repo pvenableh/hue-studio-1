@@ -639,8 +639,16 @@ const ogImg = computed(() => {
 
 const ogDesc = computed(() => item.value?.synopsis ? stripHtml(item.value.synopsis) : `Creative marketing project by Hue — ${item.value?.name}.`)
 
+const seoTitle = computed(() => {
+  const name = item.value?.name ?? 'Project'
+  const service = item.value?.service?.name
+  const industry = primaryIndustryName(item.value!)
+  const context = [service, industry].filter(Boolean).join(' & ')
+  return context ? `${name} — ${context} | Hue Creative Agency` : `${name} | Hue Creative Agency`
+})
+
 useSeoMeta({
-  title: `${item.value?.name ?? 'Project'} | Portfolio | Hue`,
+  title: seoTitle,
   description: ogDesc.value,
   ogImage: ogImg.value ?? undefined,
 })

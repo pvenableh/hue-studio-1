@@ -741,8 +741,16 @@ const csOgImg = computed(() => {
   return id ? assetUrl(id, 'large') : null
 })
 
+const csSeoTitle = computed(() => {
+  const title = cs.value?.title ?? 'Case Study'
+  const service = allServices.value[0]
+  const industry = csIndustries.value[0]?.name
+  const context = [service, industry].filter(Boolean).join(' & ')
+  return context ? `${title} — ${context} | Hue Creative Agency` : `${title} | Hue Creative Agency`
+})
+
 useSeoMeta({
-  title: `${cs.value?.title ?? 'Case Study'} | Hue Creative Agency`,
+  title: csSeoTitle,
   description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.',
   ogImage: csOgImg.value ?? undefined,
 })

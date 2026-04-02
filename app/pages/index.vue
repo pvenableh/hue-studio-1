@@ -62,7 +62,7 @@
     </section>
 
     <!-- ═══ CASE STUDIES ═══ -->
-    <section v-if="caseStudies?.length" class="hue-section px-5 md:px-6 py-14 md:py-32">
+    <section v-if="caseStudies?.length" class="hue-section relative overflow-hidden px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
@@ -74,16 +74,42 @@
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
-        <div class="space-y-6 md:space-y-12">
-          <CaseStudiesCaseStudyCard
-            v-for="(cs, i) in caseStudies.slice(0, 3)"
-            :key="cs.id"
-            :cs="cs"
-            :image-src="csHomeImage(cs)"
-            :eager="i === 0"
-            :number="String(i + 1).padStart(2, '0')"
-            :reverse="i % 2 === 1"
-          />
+        <div class="relative">
+          <div class="overflow-hidden">
+            <div
+              class="flex transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+              :style="{ transform: `translateX(-${activeCaseStudy * 100}%)` }"
+            >
+              <div
+                v-for="(cs, i) in caseStudies.slice(0, 5)"
+                :key="cs.id"
+                class="w-full flex-shrink-0"
+              >
+                <CaseStudiesCaseStudyCard
+                  :cs="cs"
+                  :image-src="csHomeImage(cs)"
+                  :eager="i === 0"
+                  :number="String(i + 1).padStart(2, '0')"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- Progress indicators — same style as hero slider -->
+          <div class="mt-8 flex items-center justify-center gap-2">
+            <button
+              v-for="(cs, i) in caseStudies.slice(0, 5)"
+              :key="cs.id + '-dot'"
+              :aria-label="`Go to case study ${i + 1}`"
+              class="relative h-[3px] w-10 overflow-hidden rounded-full transition-all duration-300"
+              :class="i === activeCaseStudy ? 'bg-[var(--color-accent)]/30' : 'bg-[var(--color-border)] hover:bg-[var(--color-border-light)]'"
+              @click="activeCaseStudy = i"
+            >
+              <div
+                v-if="i === activeCaseStudy"
+                class="absolute inset-y-0 left-0 w-full rounded-full bg-[var(--color-accent)]"
+              />
+            </button>
+          </div>
         </div>
         <div class="mt-8 text-center sm:hidden">
           <NuxtLink to="/case-studies" class="hue-link">
@@ -95,6 +121,23 @@
     </section>
 
     <!-- ═══ HOW WE WORK ═══ -->
+    <section class="hue-section overflow-hidden px-5 md:px-6 py-14 md:py-32">
+      <div class="hue-container">
+        <div class="mb-8 md:mb-14 text-center lg:text-left">
+          <p class="hue-label mb-3">How We Work</p>
+          <h2 class="hue-display-lg">From first call to final delivery.</h2>
+        </div>
+        <IdeaChart />
+        <div class="mt-8 text-center">
+          <NuxtLink to="/magazine/three-week-discovery-process" class="hue-link">
+            Learn about our process
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+    <!-- ═══ HOW WE WORK (original — commented out) ═══ -->
+    <!--
     <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14">
@@ -110,6 +153,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- ═══ SERVICES CAROUSEL ═══ -->
     <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
@@ -129,7 +173,7 @@
     </section>
 
     <!-- ═══ FEATURED WORK ═══ -->
-    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
+    <section class="hue-section bg-white px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
@@ -281,7 +325,8 @@ import { industries } from '~/data/industries'
 
 const { fetchCaseStudies, fetchServices, assetUrl } = useDirectus()
 const { data: allServices } = await useAsyncData('home-services', () => fetchServices())
-const { data: caseStudies } = await useAsyncData('home-case-studies', () => fetchCaseStudies({ limit: 3, featured: true }))
+const { data: caseStudies } = await useAsyncData('home-case-studies', () => fetchCaseStudies({ limit: 5, featured: true }))
+const activeCaseStudy = ref(0)
 
 function csHomeImage(cs: any): string | null {
   if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
