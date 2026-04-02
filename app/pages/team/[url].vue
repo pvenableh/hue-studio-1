@@ -1,7 +1,7 @@
 <template>
   <div v-if="member">
     <!-- Hero -->
-    <section ref="heroRef" class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(400px, 50vh, 600px);">
+    <section ref="heroRef" class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(500px, 70vh, 800px);">
       <!-- Blurred background fill -->
       <img
         v-if="heroImgSrc"
@@ -9,6 +9,7 @@
         :alt="''"
         aria-hidden="true"
         class="absolute inset-0 h-full w-full object-cover blur-2xl scale-110 opacity-40"
+        style="object-position: center 0%;"
       />
 
       <!-- Sharp portrait centered -->
@@ -176,7 +177,7 @@ const fullName = computed(() => [member.value?.first_name, member.value?.last_na
 
 const heroImgSrc = computed(() => {
   const id = member.value?.photo ?? member.value?.image
-  return id ? assetUrl(id, 'large') : null
+  return id ? assetUrl(id, 'xlarge-contain') : null
 })
 
 // Fetch their blog posts — featured prominently
