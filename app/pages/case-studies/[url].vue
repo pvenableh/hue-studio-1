@@ -740,6 +740,26 @@ useSeoMeta({
   ogImage: csOgImg.value ?? undefined,
 })
 
+const csVideoSchemas = (videos.value ?? [])
+  .filter((v: any) => v.link && v.platform)
+  .map((v: any) => {
+    const vid = v.platform === 'youtube' ? extractYouTubeId(v.link) : extractVimeoId(v.link)
+    const thumbnailUrl = v.platform === 'youtube'
+      ? `https://img.youtube.com/vi/${vid}/maxresdefault.jpg`
+      : undefined
+    const embedUrl = v.platform === 'youtube'
+      ? `https://www.youtube.com/embed/${vid}`
+      : `https://player.vimeo.com/video/${vid}`
+    return {
+      '@type': 'VideoObject' as const,
+      'name': v.title || cs.value?.title || '',
+      'description': v.description || cs.value?.excerpt || '',
+      'thumbnailUrl': thumbnailUrl,
+      'embedUrl': embedUrl,
+      'uploadDate': cs.value?.date_created ?? undefined,
+    }
+  })
+
 useSchemaOrg([
   {
     '@type': 'BreadcrumbList',
@@ -749,6 +769,7 @@ useSchemaOrg([
       { '@type': 'ListItem', 'position': 3, 'name': cs.value?.title ?? 'Case Study' },
     ],
   },
+  ...csVideoSchemas,
 ])
 
 if (!csOgImg.value) {

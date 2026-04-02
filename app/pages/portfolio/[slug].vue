@@ -637,12 +637,33 @@ useSeoMeta({
   ogImage: ogImg.value ?? undefined,
 })
 
+const videoSchemas = (item.value?.videos ?? [])
+  .filter((v: any) => v.link && v.platform)
+  .map((v: any) => {
+    const vid = extractVideoId(v.link, v.platform)
+    const thumbnailUrl = v.platform === 'youtube'
+      ? `https://img.youtube.com/vi/${vid}/maxresdefault.jpg`
+      : undefined
+    const embedUrl = v.platform === 'youtube'
+      ? `https://www.youtube.com/embed/${vid}`
+      : `https://player.vimeo.com/video/${vid}`
+    return {
+      '@type': 'VideoObject' as const,
+      'name': v.title || item.value?.name || '',
+      'description': v.description || ogDesc.value,
+      'thumbnailUrl': thumbnailUrl,
+      'embedUrl': embedUrl,
+      'uploadDate': item.value?.date_created ?? undefined,
+    }
+  })
+
 useSchemaOrg([
   {
     '@type': 'CreativeWork',
     'name': item.value?.name ?? '',
     'description': ogDesc.value,
     'creator': { '@id': 'https://huestudios.com' },
+    ...(videoSchemas.length ? { video: videoSchemas } : {}),
   },
   {
     '@type': 'BreadcrumbList',
@@ -652,6 +673,7 @@ useSchemaOrg([
       { '@type': 'ListItem', 'position': 3, 'name': item.value?.name ?? 'Project' },
     ],
   },
+  ...videoSchemas,
 ])
 
 if (!ogImg.value) {
