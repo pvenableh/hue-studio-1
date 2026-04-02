@@ -22,6 +22,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
         { rel: 'alternate', type: 'application/rss+xml', title: 'hue: magazine', href: '/feed.xml' },
+        { rel: 'alternate', type: 'text/plain', title: 'LLM info', href: '/llms.txt' },
       ],
     },
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -91,6 +92,13 @@ export default defineNuxtConfig({
   // Robots.txt
   robots: {
     disallow: ['/api/', '/_nuxt/'],
+    groups: [
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'Google-Extended', 'PerplexityBot', 'anthropic-ai', 'ClaudeBot', 'cohere-ai'],
+        allow: ['/'],
+        disallow: ['/api/', '/_nuxt/'],
+      },
+    ],
   },
 
   image: {
