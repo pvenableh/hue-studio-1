@@ -1,11 +1,6 @@
 <template>
   <div v-if="item">
-    <!-- Back -->
-    <div class="bg-white px-2 py-2">
-      <NuxtLink to="/portfolio" class="hue-link text-[0.6875rem] text-[var(--silver)]">
-        <Icon name="lucide:arrow-left" class="size-3" /> All Work
-      </NuxtLink>
-    </div>
+    <BackLink to="/portfolio">All Work</BackLink>
 
     <!-- Hero -->
     <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">

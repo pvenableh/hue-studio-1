@@ -1,10 +1,6 @@
 <template>
   <div v-if="industry">
-    <div class="bg-white px-2 py-2">
-      <NuxtLink to="/industries" class="hue-link text-[0.6875rem] text-[var(--silver)]">
-        <Icon name="lucide:arrow-left" class="size-3" /> All Industries
-      </NuxtLink>
-    </div>
+    <BackLink to="/industries">All Industries</BackLink>
 
     <!-- Hero (pinned) -->
     <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">

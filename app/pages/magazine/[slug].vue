@@ -1,16 +1,59 @@
 <template>
   <div v-if="post">
-    <!-- Breadcrumb -->
-    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
-      <div class="hue-container">
-        <NuxtLink to="/magazine" class="hue-link text-[0.8125rem] text-[var(--grey)]">
-          <Icon name="lucide:arrow-left" class="size-3.5" /> Magazine
-        </NuxtLink>
+    <!-- ═══ DESKTOP: Fixed hero image with content scrolling over ═══ -->
+    <div v-if="heroImgSrc" ref="articleHeroWrapRef" class="relative hidden lg:block">
+      <!-- Breadcrumb — over hero -->
+      <div class="absolute left-0 top-0 z-20">
+        <BackLink to="/magazine" light>Magazine</BackLink>
+      </div>
+      <!-- Fixed background image — clipped to this wrapper -->
+      <div class="article-clip-to-parent">
+        <div class="fixed inset-0 h-screen w-full">
+          <img
+            :src="heroImgSrc"
+            :alt="post.title ?? ''"
+            class="h-full w-full object-cover"
+          />
+          <div ref="articleOverlayRef" class="absolute inset-0 bg-black" style="opacity: 0.45;" />
+        </div>
+      </div>
+
+      <!-- Header content with parallax layers -->
+      <div class="relative z-10 flex min-h-screen flex-col justify-end">
+        <div class="pb-20 pt-32 px-2 md:px-6">
+          <div class="hue-container-sm text-center">
+            <div v-if="primaryCategory" ref="parallaxCategory" class="mb-5">
+              <NuxtLink
+                :to="`/magazine/category/${primaryCategory.slug}`"
+                class="hue-label-sm tracking-[0.15em] text-white/50 transition-colors hover:text-white/80"
+                :style="primaryCategory.color ? `color: ${primaryCategory.color}` : ''"
+              >{{ primaryCategory.name }}</NuxtLink>
+            </div>
+            <h1 ref="parallaxTitle" class="hue-display-lg mb-6 text-white">{{ post.title }}</h1>
+            <p v-if="post.excerpt" ref="parallaxExcerpt" class="hue-editorial-md mx-auto mb-10 max-w-2xl text-white/70">{{ post.excerpt }}</p>
+            <div ref="parallaxAuthor" class="flex justify-center [&_*]:!text-white/60">
+              <MagazineAuthorCard
+                v-if="post.author"
+                :author="post.author"
+                :date="post.date_published ?? post.date_created"
+                :reading-time="post.reading_time"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer for scroll room -->
+        <div class="h-[40vh]" />
       </div>
     </div>
 
-    <!-- Article Header -->
-    <section class="px-2 md:px-6 py-16 md:py-24">
+    <!-- Mobile breadcrumb -->
+    <div class="lg:hidden">
+      <BackLink to="/magazine">Magazine</BackLink>
+    </div>
+
+    <!-- ═══ MOBILE: Standard stacked layout ═══ -->
+    <section class="px-2 md:px-6 py-16 md:py-24 lg:hidden">
       <div class="hue-container-sm text-center">
         <div v-if="primaryCategory" class="mb-5">
           <NuxtLink
@@ -32,8 +75,8 @@
       </div>
     </section>
 
-    <!-- Featured Image -->
-    <section v-if="heroImgSrc" class="px-2 md:px-6 pb-16">
+    <!-- Featured Image (mobile only) -->
+    <section v-if="heroImgSrc" class="px-2 md:px-6 pb-16 lg:hidden">
       <div class="hue-container">
         <img
           :src="heroImgSrc"
@@ -45,14 +88,14 @@
     </section>
 
     <!-- Article Body -->
-    <section class="px-2 md:px-6 pb-20">
+    <section class="bg-[var(--color-bg)] relative z-10 px-2 md:px-6 pb-20 lg:pt-0">
       <div class="hue-container-sm">
         <MagazineArticleBody v-if="post.body" :content="post.body" />
       </div>
     </section>
 
     <!-- Tags / Taxonomy -->
-    <section v-if="allTags.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-10">
+    <section v-if="allTags.length" class="px-2 md:px-6 py-10">
       <div class="hue-container-sm flex flex-wrap items-center gap-3">
         <NuxtLink
           v-for="tag in allTags"
@@ -64,7 +107,7 @@
     </section>
 
     <!-- Author Bio -->
-    <section v-if="post.author" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
+    <section v-if="post.author" class="px-2 md:px-6 py-16">
       <div class="hue-container-sm grid gap-6 sm:grid-cols-[auto_1fr]">
         <NuxtLink v-if="post.author.url" :to="`/team/${post.author.url}`">
           <img
@@ -86,7 +129,7 @@
     </section>
 
     <!-- Related Work (portfolio + case studies) -->
-    <section v-if="relatedWork.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
+    <section v-if="relatedWork.length" class="px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">Related Work</p>
@@ -99,9 +142,9 @@
             v-for="card in relatedWork"
             :key="card.id"
             :to="card.to"
-            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
+            class="group block bg-[var(--color-bg)] transition-colors hover:bg-[var(--color-bg-alt)]"
           >
-            <div class="relative flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 4/3;">
+            <div class="relative flex items-center justify-center overflow-hidden bg-[var(--color-bg)]" style="aspect-ratio: 4/3;">
               <img
                 v-if="card.image"
                 :src="card.image"
@@ -126,7 +169,7 @@
     </section>
 
     <!-- Related Articles -->
-    <section v-if="relatedPosts?.length" class="border-t border-[var(--silk)] px-2 md:px-6 py-16">
+    <section v-if="relatedPosts?.length" class="px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
           <p class="hue-label">More from the Magazine</p>
@@ -183,6 +226,57 @@ const primaryCategory = computed(() => post.value?.categories?.[0]?.blog_categor
 const heroImgSrc = computed(() => {
   const id = post.value?.featured_image
   return id ? assetUrl(id, 'hero') : null
+})
+
+// Desktop fixed-image scroll animation refs
+const articleHeroWrapRef = ref<HTMLElement | null>(null)
+const articleOverlayRef = ref<HTMLElement | null>(null)
+const parallaxCategory = ref<HTMLElement | null>(null)
+const parallaxTitle = ref<HTMLElement | null>(null)
+const parallaxExcerpt = ref<HTMLElement | null>(null)
+const parallaxAuthor = ref<HTMLElement | null>(null)
+
+onMounted(async () => {
+  await nextTick()
+  if (!articleHeroWrapRef.value || import.meta.server) return
+
+  const { gsap } = await import('gsap')
+  const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+  gsap.registerPlugin(ScrollTrigger)
+
+  const triggerConfig = {
+    trigger: articleHeroWrapRef.value,
+    start: 'top top',
+    end: 'bottom top',
+    scrub: true,
+  }
+
+  // Overlay darkens on scroll
+  if (articleOverlayRef.value) {
+    gsap.fromTo(articleOverlayRef.value, { opacity: 0.45 }, {
+      opacity: 0.85,
+      ease: 'none',
+      scrollTrigger: triggerConfig,
+    })
+  }
+
+  // Each element scrolls slower than the page — they lag behind, feeling pinned to the image
+  const layers = [
+    { el: parallaxCategory.value, yPercent: 400 },
+    { el: parallaxTitle.value, yPercent: 350 },
+    { el: parallaxExcerpt.value, yPercent: 300 },
+    { el: parallaxAuthor.value, yPercent: 250 },
+  ]
+
+  layers.forEach(({ el, yPercent }) => {
+    if (!el) return
+    gsap.to(el, {
+      yPercent,
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: triggerConfig,
+    })
+  })
 })
 
 const authorName = computed(() => {
@@ -373,3 +467,13 @@ useSchemaOrg([
   },
 ])
 </script>
+
+<style scoped>
+.article-clip-to-parent {
+  clip: rect(0, auto, auto, 0);
+  clip-path: inset(0);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+</style>

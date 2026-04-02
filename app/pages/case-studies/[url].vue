@@ -1,11 +1,6 @@
 <template>
   <div v-if="cs">
-    <!-- Back -->
-    <div class="bg-white px-2 py-2">
-      <NuxtLink to="/case-studies" class="hue-link text-[0.6875rem] text-[var(--silver)]">
-        <Icon name="lucide:arrow-left" class="size-3" /> All Case Studies
-      </NuxtLink>
-    </div>
+    <BackLink to="/case-studies">All Case Studies</BackLink>
 
     <!-- Hero — matches portfolio detail layout -->
     <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">

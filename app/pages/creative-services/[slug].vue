@@ -1,10 +1,6 @@
 <template>
   <div v-if="service">
-    <div class="bg-white px-2 py-2">
-      <NuxtLink to="/creative-services" class="hue-link text-[0.6875rem] text-[var(--silver)]">
-        <Icon name="lucide:arrow-left" class="size-3" /> All Services
-      </NuxtLink>
-    </div>
+    <BackLink to="/creative-services">All Services</BackLink>
 
     <!-- Hero (pinned) -->
     <section ref="heroRef" class="relative overflow-x-clip bg-white px-2 md:px-6 py-16 lg:py-20">

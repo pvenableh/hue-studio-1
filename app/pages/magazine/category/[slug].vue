@@ -1,13 +1,7 @@
 <template>
   <div>
     <!-- Breadcrumb -->
-    <div class="border-b border-[var(--silk)] bg-white px-2 md:px-6 py-3">
-      <div class="hue-container">
-        <NuxtLink to="/magazine" class="hue-link text-[0.8125rem] text-[var(--grey)]">
-          <Icon name="lucide:arrow-left" class="size-3.5" /> Magazine
-        </NuxtLink>
-      </div>
-    </div>
+    <BackLink to="/magazine">Magazine</BackLink>
 
     <!-- Category Hero -->
     <section class="hue-section px-2 md:px-6 py-16 md:py-24">
