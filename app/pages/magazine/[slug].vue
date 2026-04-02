@@ -182,5 +182,13 @@ useSchemaOrg([
       'name': authorName.value,
     },
   },
+  {
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://huestudios.com' },
+      { '@type': 'ListItem', 'position': 2, 'name': 'Magazine', 'item': 'https://huestudios.com/magazine' },
+      { '@type': 'ListItem', 'position': 3, 'name': post.value?.title ?? 'Article' },
+    ],
+  },
 ])
 </script>

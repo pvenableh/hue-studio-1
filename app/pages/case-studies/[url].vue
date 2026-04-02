@@ -740,6 +740,17 @@ useSeoMeta({
   ogImage: csOgImg.value ?? undefined,
 })
 
+useSchemaOrg([
+  {
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://huestudios.com' },
+      { '@type': 'ListItem', 'position': 2, 'name': 'Case Studies', 'item': 'https://huestudios.com/case-studies' },
+      { '@type': 'ListItem', 'position': 3, 'name': cs.value?.title ?? 'Case Study' },
+    ],
+  },
+])
+
 if (!csOgImg.value) {
   defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.', label: 'Case Study' } })
 }

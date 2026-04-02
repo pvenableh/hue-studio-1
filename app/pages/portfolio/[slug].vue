@@ -637,6 +637,23 @@ useSeoMeta({
   ogImage: ogImg.value ?? undefined,
 })
 
+useSchemaOrg([
+  {
+    '@type': 'CreativeWork',
+    'name': item.value?.name ?? '',
+    'description': ogDesc.value,
+    'creator': { '@id': 'https://huestudios.com' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://huestudios.com' },
+      { '@type': 'ListItem', 'position': 2, 'name': 'Portfolio', 'item': 'https://huestudios.com/portfolio' },
+      { '@type': 'ListItem', 'position': 3, 'name': item.value?.name ?? 'Project' },
+    ],
+  },
+])
+
 if (!ogImg.value) {
   defineOgImage({ component: 'HueOg', props: { title: item.value?.name ?? 'Project', description: ogDesc.value, label: 'Portfolio' } })
 }

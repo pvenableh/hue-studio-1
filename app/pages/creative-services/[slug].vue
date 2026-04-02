@@ -236,6 +236,23 @@ useSeoMeta({
   description: service.value?.caption ?? `Creative ${service.value?.name} services by Hue.`,
 })
 
+useSchemaOrg([
+  {
+    '@type': 'Service',
+    'name': service.value?.name ?? '',
+    'description': service.value?.caption ?? '',
+    'provider': { '@id': 'https://huestudios.com' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://huestudios.com' },
+      { '@type': 'ListItem', 'position': 2, 'name': 'Creative Services', 'item': 'https://huestudios.com/creative-services' },
+      { '@type': 'ListItem', 'position': 3, 'name': service.value?.name ?? 'Service' },
+    ],
+  },
+])
+
 defineOgImage({
   component: 'HueOg',
   props: {
