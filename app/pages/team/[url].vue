@@ -1,6 +1,6 @@
 <template>
   <div v-if="member">
-    <!-- Hero (pinned) -->
+    <!-- Hero -->
     <section ref="heroRef" class="relative overflow-hidden bg-[var(--near-black)]" style="height: clamp(400px, 50vh, 600px);">
       <!-- Blurred background fill -->
       <img
@@ -33,96 +33,69 @@
       </h1>
     </section>
 
-    <!-- Info bar -->
-    <section class="px-2 md:px-6 py-10">
-      <div class="hue-container flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+    <!-- Info + Bio -->
+    <section class="px-2 md:px-6 py-16 md:py-20">
+      <div class="hue-container grid gap-16 lg:grid-cols-[1fr_320px]">
         <div>
-          <p class="hue-label mb-2">Team</p>
-          <p v-if="member.title" class="text-[1.0625rem] text-[var(--grey)] whitespace-nowrap">{{ member.title }}</p>
-          <p v-if="member.headline" class="hue-editorial-md mt-2 max-w-lg">{{ member.headline }}</p>
+          <p class="hue-label mb-2">{{ member.title }}</p>
+          <p v-if="member.headline" class="hue-editorial-md mt-2 mb-10 max-w-lg">{{ member.headline }}</p>
+          <div v-if="member.extended_bio || member.bio" class="hue-body-lg max-w-2xl space-y-5 text-[var(--color-text-secondary)]" v-html="member.extended_bio ?? member.bio" />
         </div>
-        <div class="flex flex-wrap gap-3">
-          <a
-            v-if="member.linkedin_url"
-            :href="member.linkedin_url"
-            target="_blank"
-            rel="noopener"
-            class="hue-btn-outline inline-flex items-center gap-2 text-[0.8125rem]"
-          >
-            <Icon name="lucide:linkedin" class="size-4" /> LinkedIn
-          </a>
-          <a
-            v-if="member.email"
-            :href="`mailto:${member.email}`"
-            class="hue-btn-outline inline-flex items-center gap-2 text-[0.8125rem]"
-          >
-            <Icon name="lucide:mail" class="size-4" /> Email
-          </a>
+        <div class="space-y-8 lg:pt-2">
+          <!-- Contact -->
+          <div v-if="member.linkedin_url || member.email" class="space-y-3">
+            <a
+              v-if="member.linkedin_url"
+              :href="member.linkedin_url"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 text-[0.75rem] text-[var(--grey)] transition-colors hover:text-[var(--color-text)]"
+            >
+              <Icon name="lucide:linkedin" class="size-3.5" /> LinkedIn
+            </a>
+            <a
+              v-if="member.email"
+              :href="`mailto:${member.email}`"
+              class="block text-[0.75rem] text-[var(--grey)] transition-colors hover:text-[var(--color-text)]"
+            >
+              <Icon name="lucide:mail" class="size-3.5 inline" /> {{ member.email }}
+            </a>
+          </div>
+
+          <!-- Specialties -->
+          <div v-if="member.specialties?.length">
+            <p class="hue-label-sm mb-4 text-[var(--silver)]">Specialties</p>
+            <div class="flex flex-wrap gap-2">
+              <span
+                v-for="s in member.specialties"
+                :key="s"
+                class="rounded-full bg-[var(--color-bg-alt)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-wider text-[var(--grey)]"
+              >{{ s }}</span>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div v-if="member.education?.length">
+            <p class="hue-label-sm mb-4 text-[var(--silver)]">Education</p>
+            <div class="space-y-3">
+              <div v-for="(edu, i) in member.education" :key="i">
+                <p class="text-[0.875rem]">{{ edu.degree }}</p>
+                <p class="text-[0.75rem] text-[var(--grey)]">{{ edu.school }}{{ edu.year ? ` · ${edu.year}` : '' }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Bio -->
-    <section v-if="member.extended_bio || member.bio" class="hue-section px-2 md:px-6 py-20">
-      <div class="hue-container-sm">
-        <p class="hue-label mb-8">About</p>
-        <div class="hue-body-lg space-y-5 text-[var(--color-text-secondary)]" v-html="member.extended_bio ?? member.bio" />
-      </div>
-    </section>
-
-    <!-- Specialties -->
-    <section v-if="member.specialties?.length" class="hue-section-alt px-2 md:px-6 py-16">
-      <div class="hue-container">
-        <p class="hue-label mb-8">Specialties</p>
-        <div class="flex flex-wrap gap-3">
-          <span
-            v-for="s in member.specialties"
-            :key="s"
-            class="rounded-full border border-[var(--silk)] bg-white px-3 py-1 text-[0.625rem] font-medium uppercase tracking-wider text-[var(--grey)]"
-          >{{ s }}</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Case Studies / Projects -->
-    <section v-if="caseStudies?.length" class="hue-section px-2 md:px-6 py-20">
+    <!-- Featured Articles -->
+    <section v-if="posts?.length" class="px-2 md:px-6 py-16">
       <div class="hue-container">
         <div class="mb-10 flex items-end justify-between">
-          <p class="hue-label">Projects</p>
-          <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem]">
-            All case studies <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-        </div>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] md:grid-cols-2 lg:grid-cols-3">
-          <NuxtLink
-            v-for="cs in caseStudies"
-            :key="cs.id"
-            :to="`/case-studies/${cs.url}`"
-            class="group block bg-white transition-colors hover:bg-[var(--snow)]"
-          >
-            <div class="relative overflow-hidden bg-white" style="aspect-ratio: 4/3;">
-              <img
-                v-if="csImg(cs)"
-                :src="csImg(cs)!"
-                :alt="cs.title ?? ''"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                loading="lazy"
-              />
-            </div>
-            <div class="p-6">
-              <span v-if="csService(cs)" class="hue-label-sm">{{ csService(cs) }}</span>
-              <h3 class="mt-2 text-[1rem] font-light">{{ cs.title }}</h3>
-            </div>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Latest Articles -->
-    <section v-if="posts?.length" class="hue-section-alt px-2 md:px-6 py-20">
-      <div class="hue-container">
-        <div class="mb-10 flex items-end justify-between">
-          <p class="hue-label">Latest articles</p>
+          <div>
+            <p class="hue-label mb-2">From the Magazine</p>
+            <p class="text-[0.875rem] text-[var(--grey)]">Articles by {{ member.first_name }}</p>
+          </div>
           <NuxtLink to="/magazine" class="hue-link text-[0.8125rem]">
             All articles <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
@@ -133,36 +106,36 @@
       </div>
     </section>
 
-    <!-- Career Timeline -->
-    <section v-if="member.resume_highlights?.length" class="hue-section px-2 md:px-6 py-20">
-      <div class="hue-container-sm">
-        <p class="hue-label mb-10">Career</p>
-        <div class="space-y-8 border-l border-[var(--silk)] pl-8">
-          <div v-for="(item, i) in member.resume_highlights" :key="i" class="relative">
-            <div class="absolute -left-[2.55rem] top-1 h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
-            <p class="hue-label-sm mb-1">{{ item.year }}</p>
-            <h3 class="text-[1.0625rem] font-medium">{{ item.role }}</h3>
-            <p class="text-[0.875rem] text-[var(--grey)]">{{ item.company }}</p>
-            <p v-if="item.description" class="mt-2 text-[0.875rem] leading-relaxed text-[var(--color-text-secondary)]">
-              {{ item.description }}
-            </p>
-          </div>
+    <!-- Case Studies -->
+    <section v-if="caseStudies?.length" class="px-2 md:px-6 py-16">
+      <div class="hue-container">
+        <div class="mb-10 flex items-end justify-between">
+          <p class="hue-label">Projects</p>
+          <NuxtLink to="/case-studies" class="hue-link text-[0.8125rem]">
+            All case studies <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
         </div>
-      </div>
-    </section>
-
-    <!-- Education -->
-    <section v-if="member.education?.length" class="hue-section-alt px-2 md:px-6 py-16">
-      <div class="hue-container-sm">
-        <p class="hue-label mb-8">Education</p>
-        <div class="space-y-4">
-          <div v-for="(edu, i) in member.education" :key="i" class="flex items-baseline justify-between gap-4">
-            <div>
-              <p class="text-[1rem] font-light">{{ edu.degree }}</p>
-              <p class="text-[0.875rem] text-[var(--grey)]">{{ edu.school }}</p>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <NuxtLink
+            v-for="cs in caseStudies"
+            :key="cs.id"
+            :to="`/case-studies/${cs.url}`"
+            class="group block"
+          >
+            <div class="relative overflow-hidden rounded-sm bg-[var(--color-bg-alt)]" style="aspect-ratio: 4/3;">
+              <img
+                v-if="csImg(cs)"
+                :src="csImg(cs)!"
+                :alt="cs.title ?? ''"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
             </div>
-            <span v-if="edu.year" class="hue-label-sm shrink-0">{{ edu.year }}</span>
-          </div>
+            <div class="mt-4">
+              <span v-if="csService(cs)" class="hue-label-sm" style="color: var(--color-accent);">{{ csService(cs) }}</span>
+              <h3 class="mt-1 text-[0.9375rem] font-light transition-colors group-hover:text-[var(--color-accent)]">{{ cs.title }}</h3>
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -206,7 +179,7 @@ const heroImgSrc = computed(() => {
   return id ? assetUrl(id, 'large') : null
 })
 
-// Fetch their blog posts
+// Fetch their blog posts — featured prominently
 const { data: posts } = await useAsyncData(
   `team-posts-${member.value?.id}`,
   () => member.value ? fetchTeamMemberPosts(member.value.id, 6) : Promise.resolve([]),
@@ -219,17 +192,14 @@ const { data: caseStudies } = await useAsyncData(
 )
 
 function csImg(cs: DirectusCaseStudy) {
-  // 1. Case study's own image
   let id = cs.featured_image ?? cs.gallery?.[0]?.directus_files_id
   if (id) return assetUrl(id, 'medium-contain')
 
-  // 2. Check linked portfolio items and their child projects
   for (const pi of cs.portfolio_items ?? []) {
     const p = pi.portfolio_id
     if (!p) continue
     id = p.featured_image ?? p.images?.[0]?.directus_files_id
     if (id) return assetUrl(id, 'medium-contain')
-    // Check child projects
     for (const child of (p as any).projects ?? []) {
       id = child.featured_image ?? child.images?.[0]?.directus_files_id
       if (id) return assetUrl(id, 'medium-contain')
@@ -248,7 +218,7 @@ const teamOgImg = computed(() => {
 })
 
 useSeoMeta({
-  title: `${fullName.value} | ${member.value?.title} | Hue`,
+  title: `${fullName.value} | ${member.value?.title} | Hue Creative Agency`,
   description: member.value?.headline ?? `${fullName.value}, ${member.value?.title} at Hue Creative Agency.`,
   ogImage: teamOgImg.value ?? undefined,
 })

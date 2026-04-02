@@ -1,20 +1,27 @@
 <template>
   <div>
-    <!-- Hero -->
-    <section class="hue-section-dark relative overflow-x-clip px-2 md:px-6 py-28 md:py-36">
-      <SectionWatermark word="About" :dark="true" />
-      <div class="hue-container relative grid gap-16 lg:grid-cols-2">
-        <div>
-          <p class="hue-label mb-5 text-white/40">About Hue</p>
-          <h1 class="hue-display-xl text-white">
-            Boutique experience<br>on
-            <span style="font-family:var(--font-editorial);font-style:italic;">purpose.</span>
-          </h1>
-        </div>
-        <div class="flex items-end">
-          <p class="text-[1.0625rem] leading-relaxed text-white/45">
-            Hue is a woman-owned, full-service brand strategy and digital experience firm headquartered in New York State, with offices in Miami Beach. We are boutique on purpose — every discipline is in-house, and every engagement is led directly by our senior principals. No junior handoffs. No offshore subcontractors.
-          </p>
+    <!-- Hero — full-bleed background image -->
+    <section class="relative overflow-x-clip min-h-[70vh] flex items-end">
+      <img
+        src="https://admin.huestudios.company/assets/9e511756-19ef-4b66-901a-43f57b743d77?key=xlarge"
+        alt="Hue Studios"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/40" />
+      <div class="relative z-10 w-full px-2 md:px-6 pb-16 pt-32 md:pb-24 md:pt-40">
+        <div class="hue-container grid gap-16 lg:grid-cols-2">
+          <div>
+            <p class="hue-label mb-5 text-white/40">About Hue</p>
+            <h1 class="hue-display-xl text-white">
+              Boutique experience<br>on
+              <span style="font-family:var(--font-editorial);font-style:italic;">purpose.</span>
+            </h1>
+          </div>
+          <div class="flex items-end">
+            <p class="text-[1.0625rem] leading-relaxed text-white/50">
+              Hue is a woman-owned, full-service brand strategy and digital experience firm headquartered in New York State, with offices in Miami Beach. We are boutique on purpose — every discipline is in-house, and every engagement is led directly by our senior principals. No junior handoffs. No offshore subcontractors.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -61,31 +68,36 @@
       </div>
     </section>
 
-    <!-- Our Process — the real 4-stage framework -->
-    <section class="hue-section-alt px-2 md:px-6 py-24">
+    <!-- Locations — Miami Beach & New York -->
+    <section class="flex w-full flex-col md:h-[500px] lg:flex-row">
+      <div
+        class="relative h-[300px] w-full overflow-hidden bg-cover bg-center bg-no-repeat md:h-full lg:w-1/2"
+        style="background-image: url('https://admin.huestudios.company/assets/5d27ef8b-bb08-4105-8080-8729d90aae3e?key=large');"
+      >
+        <div class="absolute inset-0 bg-black/20" />
+        <h2 class="relative z-10 p-8 text-right text-[3.5rem] leading-[0.9] font-light uppercase tracking-[0.05em] text-white/80 md:p-12 md:text-[5rem] lg:text-[6rem]">
+          Miami<br>Beach
+        </h2>
+      </div>
+      <div
+        class="relative flex h-[300px] w-full items-end overflow-hidden bg-cover bg-center bg-no-repeat md:h-full lg:w-1/2"
+        style="background-image: url('https://admin.huestudios.company/assets/c866dea4-2f22-48e2-adaf-7f0908524af7?key=large');"
+      >
+        <div class="absolute inset-0 bg-black/20" />
+        <h2 class="relative z-10 p-8 text-left text-[3.5rem] leading-[0.9] font-light uppercase tracking-[0.05em] text-white/80 md:p-12 md:text-[5rem] lg:text-[6rem]">
+          New<br>York
+        </h2>
+      </div>
+    </section>
+
+    <!-- Our Process — IdeaChart -->
+    <section class="hue-section-alt overflow-hidden px-2 md:px-6 py-24">
       <div class="hue-container">
         <div class="mb-14">
           <p class="hue-label mb-3">Our Process</p>
           <h2 class="hue-display-lg max-w-xl">A holistic approach that shapes one singular voice.</h2>
         </div>
-        <div class="grid gap-px overflow-hidden rounded-sm border border-[var(--silk)] bg-[var(--silk)] sm:grid-cols-2 lg:grid-cols-4">
-          <div v-for="step in processSteps" :key="step.number" class="bg-white p-9">
-            <span class="hue-label-sm text-[var(--silver)]">{{ step.number }}</span>
-            <h3 class="mt-4 mb-1.5 text-[1.05rem] font-medium">{{ step.title }}</h3>
-            <p class="hue-label-sm mb-4 text-[var(--silver)]">{{ step.subtitle }}</p>
-            <p class="hue-body-sm mb-5">{{ step.description }}</p>
-            <ul class="space-y-1.5">
-              <li
-                v-for="item in step.items"
-                :key="item"
-                class="flex items-start gap-2 text-[0.75rem] text-[var(--color-text-muted)]"
-              >
-                <span class="mt-1.5 block h-px w-3 shrink-0 bg-[var(--silver)]" />
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-        </div>
+        <IdeaChart />
       </div>
     </section>
 
@@ -102,7 +114,7 @@
               <img
                 src="https://admin.huestudios.company/assets/3b1d0737-f242-43f2-92cb-5bfdd0c907d8?width=552&height=875&format=webp"
                 alt="Camila Hoffman — Creative Director / CEO at Hue"
-                class="h-full w-full object-cover"
+                class="h-full w-full object-cover object-top"
                 loading="lazy"
               />
             </div>
@@ -120,6 +132,9 @@
               <p class="hue-body">
                 Camila holds a BFA in Communications Design from Parsons School of Design, New York City. In her words, good design is about <em>"creating something that has purpose, not just a product without meaning."</em> Hue is a woman-owned business, and Camila leads every client engagement as its principal and creative director.
               </p>
+              <NuxtLink to="/magazine/your-brand-is-not-your-logo" class="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-medium uppercase tracking-[0.12em] transition-colors" style="color: var(--color-accent);">
+                Read: Your Brand Is Not Your Logo <Icon name="lucide:arrow-right" class="size-3" />
+              </NuxtLink>
             </div>
           </div>
 
@@ -139,24 +154,17 @@
             </NuxtLink>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
-                Peter joined Hue in 2006 and has since led every digital experience the firm has produced — from complex CMS builds and interactive data platforms to native apps, SaaS programs, and full digital campaign infrastructure. To call him a web developer would be to undersell what he actually does. Peter is a builder of digital ecosystems — someone who thinks in systems, works across the full modern stack, and consistently delivers platforms that function as genuine operational tools rather than polished marketing surfaces.
+                Peter joined Hue in 2006 and has since led every digital experience the firm has produced. He is a builder of digital ecosystems — someone who thinks in systems, works across the full modern stack, and consistently delivers platforms that function as genuine operational tools rather than polished marketing surfaces.
               </p>
               <p class="hue-body">
-                What sets Peter apart is his active integration of emerging technologies into real client work. He is not watching AI from the sidelines — he is building with it, designing platforms that incorporate intelligent connection mapping, AI-assisted content discovery, and automated data workflows that turn static information hubs into dynamic, responsive environments. His technical range spans component-based frontend frameworks, headless CMS architecture, API and data pipeline design, progressive web apps, and SaaS platform development — all kept current through 10 to 15 hours of structured learning every month.
+                What sets Peter apart is his active integration of emerging technologies into real client work — designing platforms that incorporate intelligent data workflows, AI-assisted content discovery, and modern web architecture that turn static information hubs into dynamic, responsive environments.
               </p>
               <p class="hue-body">
                 Peter holds a BA from Hobart College in Geneva, New York. His background in literature and design gives him the ability to see the relationship between content, architecture, and human experience — and build accordingly.
               </p>
-              <!-- Tech capabilities -->
-              <div class="mt-6 rounded-lg border border-[var(--silk)] p-5">
-                <p class="hue-label-sm mb-4 text-[var(--silver)]">Technical Capabilities</p>
-                <div class="grid grid-cols-2 gap-3">
-                  <div v-for="cap in techCaps" :key="cap.label">
-                    <p class="text-[0.6875rem] font-medium text-[var(--dark-grey)]">{{ cap.label }}</p>
-                    <p class="text-[0.75rem] text-[var(--grey)]">{{ cap.items }}</p>
-                  </div>
-                </div>
-              </div>
+              <NuxtLink to="/magazine/why-we-build-with-directus-nuxt-gsap" class="mt-6 inline-flex items-center gap-2 text-[0.6875rem] font-medium uppercase tracking-[0.12em] transition-colors" style="color: var(--color-accent);">
+                Read: Why We Build with Directus, Nuxt, and GSAP <Icon name="lucide:arrow-right" class="size-3" />
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -170,6 +178,9 @@
           <p class="hue-label">Our Story</p>
         </div>
         <div class="max-w-2xl space-y-5">
+          <p class="hue-editorial-lg mb-8 max-w-md" style="font-family:var(--font-editorial);font-style:italic;">
+            "Create products with meaning."
+          </p>
           <p class="hue-body-lg">
             Hue was established in 2005 when Camila and Peter decided to design their own life, their own way. They relocated to Upstate New York, and using the holistic approach Camila developed at a global fashion brand, built a boutique creative agency that recreates its thinking for each new project.
           </p>
@@ -200,37 +211,21 @@
       </div>
     </section>
 
-    <!-- Why Hue -->
-    <WhyHue headline="Three things that set us apart from every other agency." />
-
-    <!-- Quote -->
-    <section class="hue-section px-2 md:px-6 py-20 text-center">
-      <div class="hue-container-sm">
-        <p class="hue-pullquote reveal">"Know thyself."</p>
-        <p class="mt-4 hue-body-sm">— Plato</p>
-      </div>
-    </section>
-
     <!-- CTA -->
     <section class="hue-section-dark px-2 md:px-6 py-24 text-center">
-      <div class="mx-auto max-w-md">
-        <h2 class="hue-display-lg mb-5 text-white">Ready to work together?</h2>
-        <p class="mb-8 text-[0.9375rem] text-white/40">Start with a free brand analysis or book a discovery call.</p>
-        <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <NuxtLink to="/brand-analysis" class="hue-btn-ghost">
-            Free Brand Analysis <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-          <NuxtLink to="/contact" class="hue-link">
-            Book a Call <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-        </div>
+      <div class="mx-auto max-w-lg">
+        <p class="hue-pullquote mb-8 text-white/20" style="font-family:var(--font-editorial);font-style:italic;">"Know thyself."</p>
+        <h2 class="hue-display-lg mb-5 text-white">Let's find your brand's singular voice.</h2>
+        <p class="mb-10 text-[0.9375rem] text-white/40">Start with a complimentary brand analysis — 8 questions, 15 minutes, and a clear-eyed assessment delivered within 5 business days.</p>
+        <NuxtLink to="/brand-analysis" class="hue-btn-ghost">
+          Start Your Brand Analysis <Icon name="lucide:arrow-right" class="size-3.5" />
+        </NuxtLink>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { processSteps } from '~/data/services'
 
 useSeoMeta({
   title: 'About Hue | Creative Marketing Studio | Miami Beach & New York',
@@ -253,15 +248,6 @@ useSchemaOrg([
     worksFor: { '@type': 'Organization', name: 'Hue Creative Agency' },
   },
 ])
-
-const techCaps = [
-  { label: 'Frontend', items: 'Nuxt, Vue, React, GSAP' },
-  { label: 'Backend / CMS', items: 'Directus, Node.js, API design' },
-  { label: 'AI & Data', items: 'LLM integration, MCP, data pipelines' },
-  { label: 'Platform', items: 'SaaS, PWA, multi-tenant architecture' },
-  { label: 'Commerce', items: 'Stripe, subscription infrastructure' },
-  { label: 'DevOps', items: 'Vercel, CDN, CI/CD, WebSockets' },
-]
 
 const stats = [
   { value: '20+', label: 'Years in Business' },
