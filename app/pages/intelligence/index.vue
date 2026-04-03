@@ -113,6 +113,9 @@ onMounted(async () => {
       tweens.push(tween)
     })
   }
+
+  // Recalculate after layout settles (fixes client-side navigation)
+  requestAnimationFrame(() => ScrollTrigger.refresh())
 })
 
 onUnmounted(() => {
