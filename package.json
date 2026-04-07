@@ -11,6 +11,7 @@
     "emails:build": "npx mjml emails/*.mjml -o emails/compiled/"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "@iconify-json/lucide": "^1.2.39",
     "@nuxt/fonts": "^0.12.1",
     "@nuxt/icon": "^1.11.0",

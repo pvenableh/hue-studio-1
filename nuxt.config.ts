@@ -30,6 +30,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     directusStaticToken: process.env.DIRECTUS_STATIC_TOKEN || '',
+    googleServiceAccount: process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
+    ga4PropertyId: process.env.GA4_PROPERTY_ID,
+    analyticsPassword: process.env.ANALYTICS_PASSWORD,
     public: {
       directusUrl: process.env.NUXT_PUBLIC_DIRECTUS_URL || 'https://admin.huestudios.company',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://huestudios.com',
