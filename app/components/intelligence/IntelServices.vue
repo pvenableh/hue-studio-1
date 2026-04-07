@@ -68,32 +68,32 @@ const steps = [
   {
     number: '01',
     name: 'AI Insight Assistant',
-    short: 'Ask your data anything',
-    detail: 'Connect Claude to your Directus collections via MCP. Your team asks questions in plain English and gets instant, accurate answers — member stats, project status, donor history, anything in your database. No SQL. No spreadsheets.',
+    short: '"How many members renewed this quarter?" — answered in 2 seconds',
+    detail: 'Your team types a question into a chat window — in plain English — and gets an accurate answer pulled directly from your own database. Member counts, project statuses, donor totals, open invoices. No spreadsheets to open. No one to ask. Just the answer.',
   },
   {
     number: '02',
     name: 'Automation Workflows',
-    short: 'Your data triggers action',
-    detail: 'When something changes in your system — a project status, a form submission, a membership lapse — AI takes the next step automatically. Emails written and sent. PDFs generated. Alerts dispatched. Staff freed.',
+    short: 'A membership lapses → renewal email sends on day 1, automatically',
+    detail: 'When something changes in your system, the next step happens without anyone lifting a finger. A new lead comes in at midnight — by morning, they\'ve received a welcome email, your sales team got an alert, and the CRM is updated. A project status changes — the client gets a progress update. A renewal is 30 days out — the reminder sequence starts.',
   },
   {
     number: '03',
     name: 'Smart Content Engine',
-    short: 'Draft in seconds, publish in minutes',
-    detail: 'AI generates newsletters, donor impact reports, proposal sections, and event recaps by pulling directly from your structured collections. Your voice, your data, your time back.',
+    short: 'Click "Draft Newsletter" → a full issue from this month\'s data, ready to edit',
+    detail: 'AI pulls from your latest projects, events, member news, and milestones to draft newsletters, donor impact reports, grant narratives, and event recaps. It writes in your voice, with your real data — not generic filler. Your team reviews and publishes. What used to take a week takes an afternoon.',
   },
   {
     number: '04',
     name: 'Custom AI Dashboard',
-    short: 'A command center for your team',
-    detail: 'A branded, role-specific interface that surfaces your most important data with AI summaries, one-click prompt actions, and live KPIs. Built on your stack, designed for your people.',
+    short: 'Open one screen → today\'s KPIs, overdue tasks, and an AI-written summary',
+    detail: 'Your team opens a single, branded screen and sees everything that matters: live numbers, items that need attention, and a plain-English summary of what changed since yesterday. Role-specific — your ED sees the big picture, your program manager sees their caseload, your development director sees donor activity.',
   },
   {
     number: '05',
     name: 'AI Operations Retainer',
-    short: 'Your intelligence, always evolving',
-    detail: 'Monthly engagement: new automations, prompt refinement, new integrations, staff training, and strategic roadmap calls. AI is not a one-time project — it compounds.',
+    short: 'New automations added monthly as your team discovers more to automate',
+    detail: 'Once your team starts using AI daily, they\'ll find ten more things it should handle. Our monthly retainer covers new automations, refinements to existing ones, staff training, and strategic calls to keep your system evolving. The value compounds — month over month, your team spends less time on manual work and more time on the work that matters.',
   },
 ]
 </script>

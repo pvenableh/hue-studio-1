@@ -376,6 +376,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 const route = useRoute()
 const slug = route.params.slug as string
 const { trackBeforeAfterInteraction, trackPortfolioView } = useAnalytics()
+const { useScrollDepthTracker } = useTracking()
 const { fetchPortfolioItem, fetchPortfolio, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
 
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
@@ -398,6 +399,10 @@ if (import.meta.client) {
     primaryIndustryName(item.value),
   )
 }
+
+onMounted(() => {
+  useScrollDepthTracker()
+})
 
 parallaxElement(bgWordRef, 0.3)
 staggerEntrance([heroLabel, heroTitle])

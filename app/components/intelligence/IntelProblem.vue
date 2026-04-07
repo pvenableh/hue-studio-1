@@ -3,20 +3,21 @@
     <div class="intel-container px-6 md:px-10">
       <p class="intel-eyebrow mb-4 reveal">The Challenge</p>
       <h2 class="intel-h2 mb-12 max-w-3xl reveal reveal-delay-1">
-        Your organization is sitting on a goldmine of untapped data.
+        You already have the data. It's just not doing anything.
       </h2>
 
       <div class="grid gap-12 lg:grid-cols-2 lg:gap-20">
         <!-- Left: body copy -->
         <div class="reveal reveal-delay-2">
           <p class="intel-body-lg mb-6">
-            Most small and mid-sized organizations have more data than they
-            know what to do with — member records, project files, donor histories,
-            contact databases. It lives in spreadsheets, email threads, and
-            disconnected tools.
+            Every Monday, someone on your team spends the morning pulling numbers into a
+            spreadsheet for a board report. Renewal reminders go out late — or not at all.
+            Grant narratives get rewritten from scratch even though 80% of the content is
+            the same every cycle.
           </p>
           <p class="intel-body-lg">
-            It answers no questions. It writes no reports. It reminds no one.
+            The information exists. It just can't reach the people who need it,
+            when they need it, in the format they need it in.
           </p>
         </div>
 
@@ -40,9 +41,9 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 const stats = [
-  { icon: 'lucide:clock', value: '6–10 hrs/week', label: 'Lost to manual reporting and data lookup', countTo: 10, prefix: '', suffix: ' hrs/week' },
-  { icon: 'lucide:file-text', value: '70%', label: 'Of grant/proposal writing is repetitive structured content', countTo: 70, prefix: '', suffix: '%' },
-  { icon: 'lucide:users', value: '1 in 3', label: 'Staff tasks could be automated with existing data', countTo: 3, prefix: '1 in ', suffix: '' },
+  { icon: 'lucide:clock', value: '6–10 hrs/week', label: 'Spent copying data between systems, building reports by hand, and chasing status updates', countTo: 10, prefix: '', suffix: ' hrs/week' },
+  { icon: 'lucide:file-text', value: '80%', label: 'Of the content in your grants, proposals, and reports is the same every time — rewritten from scratch', countTo: 80, prefix: '', suffix: '%' },
+  { icon: 'lucide:users', value: '1 in 3', label: 'Tasks your team does today — reminders, follow-ups, updates — could run automatically', countTo: 3, prefix: '1 in ', suffix: '' },
 ]
 
 const statValues = ref<string[]>(stats.map(() => ''))

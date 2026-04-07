@@ -47,6 +47,7 @@
             aspect-ratio="3/2"
             compact
             overlay
+            @click="onPortfolioCardClick(item)"
           />
         </div>
       </div>
@@ -125,6 +126,16 @@ const filtered = computed(() => {
 })
 
 const gridItems = computed(() => filtered.value)
+
+const { trackPortfolioItemView, useScrollDepthTracker } = useTracking()
+
+onMounted(() => {
+  useScrollDepthTracker()
+})
+
+function onPortfolioCardClick(item: DirectusPortfolioItem) {
+  trackPortfolioItemView(item.url ?? '', item.name ?? '')
+}
 
 function imgUrl(item: DirectusPortfolioItem) {
   const id = primaryImageId(item)

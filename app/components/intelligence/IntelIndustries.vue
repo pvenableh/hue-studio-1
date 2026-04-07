@@ -3,7 +3,7 @@
     <div class="intel-container px-6 md:px-10">
       <p class="intel-eyebrow mb-4 reveal">Built for Your Sector</p>
       <h2 class="intel-h2 mb-14 max-w-3xl reveal reveal-delay-1">
-        The same intelligence, applied to your specific reality.
+        Here's what it looks like in your world.
       </h2>
 
       <div class="grid gap-5 md:grid-cols-2">
@@ -40,26 +40,26 @@ const industries = [
   {
     icon: 'lucide:building-2',
     title: 'Architecture & Construction',
-    body: 'Stop hunting through email threads for RFI status. Know which projects are behind schedule and why. Draft project case studies and proposals in minutes. AI that speaks the language of deadlines, submittals, and client relationships.',
-    useCases: ['RFI/submittal tracking', 'Proposal drafting', 'Project status summaries', 'Client communication automation'],
+    body: 'Today, your PM digs through email threads to find an RFI status. After: they type "What\'s the status of the Morrison submittal?" and get the answer in seconds. Proposals that took a week to assemble now draft themselves from your project data. Client updates go out automatically when a milestone is hit.',
+    useCases: ['Instant project status lookup', 'Auto-drafted proposals from project data', 'Client updates sent on milestone changes', 'Weekly PM summary reports, auto-generated'],
   },
   {
     icon: 'lucide:handshake',
     title: 'Chambers of Commerce',
-    body: 'Automate member onboarding, renewal reminders, and event follow-ups. Generate member spotlight emails and event recaps from your database. Give your board instant access to membership intelligence.',
-    useCases: ['Member lookup & reporting', 'Automated renewal sequences', 'Event recap generation', 'Board report automation'],
+    body: 'Today, someone manually checks a spreadsheet to see who hasn\'t renewed. After: on the day a membership lapses, a personalized renewal email sends automatically. Your board report writes itself every month from live membership data. Event recaps go out the next morning with photos, attendance, and key takeaways — drafted by AI, reviewed by you.',
+    useCases: ['"Who joined this quarter?" — answered instantly', 'Renewal emails sent the day a membership lapses', 'Monthly board reports generated automatically', 'Event recaps drafted overnight, ready by morning'],
   },
   {
     icon: 'lucide:heart',
     title: 'NGOs & Nonprofits',
-    body: 'Transform program data into compelling grant narratives and donor impact reports. Automate stewardship touchpoints. Give leadership the dashboards they need to make decisions — and funders the evidence they need to say yes.',
-    useCases: ['Grant narrative drafting', 'Donor impact reports', 'Program data dashboards', 'Automated stewardship sequences'],
+    body: 'Today, your development director copies program stats into grant templates by hand. After: they click "Draft Q3 Grant Narrative" and get a first draft in 90 seconds — pre-filled with real outcomes, beneficiary counts, and financial data. Donor thank-you emails trigger automatically after every gift. Your ED opens a dashboard and sees program health at a glance.',
+    useCases: ['Grant narratives drafted from real program data', 'Donor thank-you emails sent automatically after gifts', 'Impact reports generated with one click', 'Leadership dashboard with live program KPIs'],
   },
   {
     icon: 'lucide:store',
     title: 'Small Businesses',
-    body: 'Capture every lead. Follow up with every customer. Answer every question — even at 2am. AI automation that handles the operational tasks so your team focuses on what only humans can do.',
-    useCases: ['AI website chat & lead capture', 'Follow-up automation', 'Inventory & order intelligence', 'Review and reputation monitoring'],
+    body: 'Today, leads fill out your form at 11pm and wait until Monday for a response. After: by the time they close the browser, they\'ve received a personalized follow-up, your team got an alert, and the lead is logged in your system. Customer questions get answered 24/7. Follow-ups never fall through the cracks.',
+    useCases: ['Leads get a response in minutes, not days', '24/7 AI chat trained on your services', 'Automatic follow-up sequences for every inquiry', 'Weekly business summary delivered to your inbox'],
   },
 ]
 </script>

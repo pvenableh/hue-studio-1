@@ -29,6 +29,7 @@
             required
             placeholder="your@email.com"
             class="flex-1 rounded-none border-0 border-b border-white/20 bg-transparent px-1 py-2 text-[0.875rem] text-white placeholder-white/25 outline-none transition focus:border-white/40"
+            @focus="onSubscribeFocus"
           />
           <button type="submit" class="hue-btn-ghost shrink-0 text-[0.6875rem]" :disabled="subscribing">
             <span v-if="subscribing">…</span>
@@ -111,6 +112,7 @@
 const route = useRoute()
 const { submitSubscribe } = useDirectus()
 const { trackFormSubmit, trackCtaClick } = useAnalytics()
+const { trackFormStart: trackStart, trackFormSubmit: trackSubmit, trackFormSuccess: trackSuccess, trackFormError: trackError } = useTracking()
 
 // Pages that have their own CTA sections — hide the footer CTA to avoid doubling
 const pagesWithOwnCta = ['/', '/about', '/partnerships', '/creative-services', '/brand-analysis', '/contact', '/industries', '/intelligence']
@@ -127,14 +129,26 @@ const showCta = computed(() => {
 const subscribeEmail = ref('')
 const subscribing = ref(false)
 const subscribed = ref(false)
+const subscribeStarted = ref(false)
+
+function onSubscribeFocus() {
+  if (!subscribeStarted.value) {
+    subscribeStarted.value = true
+    trackStart('subscribe')
+  }
+}
 
 async function handleSubscribe() {
   subscribing.value = true
+  trackSubmit('subscribe')
   const result = await submitSubscribe({ email: subscribeEmail.value })
   subscribing.value = false
   if (result.success) {
     subscribed.value = true
     trackFormSubmit('newsletter', { location: 'footer' })
+    trackSuccess('subscribe')
+  } else {
+    trackError('subscribe', 'Server error on newsletter subscription')
   }
 }
 </script>

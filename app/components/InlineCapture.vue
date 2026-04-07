@@ -19,6 +19,7 @@
             :class="dark
               ? 'border-white/20 text-white placeholder-white/25 focus:border-white/40'
               : 'border-[var(--silver)] text-[var(--near-black)] placeholder-[var(--silver)] focus:border-[var(--near-black)]'"
+            @focus="onFirstFocus"
           />
           <input
             v-model="form.email"
@@ -84,25 +85,45 @@ const props = withDefaults(defineProps<{
 
 const { submitContact, submitSubscribe } = useDirectus()
 const { trackFormSubmit } = useAnalytics()
+const { trackFormStart, trackFormSubmit: trackSubmit, trackFormSuccess, trackFormError } = useTracking()
 
 const form = reactive({ name: '', email: '' })
 const submitting = ref(false)
 const submitted = ref(false)
+const formStarted = ref(false)
+
+function onFirstFocus() {
+  if (!formStarted.value) {
+    formStarted.value = true
+    const formType = props.type === 'subscribe' ? 'subscribe' : 'contact'
+    trackFormStart(formType)
+  }
+}
 
 async function handleSubmit() {
   submitting.value = true
+  const formType = props.type === 'subscribe' ? 'subscribe' : 'contact'
+  trackSubmit(formType)
+  let success = false
   if (props.type === 'subscribe') {
-    await submitSubscribe({ email: form.email, first_name: form.name })
+    const result = await submitSubscribe({ email: form.email, first_name: form.name })
+    success = result.success
   } else {
-    await submitContact({
+    const result = await submitContact({
       first_name: form.name,
       email: form.email,
       project: props.context || 'Inline Inquiry',
       explanation: props.context ? `Inline capture from: ${props.context}` : 'Inline capture form submission',
     })
+    success = result.success
   }
   submitting.value = false
   submitted.value = true
   trackFormSubmit(props.type === 'subscribe' ? 'inline_subscribe' : 'inline_capture', { context: props.context })
+  if (success) {
+    trackFormSuccess(formType)
+  } else {
+    trackFormError(formType, 'Server error on inline form submission')
+  }
 }
 </script>

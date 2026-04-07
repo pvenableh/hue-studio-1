@@ -243,11 +243,11 @@
         <div>
           <p class="hue-label mb-5 text-[#D4973A]/60">Hue Intelligence</p>
           <h2 class="hue-display-lg mb-6 text-white">
-            Your data,<br>
-            <span style="font-family:var(--font-editorial);font-style:italic;">finally</span> working for you.
+            The answers are<br>
+            <span style="font-family:var(--font-editorial);font-style:italic;">already</span> in your data.
           </h2>
           <p class="mb-8 text-[1.0625rem] leading-relaxed text-white/40">
-            AI-powered intelligence and automation for small and mid-sized organizations. We turn your existing data into actionable reports, automated workflows, and AI-ready dashboards — delivered by a boutique team.
+            Your organization already has the data it needs to work smarter. We connect it, automate the repetitive work, and give your team instant answers — so Monday morning reports write themselves and no follow-up falls through the cracks.
           </p>
           <NuxtLink to="/intelligence" class="inline-flex items-center gap-2 rounded-full border border-[#D4973A]/30 px-5 py-2.5 text-[0.75rem] font-medium uppercase tracking-wider text-[#D4973A]/80 transition-all hover:border-[#D4973A]/60 hover:text-[#D4973A]">
             Explore Hue Intelligence
@@ -257,23 +257,23 @@
         <div class="grid grid-cols-2 content-center gap-3">
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
             <Icon name="lucide:bot" class="mb-3 size-5 text-[#D4973A]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">AI Insight Assistant</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">Ask your data anything in plain English — instant answers, no SQL.</p>
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Instant Answers</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Type "How many proposals did we send this quarter?" and get the answer from your own data — instantly.</p>
           </div>
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
             <Icon name="lucide:workflow" class="mb-3 size-5 text-[#D4973A]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Smart Workflows</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">Automated actions triggered by your data — emails, reports, alerts.</p>
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Automatic Follow-Up</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">A lead fills out your form at midnight. By morning, they've received a welcome email and your team got an alert.</p>
           </div>
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
             <Icon name="lucide:sparkles" class="mb-3 size-5 text-[#D4973A]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Content Engine</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">AI-generated newsletters, reports, and proposals from your collections.</p>
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">One-Click Content</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">Generate this month's newsletter from your latest projects and milestones — ready to review and send.</p>
           </div>
           <div class="rounded-lg border border-white/[0.06] bg-white/[0.03] p-6">
             <Icon name="lucide:layout-dashboard" class="mb-3 size-5 text-[#D4973A]/60" />
-            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Custom Dashboard</p>
-            <p class="text-[0.75rem] leading-relaxed text-white/30">A branded command center with live KPIs and AI summaries.</p>
+            <p class="mb-1 text-[0.8125rem] font-medium text-white/80">Your Daily Dashboard</p>
+            <p class="text-[0.75rem] leading-relaxed text-white/30">One screen with today's numbers, overdue items, and an AI summary of what needs attention.</p>
           </div>
         </div>
       </div>
@@ -289,7 +289,7 @@
             <p class="hue-body-lg mb-8 max-w-lg">
               Not sure where your brand stands? In 8 questions and 15 minutes, we'll assess your current positioning and deliver a custom presentation in 5 business days. Free, confidential, no obligation.
             </p>
-            <NuxtLink to="/brand-analysis" class="hue-btn">
+            <NuxtLink to="/brand-analysis" class="hue-btn" @click="trackCtaClick('Start Your Free Analysis', 'homepage_audit_cta')">
               Start Your Free Analysis
               <Icon name="lucide:arrow-right" class="size-3.5" />
             </NuxtLink>
@@ -323,6 +323,7 @@
 import { packages, processSteps } from '~/data/services'
 import { industries } from '~/data/industries'
 
+const { trackCtaClick, useScrollDepthTracker } = useTracking()
 const { fetchCaseStudies, fetchServices, assetUrl } = useDirectus()
 const { data: allServices } = await useAsyncData('home-services', () => fetchServices())
 const { data: caseStudies } = await useAsyncData('home-case-studies', () => fetchCaseStudies({ limit: 5, featured: true }))
@@ -383,6 +384,10 @@ const auditStats = [
   { value: '5', label: 'Day Delivery' },
   { value: '$0', label: 'Cost' },
 ]
+
+onMounted(() => {
+  useScrollDepthTracker()
+})
 
 useScrollReveal()
 </script>

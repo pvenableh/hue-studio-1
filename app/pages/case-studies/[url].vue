@@ -483,6 +483,7 @@ const url = route.params.url as string
 const { fetchCaseStudyByUrl, fetchPortfolioItemById, assetUrl, resolvedBeforeAfters } = useDirectus()
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 const { trackBeforeAfterInteraction, trackCaseStudyView } = useAnalytics()
+const { trackCaseStudyView: trackCaseStudyViewNew, useScrollDepthTracker } = useTracking()
 
 const heroRef = ref<HTMLElement | null>(null)
 const bgWordRef = ref<HTMLElement | null>(null)
@@ -522,7 +523,16 @@ if (import.meta.client) {
     cs.value.title ?? '',
     cs.value.services?.[0]?.services_id?.name,
   )
+  trackCaseStudyViewNew(
+    url,
+    cs.value.title ?? '',
+    cs.value.industries?.[0]?.industries_id?.name,
+  )
 }
+
+onMounted(() => {
+  useScrollDepthTracker()
+})
 
 parallaxElement(bgWordRef, 0.3)
 staggerEntrance([heroLabel, heroTitle, heroDesc])

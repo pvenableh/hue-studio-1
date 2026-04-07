@@ -36,7 +36,7 @@
 
           <div class="mt-10 border-t border-[var(--silk)] pt-10">
             <p class="hue-label-sm mb-4 text-[var(--silver)]">Prefer to start with a free analysis?</p>
-            <NuxtLink to="/brand-analysis" class="hue-btn-outline">
+            <NuxtLink to="/brand-analysis" class="hue-btn-outline" @click="trackCtaClick('Free Brand Perception Analysis', 'contact_hero')">
               Free Brand Perception Analysis
               <Icon name="lucide:arrow-right" class="size-3.5" />
             </NuxtLink>
@@ -50,7 +50,7 @@
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
                 <label class="hue-label-field">First name</label>
-                <input v-model="form.firstName" type="text" class="hue-input" required placeholder="Jane" />
+                <input v-model="form.firstName" type="text" class="hue-input" required placeholder="Jane" @focus="onFirstFocus" />
               </div>
               <div>
                 <label class="hue-label-field">Last name</label>
@@ -149,11 +149,20 @@ const submitted  = ref(false)
 const submitError = ref(false)
 
 const { submitContact } = useDirectus()
-const { trackFormSubmit } = useAnalytics()
+const { trackFormStart, trackFormSubmit, trackFormSuccess, trackFormError, trackCtaClick } = useTracking()
+
+const formStarted = ref(false)
+function onFirstFocus() {
+  if (!formStarted.value) {
+    formStarted.value = true
+    trackFormStart('contact')
+  }
+}
 
 async function submitForm() {
   submitting.value = true
   submitError.value = false
+  trackFormSubmit('contact')
 
   const explanation = form.industry
     ? `${form.message}\n\nIndustry: ${form.industry}`
@@ -172,7 +181,10 @@ async function submitForm() {
   submitting.value = false
   if (result.success) {
     submitted.value = true
-    trackFormSubmit('contact', { goal: form.goal, budget: form.budget })
-  } else { submitError.value = true }
+    trackFormSuccess('contact')
+  } else {
+    submitError.value = true
+    trackFormError('contact', 'Server error on contact form submission')
+  }
 }
 </script>

@@ -9,14 +9,15 @@
         <p ref="eyebrowEl" class="intel-eyebrow mb-6">Introducing Hue&reg; Intelligence</p>
 
         <h1 ref="h1El" class="intel-h1 mb-8">
-          Your data,<br>
-          <em class="italic" style="color: var(--color-accent);">finally</em> working for you.
+          The answers are<br>
+          <em class="italic" style="color: var(--color-accent);">already</em> in your data.
         </h1>
 
         <p ref="subEl" class="intel-body-lg mb-10 max-w-[520px]">
-          AI-powered intelligence and automation for small and mid-sized
-          organizations — built on your existing data, delivered by a
-          boutique team that understands design as much as technology.
+          Your organization already has the data it needs to work smarter —
+          it's just trapped in spreadsheets, inboxes, and disconnected tools.
+          We connect it, automate the repetitive work, and give your team
+          instant answers to the questions they ask every day.
         </p>
 
         <div ref="ctaEl" class="flex flex-wrap items-center gap-4">

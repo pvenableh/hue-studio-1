@@ -31,7 +31,7 @@
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
                 <label class="hue-label-field">First name</label>
-                <input v-model="form.firstName" type="text" class="hue-input" placeholder="Jane" required />
+                <input v-model="form.firstName" type="text" class="hue-input" placeholder="Jane" required @focus="onFirstFocus" />
               </div>
               <div>
                 <label class="hue-label-field">Last name</label>
@@ -177,14 +177,23 @@ const form = reactive({
 })
 
 const { submitAudit } = useDirectus()
-const { trackFormSubmit } = useAnalytics()
+const { trackFormStart, trackFormSubmit, trackFormSuccess, trackFormError } = useTracking()
 const submitting = ref(false)
 const submitted  = ref(false)
 const submitError = ref(false)
 
+const formStarted = ref(false)
+function onFirstFocus() {
+  if (!formStarted.value) {
+    formStarted.value = true
+    trackFormStart('audit')
+  }
+}
+
 async function submitForm() {
   submitting.value = true
   submitError.value = false
+  trackFormSubmit('audit')
   // Build a rich explanation that includes all brand perception answers
   const parts = [form.challenge]
   if (form.brandWords) parts.push(`Brand words: ${form.brandWords}`)
@@ -215,8 +224,11 @@ async function submitForm() {
   submitting.value = false
   if (result.success) {
     submitted.value = true
-    trackFormSubmit('brand_audit', { industry: form.industry })
-  } else { submitError.value = true }
+    trackFormSuccess('audit')
+  } else {
+    submitError.value = true
+    trackFormError('audit', 'Server error on audit form submission')
+  }
 }
 
 useScrollReveal()

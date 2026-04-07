@@ -123,6 +123,7 @@ const slug = route.params.slug as string
 
 const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchServices, assetUrl } = useDirectus()
 const { pinHero, parallaxElement, staggerEntrance } = useHeroAnimations()
+const { trackIndustryView, useScrollDepthTracker } = useTracking()
 
 // Hero animation refs
 const heroRef = ref<HTMLElement | null>(null)
@@ -302,6 +303,11 @@ defineOgImage({
     description: industry.value?.headline ?? industry.value?.description ?? '',
     label: 'Industries',
   },
+})
+
+onMounted(() => {
+  trackIndustryView(slug, industry.value?.name ?? '')
+  useScrollDepthTracker()
 })
 
 useScrollReveal()

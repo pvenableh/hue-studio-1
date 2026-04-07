@@ -41,6 +41,7 @@
           <div
             v-for="(pkg, i) in packages"
             :key="pkg.id"
+            :ref="(el) => { if (el) packageCardRefs[i] = el as HTMLElement }"
             class="hue-card reveal flex flex-col"
             :class="{ 'hue-card-featured': pkg.featured }"
             :style="{ transitionDelay: `${i * 80}ms` }"
@@ -438,9 +439,13 @@ const comparisonRows = [
   { capability: 'Extensibility', legacy: 'Constrained by monolithic architecture', modern: 'Headless — any frontend, any channel' },
 ]
 
+const { trackPackageView, useScrollDepthTracker } = useTracking()
+
 const heroLabel = ref<HTMLElement | null>(null)
 const heroTitle = ref<HTMLElement | null>(null)
 const heroSub   = ref<HTMLElement | null>(null)
+const packageCardRefs = ref<HTMLElement[]>([])
+const viewedPackages = new Set<string>()
 
 useScrollReveal()
 
@@ -450,6 +455,21 @@ onMounted(async () => {
   tl.fromTo(heroLabel.value, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 })
     .fromTo(heroTitle.value, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 1.0 }, '-=0.4')
     .fromTo(heroSub.value,   { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
+
+  useScrollDepthTracker()
+
+  // Track package card visibility
+  for (let i = 0; i < packageCardRefs.value.length; i++) {
+    const el = packageCardRefs.value[i]
+    const pkg = packages[i]
+    if (!el || !pkg) continue
+    useIntersectionObserver(el, ([{ isIntersecting }]) => {
+      if (isIntersecting && !viewedPackages.has(pkg.id)) {
+        viewedPackages.add(pkg.id)
+        trackPackageView(pkg.name, pkg.price)
+      }
+    })
+  }
 })
 </script>
 
