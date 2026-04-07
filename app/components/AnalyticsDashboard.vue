@@ -541,7 +541,11 @@ function computeChart(items: { date: string; value: number }[]) {
     return `${months[m - 1]} ${d}`
   }
   let xLabels: string[] = []
-  if (items.length > 0) {
+  if (items.length === 1) {
+    xLabels = [fmt(items[0]!.date)]
+  } else if (items.length === 2) {
+    xLabels = [fmt(items[0]!.date), fmt(items[1]!.date)]
+  } else if (items.length > 2) {
     xLabels = [
       fmt(items[0]!.date),
       fmt(items[Math.floor(items.length / 2)]!.date),
