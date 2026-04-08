@@ -100,7 +100,7 @@ const props = withDefaults(defineProps<{
   description?: string
   label?: string
 }>(), {
-  title: 'Hue — Creative Marketing Studio',
+  title: 'Hue Studios',
 })
 
 const truncatedDescription = computed(() => {

@@ -751,12 +751,12 @@ const csSeoTitle = computed(() => {
   const service = allServices.value[0]
   const industry = csIndustries.value[0]?.name
   const context = [service, industry].filter(Boolean).join(' & ')
-  return context ? `${title} — ${context} | Hue Creative Agency` : `${title} | Hue Creative Agency`
+  return context ? `${title} — ${context} | Hue Studios` : `${title} | Hue Studios`
 })
 
 useSeoMeta({
   title: csSeoTitle,
-  description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.',
+  description: cs.value?.excerpt ?? 'A case study by Hue Studios.',
   ogImage: csOgImg.value ?? undefined,
 })
 
@@ -793,7 +793,7 @@ useSchemaOrg([
 ])
 
 if (!csOgImg.value) {
-  defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Creative Agency.', label: 'Case Study' } })
+  defineOgImage({ component: 'HueOg', props: { title: cs.value?.title ?? 'Case Study', description: cs.value?.excerpt ?? 'A case study by Hue Studios.', label: 'Case Study' } })
 }
 </script>
 

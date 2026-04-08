@@ -56,7 +56,7 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://huestudios.com',
-    name: 'Hue — Creative Marketing Studio',
+    name: 'Hue Studios — Branding, Web Design, and Creative Marketing Agency',
     description: 'Full-service creative marketing for growth-stage companies. Brand strategy, digital experience, and lead generation that drives real business outcomes.',
     defaultLocale: 'en',
   },

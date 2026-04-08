@@ -80,7 +80,7 @@
 import type { DirectusCaseStudy } from '~/composables/useDirectus'
 
 useSeoMeta({
-  title: 'Case Studies | B2B Branding & Lead Generation | Hue Creative Agency',
+  title: 'Case Studies | B2B Branding & Lead Generation | Hue Studios',
   description: 'Explore our case studies in brand strategy, website design, and lead generation for government, architecture, real estate, technology, and professional services.',
 })
 

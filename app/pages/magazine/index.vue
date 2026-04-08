@@ -186,7 +186,7 @@ function formatDate(d: string | null | undefined) {
 
 useSeoMeta({
   title: 'hue: magazine | Brand Strategy & Design Insights',
-  description: 'Perspectives on brand strategy, design, and the business of creative excellence from Hue Creative Agency.',
+  description: 'Perspectives on brand strategy, design, and the business of creative excellence from Hue Studios.',
 })
 
 defineOgImage({ component: 'HueOg', props: { title: 'hue: magazine', description: 'Brand strategy & design insights', label: 'Magazine' } })

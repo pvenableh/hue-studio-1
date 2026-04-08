@@ -120,7 +120,7 @@
             </div>
             <p class="hue-label mb-1">Creative Director &amp; Brand Strategist</p>
             <NuxtLink to="/team/camila-hoffman" class="group">
-              <h2 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Camila Hoffman</h2>
+              <h3 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Camila Hoffman</h3>
             </NuxtLink>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
@@ -150,7 +150,7 @@
             </div>
             <p class="hue-label mb-1">Web Director &amp; Development Lead</p>
             <NuxtLink to="/team/peter-hoffman" class="group">
-              <h2 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Peter Hoffman</h2>
+              <h3 class="mb-4 text-[1.75rem] font-light transition-colors group-hover:text-[var(--accent)]">Peter Hoffman</h3>
             </NuxtLink>
             <div class="space-y-4 max-w-lg">
               <p class="hue-body">
@@ -228,7 +228,7 @@
 <script setup lang="ts">
 
 useSeoMeta({
-  title: 'About Hue | Creative Marketing Studio | Miami Beach & New York',
+  title: 'About Hue Studios | Branding & Creative Marketing | Miami Beach & New York',
   description: 'Full-service creative marketing studio founded in 2005 by Camila Hoffman (former A|X Armani Exchange Art Director) and Peter Hoffman. Miami Beach & New York.',
 })
 
@@ -239,13 +239,13 @@ useSchemaOrg([
     '@type': 'Person',
     name: 'Camila Hoffman',
     jobTitle: 'Creative Director & Brand Strategist',
-    worksFor: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    worksFor: { '@type': 'Organization', name: 'Hue Studios' },
   },
   {
     '@type': 'Person',
     name: 'Peter Hoffman',
     jobTitle: 'Web Director & Development Lead',
-    worksFor: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    worksFor: { '@type': 'Organization', name: 'Hue Studios' },
   },
 ])
 

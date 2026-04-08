@@ -69,7 +69,7 @@
                   <p class="text-[0.8125rem] text-white/30">Miami Beach, FL</p>
                   <p class="text-[0.8125rem] text-white/30">New York, NY</p>
                 </div>
-                <p class="text-[0.6875rem] text-white/15">&copy; {{ new Date().getFullYear() }} Hue Creative Agency</p>
+                <p class="text-[0.6875rem] text-white/15">&copy; {{ new Date().getFullYear() }} Hue Studios</p>
               </div>
             </div>
           </div>

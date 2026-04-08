@@ -120,8 +120,8 @@
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Contact | Start a Project | Hue Creative Agency',
-  description: 'Ready to start your next brand or creative project? Contact Hue Creative Agency in Miami Beach and New York.',
+  title: 'Contact | Start a Project | Hue Studios',
+  description: 'Ready to start your next brand or creative project? Contact Hue Studios in Miami Beach and New York.',
 })
 
 defineOgImage({ component: 'HueOg', props: { title: 'Start a Project', description: 'Ready to invest in a brand that performs? Let\'s talk.', label: 'Contact' } })

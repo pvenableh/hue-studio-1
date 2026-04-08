@@ -64,8 +64,8 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Partnerships | Hue Creative Agency',
-  description: 'Partner with Hue Creative Agency. Co-branded creative services, agency partnerships, developer collaborations, and referral programs.',
+  title: 'Partnerships | Hue Studios',
+  description: 'Partner with Hue Studios. Co-branded creative services, agency partnerships, developer collaborations, and referral programs.',
 })
 
 defineOgImage({ component: 'HueOg', props: { title: 'Strategic Partnerships', description: 'Scalable creative infrastructure for agencies and consultancies.', label: 'Partnerships' } })

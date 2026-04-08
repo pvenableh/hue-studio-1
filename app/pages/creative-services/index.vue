@@ -352,7 +352,7 @@ const { data: allServices } = await useAsyncData('services-all-index', () => fet
 const { data: allIndustries } = await useAsyncData('industries-all-index', () => fetchAllIndustries())
 
 useSeoMeta({
-  title: 'Creative Services & Packages | Hue — Creative Marketing Studio',
+  title: 'Creative Services & Packages | Hue Studios',
   description: 'Full-service creative marketing packages for growth-stage companies. Brand strategy, digital experience, print, video. Packages from $15,000. Retainers from $3,500/mo.',
 })
 
@@ -362,13 +362,13 @@ useSchemaOrg([
   {
     '@type': 'Service',
     name: 'Brand Strategy & Identity',
-    provider: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    provider: { '@type': 'Organization', name: 'Hue Studios' },
     serviceType: 'Brand Strategy',
   },
   {
     '@type': 'Service',
     name: 'Digital & Web Design',
-    provider: { '@type': 'Organization', name: 'Hue Creative Agency' },
+    provider: { '@type': 'Organization', name: 'Hue Studios' },
     serviceType: 'Web Design',
   },
 ])

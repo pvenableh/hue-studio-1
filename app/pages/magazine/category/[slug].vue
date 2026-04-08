@@ -64,7 +64,7 @@ const { data: posts, pending } = await useAsyncData(
 
 useSeoMeta({
   title: `${categoryName.value} | hue: magazine`,
-  description: `Articles about ${categoryName.value} from Hue Creative Agency.`,
+  description: `Articles about ${categoryName.value} from Hue Studios.`,
 })
 
 defineOgImage({ component: 'HueOg', props: { title: categoryName.value, description: `Articles about ${categoryName.value}`, label: 'Magazine' } })

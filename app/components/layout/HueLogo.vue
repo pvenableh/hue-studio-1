@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink to="/" class="hue-logo" aria-label="Hue Creative Agency — Home">
+  <NuxtLink to="/" class="hue-logo" aria-label="Hue Studios — Home">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 48.62 98.44"

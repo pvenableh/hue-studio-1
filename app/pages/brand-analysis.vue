@@ -146,7 +146,7 @@
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Free Brand Perception Analysis | Hue Creative Agency',
+  title: 'Free Brand Perception Analysis | Hue Studios',
   description: '8 questions. 15 minutes. A custom Brand Perception Presentation delivered in 5 business days. Free, confidential, no obligation.',
 })
 

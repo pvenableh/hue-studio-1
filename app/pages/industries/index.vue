@@ -100,7 +100,7 @@
 import { industries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Industries | B2B Creative Agency | Hue',
+  title: 'Industries | B2B Creative Agency | Hue Studios',
   description: 'We serve architecture, construction, real estate, professional services, fashion, technology, and nonprofit sectors with strategic brand and creative work.',
 })
 

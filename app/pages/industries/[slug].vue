@@ -292,7 +292,7 @@ function csImage(cs: DirectusCaseStudy): string | null {
 }
 
 useSeoMeta({
-  title: `${industry.value?.name ?? 'Industry'} | Industries | Hue Creative Agency`,
+  title: `${industry.value?.name ?? 'Industry'} | Industries | Hue Studios`,
   description: industry.value?.description ?? `Creative marketing services for the ${industry.value?.name} industry.`,
 })
 
@@ -304,6 +304,25 @@ defineOgImage({
     label: 'Industries',
   },
 })
+
+useSchemaOrg([
+  {
+    '@type': 'WebPage',
+    '@id': `https://huestudios.com/industries/${route.params.slug}`,
+    'name': industry.value?.name ?? 'Industry',
+    'description': industry.value?.description ?? '',
+    'isPartOf': { '@id': 'https://huestudios.com/#website' },
+    'about': { '@id': 'https://huestudios.com/#organization' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://huestudios.com' },
+      { '@type': 'ListItem', 'position': 2, 'name': 'Industries', 'item': 'https://huestudios.com/industries' },
+      { '@type': 'ListItem', 'position': 3, 'name': industry.value?.name ?? 'Industry' },
+    ],
+  },
+])
 
 onMounted(() => {
   trackIndustryView(slug, industry.value?.name ?? '')
