@@ -100,7 +100,7 @@
 
       <div class="flex flex-col items-center justify-center gap-4 pt-8 ">
         <p class="text-[0.6875rem] tracking-wider text-white/20">
-          © {{ new Date().getFullYear() }} HUE CREATIVE AGENCY, INC. ALL RIGHTS RESERVED.
+          © {{ new Date().getFullYear() }} HUE STUDIOS, INC. ALL RIGHTS RESERVED.
         </p>
         <p class="text-[0.6875rem] text-white/15 uppercase tracking-wider mb-20">Miami Beach · New York</p>
       </div>
