@@ -1,29 +1,21 @@
 // middleware.ts  ← project root, alongside nuxt.config.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
 const ALLOWED_COUNTRIES = new Set(['US', 'CA', 'GB', 'IE', 'FR', 'DE'])
 
 export const config = {
   matcher: [
-    /*
-     * Match all paths EXCEPT:
-     * - _nuxt/      Nuxt static assets
-     * - api/        Your Nuxt server routes (sitemap, OG image, etc.)
-     * - Static files you want publicly crawlable
-     */
     '/((?!_nuxt/|api/|favicon|apple-touch-icon|manifest\\.webmanifest|robots\\.txt|llms\\.txt|feed\\.xml|sitemap).*)',
   ],
 }
 
-export default function middleware(request: NextRequest) {
-  const country = request.geo?.country ?? 'US'
+export default function middleware(request: Request) {
+  const country = request.headers.get('x-vercel-ip-country') ?? 'US'
 
   if (ALLOWED_COUNTRIES.has(country)) {
-    return NextResponse.next()
+    return new Response(null, { status: 200 })
   }
 
-  return new NextResponse(
+  return new Response(
     `<!DOCTYPE html>
     <html lang="en">
       <head>
