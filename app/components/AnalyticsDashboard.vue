@@ -53,7 +53,7 @@
           <div v-if="data.dailyLeads.length === 0" class="empty-state">No lead data yet</div>
           <template v-else>
             <div class="chart-wrap">
-              <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
+              <svg class="chart-svg" viewBox="0 -30 560 170" preserveAspectRatio="xMidYMid meet">
                 <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
                 <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
                 <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
@@ -79,7 +79,7 @@
           <div v-if="data.dailySessions.length === 0" class="empty-state">No session data yet</div>
           <template v-else>
             <div class="chart-wrap">
-              <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
+              <svg class="chart-svg" viewBox="0 -30 560 170" preserveAspectRatio="xMidYMid meet">
                 <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
                 <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
                 <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
@@ -781,7 +781,7 @@ const cityPageGroups = computed(() => {
 
 /* Chart */
 .chart-card {
-  overflow: hidden;
+  overflow: visible;
 }
 .chart-svg {
   width: 100%;

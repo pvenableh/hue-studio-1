@@ -323,7 +323,7 @@ export default defineEventHandler(async (event) => {
       dimensionFilter: usaFilter,
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
       limit: 100
-    }).catch(() => [null]),
+    }).catch((e) => { console.error('cityPages query failed:', e.message); return [{ rows: [] }] }),
 
     // 19. Leads by city
     client.runReport({
@@ -341,7 +341,7 @@ export default defineEventHandler(async (event) => {
       },
       orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
       limit: 30
-    }).catch(() => [null]),
+    }).catch((e) => { console.error('cityLeads query failed:', e.message); return [{ rows: [] }] }),
 
     // 20. Source → landing page conversions
     client.runReport({
@@ -352,7 +352,7 @@ export default defineEventHandler(async (event) => {
       dimensionFilter: usaFilter,
       orderBys: [{ metric: { metricName: 'conversions' }, desc: true }],
       limit: 30
-    }).catch(() => [null])
+    }).catch((e) => { console.error('sourcePages query failed:', e.message); return [{ rows: [] }] })
   ])
 
   // --- Parse results ---
@@ -461,21 +461,21 @@ export default defineEventHandler(async (event) => {
   })
 
   // City → page cross-dimensional
-  const cityPagesData = Array.isArray(cityPagesRes) ? null : cityPagesRes[0]
+  const cityPagesData = Array.isArray(cityPagesRes) ? cityPagesRes[0] : cityPagesRes[0]
   const cityPages = (cityPagesData?.rows ?? []).map(r => {
     const v = row(r)
     return { city: v.dim(0), path: v.dim(1), sessions: v.met(0) }
   }).filter(c => c.city && c.city !== '(not set)')
 
   // Leads by city
-  const cityLeadsData = Array.isArray(cityLeadsRes) ? null : cityLeadsRes[0]
+  const cityLeadsData = Array.isArray(cityLeadsRes) ? cityLeadsRes[0] : cityLeadsRes[0]
   const cityLeads = (cityLeadsData?.rows ?? []).map(r => {
     const v = row(r)
     return { city: v.dim(0), region: v.dim(1), leads: v.met(0) }
   }).filter(c => c.city && c.city !== '(not set)' && c.leads > 0)
 
   // Source → page conversions
-  const sourcePagesData = Array.isArray(sourcePagesRes) ? null : sourcePagesRes[0]
+  const sourcePagesData = Array.isArray(sourcePagesRes) ? sourcePagesRes[0] : sourcePagesRes[0]
   const sourcePages = (sourcePagesData?.rows ?? []).map(r => {
     const v = row(r)
     return { source: v.dim(0), page: v.dim(1), sessions: v.met(0), conversions: v.met(1) }
