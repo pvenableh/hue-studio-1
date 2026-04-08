@@ -1,4 +1,4 @@
-// middleware.ts  ← project root, alongside nuxt.config.ts
+// middleware.ts
 
 const ALLOWED_COUNTRIES = new Set(['US', 'CA', 'GB', 'IE', 'FR', 'DE'])
 
@@ -12,7 +12,7 @@ export default function middleware(request: Request) {
   const country = request.headers.get('x-vercel-ip-country') ?? 'US'
 
   if (ALLOWED_COUNTRIES.has(country)) {
-    return new Response(null, { status: 200 })
+    return // ← just pass through, don't return a Response
   }
 
   return new Response(
