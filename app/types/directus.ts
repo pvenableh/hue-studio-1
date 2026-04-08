@@ -2466,6 +2466,24 @@ export interface SocialPost {
 	error_message?: string | null;
 }
 
+export interface DirectusGbpPost {
+	/** @primaryKey */
+	id: string;
+	post_status?: 'draft' | 'posted' | 'skipped';
+	title?: string | null;
+	/** @description GBP post body — copy to Google Business Profile (1500 char max) */
+	caption?: string | null;
+	/** @description Direct URL to featured image */
+	image_url?: string | null;
+	/** @description Full URL to the magazine article */
+	link?: string | null;
+	/** @description Original blog post this was generated from */
+	source_blog_post?: DirectusBlogPost | number | null;
+	notes?: string | null;
+	date_created?: string | null;
+	user_created?: DirectusUser | string | null;
+}
+
 export interface Task {
 	/** @primaryKey */
 	id: string;

@@ -52,16 +52,25 @@
           <h3 class="panel-title">Daily Leads</h3>
           <div v-if="data.dailyLeads.length === 0" class="empty-state">No lead data yet</div>
           <template v-else>
-            <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
-              <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
-              <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
-              <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
-              <path :d="leadsChart.areaPath" class="chart-area" />
-              <polyline :points="leadsChart.linePoints" class="chart-line" />
-              <circle v-for="(pt, i) in leadsChart.points" :key="i" :cx="pt.x" :cy="pt.y" r="3" class="chart-dot" />
-            </svg>
-            <div class="chart-labels">
-              <span v-for="(label, i) in leadsChart.xLabels" :key="i">{{ label }}</span>
+            <div class="chart-wrap">
+              <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
+                <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
+                <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
+                <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
+                <path :d="leadsChart.areaPath" class="chart-area" />
+                <polyline :points="leadsChart.linePoints" class="chart-line" />
+                <g v-for="(pt, i) in leadsChart.points" :key="i" class="chart-point-group">
+                  <circle :cx="pt.x" :cy="pt.y" r="12" class="chart-hit-area" />
+                  <circle :cx="pt.x" :cy="pt.y" r="3" class="chart-dot" />
+                  <g class="chart-tooltip">
+                    <rect :x="pt.x - 30" :y="pt.y - 28" width="60" height="20" rx="4" class="tooltip-bg" />
+                    <text :x="pt.x" :y="pt.y - 15" text-anchor="middle" class="tooltip-text">{{ pt.label }}</text>
+                  </g>
+                </g>
+              </svg>
+              <div class="chart-labels">
+                <span v-for="(label, i) in leadsChart.xLabels" :key="i">{{ label }}</span>
+              </div>
             </div>
           </template>
         </div>
@@ -69,16 +78,25 @@
           <h3 class="panel-title">Daily Sessions</h3>
           <div v-if="data.dailySessions.length === 0" class="empty-state">No session data yet</div>
           <template v-else>
-            <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
-              <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
-              <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
-              <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
-              <path :d="sessionsChart.areaPath" class="chart-area chart-area--blue" />
-              <polyline :points="sessionsChart.linePoints" class="chart-line chart-line--blue" />
-              <circle v-for="(pt, i) in sessionsChart.points" :key="i" :cx="pt.x" :cy="pt.y" r="3" class="chart-dot chart-dot--blue" />
-            </svg>
-            <div class="chart-labels">
-              <span v-for="(label, i) in sessionsChart.xLabels" :key="i">{{ label }}</span>
+            <div class="chart-wrap">
+              <svg class="chart-svg" viewBox="0 0 560 140" preserveAspectRatio="xMidYMid meet">
+                <line x1="8" y1="35" x2="552" y2="35" class="chart-grid" />
+                <line x1="8" y1="70" x2="552" y2="70" class="chart-grid" />
+                <line x1="8" y1="105" x2="552" y2="105" class="chart-grid" />
+                <path :d="sessionsChart.areaPath" class="chart-area chart-area--blue" />
+                <polyline :points="sessionsChart.linePoints" class="chart-line chart-line--blue" />
+                <g v-for="(pt, i) in sessionsChart.points" :key="i" class="chart-point-group">
+                  <circle :cx="pt.x" :cy="pt.y" r="12" class="chart-hit-area" />
+                  <circle :cx="pt.x" :cy="pt.y" r="3" class="chart-dot chart-dot--blue" />
+                  <g class="chart-tooltip">
+                    <rect :x="pt.x - 30" :y="pt.y - 28" width="60" height="20" rx="4" class="tooltip-bg tooltip-bg--blue" />
+                    <text :x="pt.x" :y="pt.y - 15" text-anchor="middle" class="tooltip-text">{{ pt.label }}</text>
+                  </g>
+                </g>
+              </svg>
+              <div class="chart-labels">
+                <span v-for="(label, i) in sessionsChart.xLabels" :key="i">{{ label }}</span>
+              </div>
             </div>
           </template>
         </div>
@@ -108,17 +126,21 @@
               <tr>
                 <th>Page</th>
                 <th class="col-num">Sessions</th>
+                <th class="col-num">Leads</th>
+                <th class="col-num">Engage</th>
                 <th class="col-num">Bounce</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="data.landingPages.length === 0">
-                <td colspan="3" class="empty-state">No data yet</td>
+                <td colspan="5" class="empty-state">No data yet</td>
               </tr>
               <tr v-for="p in pagedLanding" :key="p.path">
                 <td class="col-path">{{ p.path }}</td>
                 <td class="col-num">{{ fmtNum(p.sessions) }}</td>
-                <td class="col-num">{{ (p.bounceRate * 100).toFixed(1) }}%</td>
+                <td class="col-num col-lead">{{ p.conversions > 0 ? p.conversions : '—' }}</td>
+                <td class="col-num">{{ (p.engagementRate * 100).toFixed(0) }}%</td>
+                <td class="col-num">{{ (p.bounceRate * 100).toFixed(0) }}%</td>
               </tr>
             </tbody>
           </table>
@@ -141,16 +163,20 @@
                 <th>City</th>
                 <th class="col-num">Sessions</th>
                 <th class="col-num">Users</th>
+                <th class="col-num">Engage</th>
+                <th class="col-num">Avg Time</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="!data.cities?.length">
-                <td colspan="3" class="empty-state">No city data yet</td>
+                <td colspan="5" class="empty-state">No city data yet</td>
               </tr>
               <tr v-for="c in pagedCities" :key="c.city + c.region">
                 <td>{{ c.city }}<span v-if="c.region && c.region !== '(not set)'" class="col-muted">, {{ c.region }}</span></td>
                 <td class="col-num">{{ fmtNum(c.sessions) }}</td>
                 <td class="col-num">{{ fmtNum(c.users) }}</td>
+                <td class="col-num">{{ (c.engagementRate * 100).toFixed(0) }}%</td>
+                <td class="col-num">{{ fmtDuration(c.avgDuration) }}</td>
               </tr>
             </tbody>
           </table>
@@ -195,6 +221,70 @@
               </div>
             </div>
           </template>
+        </div>
+      </div>
+
+      <!-- Cross-Dimensional Insights -->
+      <h2 class="section-title">Insights</h2>
+      <div class="two-col">
+        <div class="card">
+          <h3 class="panel-title">Leads by City</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>City</th>
+                <th class="col-num">Leads</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="!data.cityLeads?.length">
+                <td colspan="2" class="empty-state">No lead-by-city data yet</td>
+              </tr>
+              <tr v-for="c in data.cityLeads?.slice(0, 15)" :key="c.city + c.region">
+                <td>{{ c.city }}<span v-if="c.region && c.region !== '(not set)'" class="col-muted">, {{ c.region }}</span></td>
+                <td class="col-num col-lead">{{ c.leads }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3 class="panel-title">Source → Page Conversions</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Source</th>
+                <th>Landing Page</th>
+                <th class="col-num">Leads</th>
+                <th class="col-num">Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="!data.sourcePages?.length">
+                <td colspan="4" class="empty-state">No conversion path data yet</td>
+              </tr>
+              <tr v-for="s in data.sourcePages?.slice(0, 15)" :key="s.source + s.page">
+                <td class="col-muted" style="font-size: 12px;">{{ s.source || '(direct)' }}</td>
+                <td class="col-path" style="font-size: 12px;">{{ s.page }}</td>
+                <td class="col-num col-lead">{{ s.conversions }}</td>
+                <td class="col-num">{{ s.sessions > 0 ? ((s.conversions / s.sessions) * 100).toFixed(1) : '0.0' }}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Pages by City -->
+      <div class="card">
+        <h3 class="panel-title">Top Pages by City</h3>
+        <div v-if="!data.cityPages?.length" class="empty-state">No city-page data yet</div>
+        <div v-else class="city-pages-grid">
+          <div v-for="group in cityPageGroups" :key="group.city" class="city-page-group">
+            <h4 class="city-page-city">{{ group.city }}</h4>
+            <div v-for="p in group.pages" :key="p.path" class="city-page-row">
+              <span class="city-page-path">{{ p.path }}</span>
+              <span class="city-page-sessions">{{ p.sessions }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -512,13 +602,21 @@ function computeChart(items: { date: string; value: number }[]) {
   const h = 140 - pad * 2
   const maxVal = Math.max(...items.map(d => d.value), 1)
 
-  let points: { x: number; y: number }[]
+  const fmt = (raw: string) => {
+    const m = parseInt(raw.slice(4, 6))
+    const d = parseInt(raw.slice(6, 8))
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return `${months[m - 1]} ${d}`
+  }
+
+  let points: { x: number; y: number; label: string }[]
   if (items.length === 1) {
-    points = [{ x: 560 / 2, y: pad + h - (items[0]!.value / maxVal) * h }]
+    points = [{ x: 560 / 2, y: pad + h - (items[0]!.value / maxVal) * h, label: `${fmt(items[0]!.date)}: ${items[0]!.value}` }]
   } else {
     points = items.map((d, i) => ({
       x: pad + (i / (items.length - 1)) * w,
-      y: pad + h - (d.value / maxVal) * h
+      y: pad + h - (d.value / maxVal) * h,
+      label: `${fmt(d.date)}: ${d.value}`
     }))
   }
 
@@ -534,12 +632,6 @@ function computeChart(items: { date: string; value: number }[]) {
     areaPath += ` L${points[points.length - 1]!.x},${bottom} Z`
   }
 
-  const fmt = (raw: string) => {
-    const m = parseInt(raw.slice(4, 6))
-    const d = parseInt(raw.slice(6, 8))
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    return `${months[m - 1]} ${d}`
-  }
   let xLabels: string[] = []
   if (items.length === 1) {
     xLabels = [fmt(items[0]!.date)]
@@ -563,6 +655,21 @@ const leadsChart = computed(() =>
 const sessionsChart = computed(() =>
   computeChart((data.value?.dailySessions ?? []).map(d => ({ date: d.date, value: d.sessions })))
 )
+
+// --- City → Page groups (top 5 cities, top 5 pages each) ---
+const cityPageGroups = computed(() => {
+  const rows = data.value?.cityPages ?? []
+  const grouped = new Map<string, { path: string; sessions: number }[]>()
+  for (const r of rows) {
+    if (!grouped.has(r.city)) grouped.set(r.city, [])
+    grouped.get(r.city)!.push({ path: r.path, sessions: r.sessions })
+  }
+  // Top 5 cities by total sessions, top 5 pages per city
+  return [...grouped.entries()]
+    .map(([city, pages]) => ({ city, pages: pages.slice(0, 5), total: pages.reduce((s, p) => s + p.sessions, 0) }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 6)
+})
 </script>
 
 <style>
@@ -706,6 +813,36 @@ const sessionsChart = computed(() =>
 }
 .chart-dot--blue {
   fill: #4a6fa5;
+}
+/* Chart tooltips */
+.chart-wrap {
+  position: relative;
+}
+.chart-hit-area {
+  fill: transparent;
+  cursor: pointer;
+}
+.chart-tooltip {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+.chart-point-group:hover .chart-tooltip {
+  opacity: 1;
+}
+.chart-point-group:hover .chart-dot {
+  r: 5;
+}
+.tooltip-bg {
+  fill: #1a1a18;
+}
+.tooltip-bg--blue {
+  fill: #4a6fa5;
+}
+.tooltip-text {
+  fill: #ffffff;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
 }
 .chart-labels {
   display: flex;
@@ -915,5 +1052,46 @@ const sessionsChart = computed(() =>
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   color: #6b6b67;
+}
+
+/* City → Pages grid */
+.city-pages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.city-page-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.city-page-city {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a18;
+  margin: 0 0 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0f0ec;
+}
+.city-page-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.city-page-path {
+  font-size: 12px;
+  color: #6b6b67;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.city-page-sessions {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a18;
+  flex-shrink: 0;
 }
 </style>

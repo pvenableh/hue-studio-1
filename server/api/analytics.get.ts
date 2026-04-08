@@ -83,7 +83,8 @@ export default defineEventHandler(async (event) => {
     trafficRes, sessionsRes, devicesRes, landingRes,
     ctaRes, portfolioRes, outboundRes,
     citiesRes, ageRes, genderRes,
-    compTrafficRes, compLeadsRes, compFunnelRes
+    compTrafficRes, compLeadsRes, compFunnelRes,
+    cityPagesRes, cityLeadsRes, sourcePagesRes
   ] = await Promise.all([
 
     // 1. Daily leads (existing)
@@ -174,12 +175,12 @@ export default defineEventHandler(async (event) => {
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }]
     }),
 
-    // 8. Landing pages (new)
+    // 8. Landing pages (with conversions + engagement)
     client.runReport({
       property,
       dateRanges: currentRange,
       dimensions: [{ name: 'landingPagePlusQueryString' }],
-      metrics: [{ name: 'sessions' }, { name: 'bounceRate' }],
+      metrics: [{ name: 'sessions' }, { name: 'bounceRate' }, { name: 'conversions' }, { name: 'engagementRate' }],
       dimensionFilter: usaFilter,
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
       limit: 50
@@ -239,12 +240,12 @@ export default defineEventHandler(async (event) => {
       limit: 10
     }).catch(() => [null]),
 
-    // 12. Top cities (with region/state)
+    // 12. Top cities (with region/state + engagement)
     client.runReport({
       property,
       dateRanges: currentRange,
       dimensions: [{ name: 'city' }, { name: 'region' }],
-      metrics: [{ name: 'sessions' }, { name: 'activeUsers' }],
+      metrics: [{ name: 'sessions' }, { name: 'activeUsers' }, { name: 'engagementRate' }, { name: 'averageSessionDuration' }],
       dimensionFilter: usaFilter,
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
       limit: 50
@@ -311,7 +312,47 @@ export default defineEventHandler(async (event) => {
           ]
         }
       }
-    }) : noOp
+    }) : noOp,
+
+    // 18. Top pages by city
+    client.runReport({
+      property,
+      dateRanges: currentRange,
+      dimensions: [{ name: 'city' }, { name: 'pagePath' }],
+      metrics: [{ name: 'sessions' }],
+      dimensionFilter: usaFilter,
+      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+      limit: 100
+    }).catch(() => [null]),
+
+    // 19. Leads by city
+    client.runReport({
+      property,
+      dateRanges: currentRange,
+      dimensions: [{ name: 'city' }, { name: 'region' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: {
+        andGroup: {
+          expressions: [
+            usaFilter,
+            { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'form_success' } } }
+          ]
+        }
+      },
+      orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+      limit: 30
+    }).catch(() => [null]),
+
+    // 20. Source → landing page conversions
+    client.runReport({
+      property,
+      dateRanges: currentRange,
+      dimensions: [{ name: 'sessionSourceMedium' }, { name: 'landingPagePlusQueryString' }],
+      metrics: [{ name: 'sessions' }, { name: 'conversions' }],
+      dimensionFilter: usaFilter,
+      orderBys: [{ metric: { metricName: 'conversions' }, desc: true }],
+      limit: 30
+    }).catch(() => [null])
   ])
 
   // --- Parse results ---
@@ -372,16 +413,16 @@ export default defineEventHandler(async (event) => {
     return { category: v.dim(0), sessions: v.met(0) }
   })
 
-  // Landing pages
+  // Landing pages (with conversions + engagement)
   const landingPages = (landingRes[0]?.rows ?? []).map(r => {
     const v = row(r)
-    return { path: v.dim(0), sessions: v.met(0), bounceRate: v.met(1) }
+    return { path: v.dim(0), sessions: v.met(0), bounceRate: v.met(1), conversions: v.met(2), engagementRate: v.met(3) }
   }).filter(p => p.sessions > 0)
 
-  // Cities
+  // Cities (with engagement)
   const cities = (citiesRes[0]?.rows ?? []).map(r => {
     const v = row(r)
-    return { city: v.dim(0), region: v.dim(1), sessions: v.met(0), users: v.met(1) }
+    return { city: v.dim(0), region: v.dim(1), sessions: v.met(0), users: v.met(1), engagementRate: v.met(2), avgDuration: v.met(3) }
   }).filter(c => c.city && c.city !== '(not set)')
 
   // Age groups (may be empty if Google Signals not enabled)
@@ -419,6 +460,27 @@ export default defineEventHandler(async (event) => {
     return { url: v.dim(0) || '(unknown)', label: v.dim(1) || '', count: v.met(0) }
   })
 
+  // City → page cross-dimensional
+  const cityPagesData = Array.isArray(cityPagesRes) ? null : cityPagesRes[0]
+  const cityPages = (cityPagesData?.rows ?? []).map(r => {
+    const v = row(r)
+    return { city: v.dim(0), path: v.dim(1), sessions: v.met(0) }
+  }).filter(c => c.city && c.city !== '(not set)')
+
+  // Leads by city
+  const cityLeadsData = Array.isArray(cityLeadsRes) ? null : cityLeadsRes[0]
+  const cityLeads = (cityLeadsData?.rows ?? []).map(r => {
+    const v = row(r)
+    return { city: v.dim(0), region: v.dim(1), leads: v.met(0) }
+  }).filter(c => c.city && c.city !== '(not set)' && c.leads > 0)
+
+  // Source → page conversions
+  const sourcePagesData = Array.isArray(sourcePagesRes) ? null : sourcePagesRes[0]
+  const sourcePages = (sourcePagesData?.rows ?? []).map(r => {
+    const v = row(r)
+    return { source: v.dim(0), page: v.dim(1), sessions: v.met(0), conversions: v.met(1) }
+  }).filter(s => s.conversions > 0)
+
   // --- Comparison period ---
   let comparison = null
   if (compare) {
@@ -451,6 +513,7 @@ export default defineEventHandler(async (event) => {
     traffic, dailySessions, devices, landingPages,
     cities, ageGroups, genders,
     ctaClicks, portfolioViews, outboundClicks,
+    cityPages, cityLeads, sourcePages,
     comparison
   }
 })

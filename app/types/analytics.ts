@@ -16,10 +16,10 @@ export interface AnalyticsData {
   }
   dailySessions: { date: string; sessions: number }[]
   devices: { category: string; sessions: number }[]
-  landingPages: { path: string; sessions: number; bounceRate: number }[]
+  landingPages: { path: string; sessions: number; bounceRate: number; conversions: number; engagementRate: number }[]
 
   // User data
-  cities: { city: string; region: string; sessions: number; users: number }[]
+  cities: { city: string; region: string; sessions: number; users: number; engagementRate: number; avgDuration: number }[]
   ageGroups: { bracket: string; users: number }[]
   genders: { gender: string; users: number }[]
 
@@ -27,6 +27,11 @@ export interface AnalyticsData {
   ctaClicks: { label: string; location: string; count: number }[]
   portfolioViews: { project: string; count: number }[]
   outboundClicks: { url: string; label: string; count: number }[]
+
+  // Cross-dimensional
+  cityPages: { city: string; path: string; sessions: number }[]
+  cityLeads: { city: string; region: string; leads: number }[]
+  sourcePages: { source: string; page: string; sessions: number; conversions: number }[]
 
   // Comparison period (null when compare is off)
   comparison: null | {

@@ -826,6 +826,18 @@ export function useDirectus() {
     return res.data ?? []
   }
 
+  // ── GBP Posts ──────────────────────────────────────────────────────
+  async function fetchGbpPosts(opts: { status?: string; limit?: number } = {}) {
+    const params = new URLSearchParams({
+      'fields[]': 'id,post_status,title,caption,image_url,link,source_blog_post,notes,date_created',
+      'filter[post_status][_eq]': opts.status ?? 'draft',
+      sort: '-date_created',
+      limit: String(opts.limit ?? 50),
+    })
+    const res = await directusFetch<{ data: import('~/types/directus').DirectusGbpPost[] }>('items/gbp_posts', params)
+    return res.data ?? []
+  }
+
   return {
     baseUrl,
     assetsBase,
@@ -861,5 +873,6 @@ export function useDirectus() {
     fetchRelatedBlogPosts,
     fetchTeamMember,
     fetchTeamMemberPosts,
+    fetchGbpPosts,
   }
 }
