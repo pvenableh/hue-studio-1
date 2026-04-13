@@ -339,11 +339,11 @@ function csHomeImage(cs: any): string | null {
 }
 
 useSeoMeta({
-  title: 'Hue Studios — Brand Strategy & Creative Execution | Miami Beach & New York',
+  title: 'Hue — Brand Strategy & Creative Execution | Miami Beach & New York',
   description: 'Strategic brand positioning and creative execution for growth-stage companies, government agencies, and mission-driven organizations. Woman-owned. Founded 2005. Miami Beach & New York.',
 })
 
-defineOgImage({ component: 'HueOg', props: { title: 'Hue Studios', description: 'Brand strategy, digital experience, and creative execution for growth-stage companies.' } })
+defineOgImage({ component: 'HueOg', props: { title: 'Hue', description: 'Brand strategy, digital experience, and creative execution for growth-stage companies.' } })
 
 const featuredIndustries = industries.slice(0, 4)
 

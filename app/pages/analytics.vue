@@ -82,7 +82,7 @@ import type { DateRange } from '~/types/analytics'
 
 definePageMeta({ layout: false })
 
-useHead({ title: 'Analytics — Hue Studios' })
+useHead({ title: 'Analytics — Hue' })
 
 const password = ref('')
 const authenticated = ref(false)

@@ -209,7 +209,7 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Project Scope Builder | Get a Custom Proposal | Hue Studios',
+  title: 'Project Scope Builder | Get a Custom Proposal | Hue',
   description: 'Select the services you need, see timeline and investment estimates, and request a custom proposal. No obligation.',
 })
 

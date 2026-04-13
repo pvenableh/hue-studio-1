@@ -10,10 +10,35 @@
       backgroundColor: '#1d1d1f',
       fontFamily: 'DM Sans, sans-serif',
       color: '#ffffff',
+      position: 'relative',
+      overflow: 'hidden',
     }"
   >
+    <!-- Background image -->
+    <img
+      src="https://admin.earnest.guru/assets/4a330103-c090-4dff-867f-3077f0470af9?key=hero"
+      width="1200"
+      height="630"
+      :style="{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '1200px',
+        height: '630px',
+        objectFit: 'cover',
+      }"
+    />
+    <!-- Dark overlay for text readability -->
+    <div :style="{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '1200px',
+      height: '630px',
+      backgroundColor: 'rgba(29, 29, 31, 0.75)',
+    }" />
     <!-- Top: label + logo -->
-    <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }">
+    <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 1 }">
       <div v-if="label" :style="{
         fontSize: '13px',
         fontWeight: 500,
@@ -36,7 +61,7 @@
     </div>
 
     <!-- Middle: title + description -->
-    <div :style="{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
+    <div :style="{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative', zIndex: 1 }">
       <h1 :style="{
         fontSize: title.length > 40 ? '52px' : '64px',
         fontWeight: 400,
@@ -61,7 +86,7 @@
     </div>
 
     <!-- Bottom: accent line + site url -->
-    <div>
+    <div :style="{ position: 'relative', zIndex: 1 }">
       <div :style="{
         width: '48px',
         height: '2px',
@@ -100,7 +125,7 @@ const props = withDefaults(defineProps<{
   description?: string
   label?: string
 }>(), {
-  title: 'Hue Studios',
+  title: 'Hue',
 })
 
 const truncatedDescription = computed(() => {

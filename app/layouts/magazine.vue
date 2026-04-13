@@ -1,5 +1,6 @@
 <template>
   <div class="relative">
+    <div class="pwa-safe-area" />
     <!-- Floating Menu Button -->
     <button
       class="fixed right-4 top-4 z-50 flex h-10 w-10 items-center justify-center transition-all hover:opacity-70"
@@ -127,5 +128,12 @@ onMounted(() => {
 .sheet-enter-from > div:last-child,
 .sheet-leave-to > div:last-child {
   transform: translateX(100%);
+}
+
+@media all and (display-mode: standalone) {
+  .pwa-safe-area {
+    height: env(safe-area-inset-top, 0px);
+    background: var(--color-bg);
+  }
 }
 </style>

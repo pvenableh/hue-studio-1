@@ -5,7 +5,7 @@ Full-service creative marketing for growth-stage companies. Brand strategy, digi
 ## Stack
 
 - **Framework**: Nuxt 4 (`compatibilityVersion: 4`)
-- **CMS**: Directus (headless, self-hosted at `admin.huestudios.company`)
+- **CMS**: Directus (headless, self-hosted at `admin.earnest.guru`)
 - **Styling**: Tailwind CSS v4 + custom design tokens (`hue-theme.css`)
 - **Fonts**: DM Sans + Cormorant Garamond
 - **Icons**: Nuxt Icon (`lucide:*`)
@@ -114,7 +114,7 @@ The `useDirectus` composable handles all reads. Key methods:
 - `fetchCaseStudyByUrl(url)` — single case study by URL slug
 - `submitContact()` / `submitAudit()` / `submitSubscribe()` — form submissions via `/api/submit`
 
-Assets: `https://admin.huestudios.company/assets/{uuid}?width=600&fit=cover&quality=80`
+Assets: `https://admin.earnest.guru/assets/{uuid}?width=600&fit=cover&quality=80`
 
 ## Design System
 

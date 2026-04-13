@@ -3,8 +3,8 @@
     <!-- Hero — full-bleed background image -->
     <section class="relative overflow-x-clip min-h-[70vh] flex items-end">
       <img
-        src="https://admin.huestudios.company/assets/9e511756-19ef-4b66-901a-43f57b743d77?key=xlarge"
-        alt="Hue Studios"
+        src="https://admin.earnest.guru/assets/9e511756-19ef-4b66-901a-43f57b743d77?key=xlarge"
+        alt="Hue"
         class="absolute inset-0 h-full w-full object-cover"
       />
       <div class="absolute inset-0 bg-black/40" />
@@ -72,7 +72,7 @@
     <section class="flex w-full flex-col md:h-[500px] lg:flex-row">
       <div
         class="relative h-[300px] w-full overflow-hidden bg-cover bg-center bg-no-repeat md:h-full lg:w-1/2"
-        style="background-image: url('https://admin.huestudios.company/assets/5d27ef8b-bb08-4105-8080-8729d90aae3e?key=large');"
+        style="background-image: url('https://admin.earnest.guru/assets/5d27ef8b-bb08-4105-8080-8729d90aae3e?key=large');"
       >
         <div class="absolute inset-0 bg-black/20" />
         <h2 class="relative z-10 p-8 text-right text-[3.5rem] leading-[0.9] font-light uppercase tracking-[0.05em] text-white/80 md:p-12 md:text-[5rem] lg:text-[6rem]">
@@ -81,7 +81,7 @@
       </div>
       <div
         class="relative flex h-[300px] w-full items-end overflow-hidden bg-cover bg-center bg-no-repeat md:h-full lg:w-1/2"
-        style="background-image: url('https://admin.huestudios.company/assets/c866dea4-2f22-48e2-adaf-7f0908524af7?key=large');"
+        style="background-image: url('https://admin.earnest.guru/assets/c866dea4-2f22-48e2-adaf-7f0908524af7?key=large');"
       >
         <div class="absolute inset-0 bg-black/20" />
         <h2 class="relative z-10 p-8 text-left text-[3.5rem] leading-[0.9] font-light uppercase tracking-[0.05em] text-white/80 md:p-12 md:text-[5rem] lg:text-[6rem]">
@@ -112,7 +112,7 @@
           <div>
             <div class="mb-8 overflow-hidden rounded-sm bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
               <img
-                src="https://admin.huestudios.company/assets/3b1d0737-f242-43f2-92cb-5bfdd0c907d8?width=552&height=875&format=webp"
+                src="https://admin.earnest.guru/assets/3b1d0737-f242-43f2-92cb-5bfdd0c907d8?width=552&height=875&format=webp"
                 alt="Camila Hoffman — Creative Director / CEO at Hue"
                 class="h-full w-full object-cover object-top"
                 loading="lazy"
@@ -142,7 +142,7 @@
           <div>
             <div class="mb-8 overflow-hidden rounded-sm bg-[var(--cloud)]" style="aspect-ratio: 4/5; max-height: 480px;">
               <img
-                src="https://admin.huestudios.company/assets/b7d8b15b-78d1-4c98-8e75-dfa8e2554381?width=552&height=875&format=webp"
+                src="https://admin.earnest.guru/assets/b7d8b15b-78d1-4c98-8e75-dfa8e2554381?width=552&height=875&format=webp"
                 alt="Peter Hoffman — Web Director & Development Lead at Hue"
                 class="h-full w-full object-cover"
                 loading="lazy"
@@ -228,7 +228,7 @@
 <script setup lang="ts">
 
 useSeoMeta({
-  title: 'About Hue Studios | Branding & Creative Marketing | Miami Beach & New York',
+  title: 'About Hue | Branding & Creative Marketing | Miami Beach & New York',
   description: 'Full-service creative marketing studio founded in 2005 by Camila Hoffman (former A|X Armani Exchange Art Director) and Peter Hoffman. Miami Beach & New York.',
 })
 
@@ -239,13 +239,13 @@ useSchemaOrg([
     '@type': 'Person',
     name: 'Camila Hoffman',
     jobTitle: 'Creative Director & Brand Strategist',
-    worksFor: { '@type': 'Organization', name: 'Hue Studios' },
+    worksFor: { '@type': 'Organization', name: 'Hue' },
   },
   {
     '@type': 'Person',
     name: 'Peter Hoffman',
     jobTitle: 'Web Director & Development Lead',
-    worksFor: { '@type': 'Organization', name: 'Hue Studios' },
+    worksFor: { '@type': 'Organization', name: 'Hue' },
   },
 ])
 

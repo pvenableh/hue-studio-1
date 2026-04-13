@@ -19,9 +19,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 useHead({
   title: 'Hue Intelligence — AI & Automation for Growing Organizations',
   meta: [
-    { name: 'description', content: 'Boutique AI and automation services from Hue Studios. Turn your organization\'s data into intelligence — reports, automations, content, and custom dashboards.' },
+    { name: 'description', content: 'Boutique AI and automation services from Hue. Turn your organization\'s data into intelligence — reports, automations, content, and custom dashboards.' },
     { property: 'og:title', content: 'Hue Intelligence — AI & Automation for Growing Organizations' },
-    { property: 'og:description', content: 'Boutique AI and automation services from Hue Studios. Turn your organization\'s data into intelligence — reports, automations, content, and custom dashboards.' },
+    { property: 'og:description', content: 'Boutique AI and automation services from Hue. Turn your organization\'s data into intelligence — reports, automations, content, and custom dashboards.' },
     { property: 'og:image', content: '/intelligence/og-image.png' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },

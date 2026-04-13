@@ -109,6 +109,11 @@ html.dark ::selection { background: var(--accent-on-dark); color: var(--near-bla
   }
 
   ::selection { background: var(--near-black); color: var(--white); }
+
+  /* Prevent iOS zoom on input focus — inputs below 16px trigger auto-zoom */
+  @media screen and (max-width: 767px) {
+    input, select, textarea { font-size: 16px !important; }
+  }
 }
 
 @layer components {

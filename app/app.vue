@@ -7,7 +7,7 @@
 <script setup lang="ts">
 // Strip the auto-appended site name — pages set their own full titles
 useHead({
-  titleTemplate: (title) => title || 'Hue Studios — Branding, Web Design, and Creative Marketing Agency',
+  titleTemplate: (title) => title || 'Hue — Branding, Web Design, and Creative Marketing Agency',
 })
 
 // Global Schema.org — Organization, WebSite, LocalBusiness
@@ -16,7 +16,7 @@ useSchemaOrg([
   {
     '@type': 'Organization',
     '@id': 'https://huestudios.com/#organization',
-    'name': 'Hue Studios',
+    'name': 'Hue',
     'url': 'https://huestudios.com',
     'logo': 'https://huestudios.com/icon-512x512.png',
     'description': 'Full-service brand strategy and digital experience firm. Woman-owned. Miami Beach and New York.',
@@ -56,7 +56,7 @@ useSchemaOrg([
   {
     '@type': 'WebSite',
     '@id': 'https://huestudios.com/#website',
-    'name': 'Hue Studios',
+    'name': 'Hue',
     'url': 'https://huestudios.com',
   },
 
@@ -64,7 +64,7 @@ useSchemaOrg([
   {
     '@type': ['LocalBusiness', 'ProfessionalService'],
     '@id': 'https://huestudios.com/#localbusiness-miami',
-    'name': 'Hue Studios',
+    'name': 'Hue',
     'parentOrganization': { '@id': 'https://huestudios.com/#organization' },
     'image': 'https://huestudios.com/icon-512x512.png',
     'url': 'https://huestudios.com',
@@ -90,7 +90,7 @@ useSchemaOrg([
   {
     '@type': ['LocalBusiness', 'ProfessionalService'],
     '@id': 'https://huestudios.com/#localbusiness-ny',
-    'name': 'Hue Studios',
+    'name': 'Hue',
     'parentOrganization': { '@id': 'https://huestudios.com/#organization' },
     'url': 'https://huestudios.com',
     'telephone': '+1-305-680-0485',

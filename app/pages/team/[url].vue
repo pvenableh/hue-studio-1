@@ -219,8 +219,8 @@ const teamOgImg = computed(() => {
 })
 
 useSeoMeta({
-  title: `${fullName.value} | ${member.value?.title} | Hue Studios`,
-  description: member.value?.headline ?? `${fullName.value}, ${member.value?.title} at Hue Studios.`,
+  title: `${fullName.value} | ${member.value?.title} | Hue`,
+  description: member.value?.headline ?? `${fullName.value}, ${member.value?.title} at Hue.`,
   ogImage: teamOgImg.value ?? undefined,
 })
 
@@ -233,7 +233,7 @@ useSchemaOrg([
     '@type': 'Person',
     name: fullName.value,
     jobTitle: member.value?.title ?? undefined,
-    worksFor: { '@type': 'Organization', name: 'Hue Studios' },
+    worksFor: { '@type': 'Organization', name: 'Hue' },
   },
 ])
 </script>

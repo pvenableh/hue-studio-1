@@ -644,7 +644,7 @@ const seoTitle = computed(() => {
   const service = item.value?.service?.name
   const industry = primaryIndustryName(item.value!)
   const context = [service, industry].filter(Boolean).join(' & ')
-  return context ? `${name} — ${context} | Hue Studios` : `${name} | Hue Studios`
+  return context ? `${name} — ${context} | Hue` : `${name} | Hue`
 })
 
 useSeoMeta({

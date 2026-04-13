@@ -292,7 +292,7 @@ function csImage(cs: DirectusCaseStudy): string | null {
 }
 
 useSeoMeta({
-  title: `${industry.value?.name ?? 'Industry'} | Industries | Hue Studios`,
+  title: `${industry.value?.name ?? 'Industry'} | Industries | Hue`,
   description: industry.value?.description ?? `Creative marketing services for the ${industry.value?.name} industry.`,
 })
 

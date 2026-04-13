@@ -10,7 +10,7 @@
         <!-- Text -->
         <div class="reveal reveal-delay-2">
           <p class="intel-body-lg mb-6">
-            Hue Studios is a boutique creative agency in Miami Beach, founded by Peter and Camila
+            Hue is a boutique creative agency in Miami Beach, founded by Peter and Camila
             Hoffman. Peter brings 15+ years of full-stack development across Nuxt, Directus, and
             modern AI tooling. Camila brings a decade of brand and creative direction, including
             work at A|X Armani Exchange.

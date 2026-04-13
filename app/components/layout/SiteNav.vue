@@ -6,23 +6,6 @@
       scrolled ? 'shadow-[0_1px_8px_rgba(0,0,0,0.06)]' : ''
     ]"
   >
-    <!-- Analysis announcement bar (hidden on Intelligence page) -->
-    <NuxtLink v-if="!isIntelligencePage" to="/brand-analysis" class="block px-2 md:px-6 py-2.5 transition-opacity hover:opacity-90" style="background: var(--color-accent); border-bottom: 1px solid var(--color-accent-hover);">
-      <div class="flex items-center justify-between gap-4">
-        <div class="flex items-center gap-2.5">
-          <span class="inline-flex items-center rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-medium uppercase tracking-wider text-white">Free</span>
-          <p class="text-[0.78rem] text-white/80">
-            <strong class="font-medium text-white">Brand Perception Analysis</strong>
-            <span class="hidden sm:inline"> — 10 questions. 15 minutes. Custom presentation in 5 days.</span>
-          </p>
-        </div>
-        <span class="flex shrink-0 items-center gap-1.5 text-[0.7rem] font-medium uppercase tracking-wider text-white">
-          Start Free
-          <Icon name="lucide:arrow-right" class="size-3" />
-        </span>
-      </div>
-    </NuxtLink>
-
     <!-- Main nav -->
     <nav :class="isDarkNav ? (scrolled ? 'bg-[var(--color-bg)]/90 backdrop-blur-xl' : 'bg-transparent backdrop-blur-none') : 'bg-[var(--color-bg)]/70 backdrop-blur-xl'" class="overflow-hidden transition-colors duration-300">
       <div class="relative flex h-16 items-end px-2 md:px-6 pb-3">
@@ -165,9 +148,6 @@ const navLinks = [
 // Dark mode state — nav adapts to site-wide toggle
 const { isDark, toggle: toggleDarkMode } = useDarkMode()
 const isDarkNav = isDark
-
-// Intelligence page hides the announcement bar
-const isIntelligencePage = computed(() => route.path.startsWith('/intelligence'))
 
 // Close mobile menu on route change
 const route = useRoute()

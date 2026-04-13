@@ -228,7 +228,7 @@ function csImage(cs: DirectusCaseStudy): string | null {
 }
 
 useSeoMeta({
-  title: `${service.value?.name ?? 'Service'} | Creative Services | Hue Studios`,
+  title: `${service.value?.name ?? 'Service'} | Creative Services | Hue`,
   description: service.value?.caption ?? `Creative ${service.value?.name} services by Hue.`,
 })
 

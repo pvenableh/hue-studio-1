@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     ga4PropertyId: process.env.GA4_PROPERTY_ID,
     analyticsPassword: process.env.ANALYTICS_PASSWORD,
     public: {
-      directusUrl: process.env.NUXT_PUBLIC_DIRECTUS_URL || 'https://admin.huestudios.company',
+      directusUrl: process.env.NUXT_PUBLIC_DIRECTUS_URL || 'https://admin.earnest.guru',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://huestudios.com',
     },
   },
@@ -56,7 +56,7 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://huestudios.com',
-    name: 'Hue Studios — Branding, Web Design, and Creative Marketing Agency',
+    name: 'Hue — Branding, Web Design, and Creative Marketing Agency',
     description: 'Full-service creative marketing for growth-stage companies. Brand strategy, digital experience, and lead generation that drives real business outcomes.',
     defaultLocale: 'en',
   },
@@ -105,7 +105,7 @@ export default defineNuxtConfig({
   },
 
   image: {
-    domains: ['admin.huestudios.company'],
+    domains: ['admin.earnest.guru'],
     formats: ['webp', 'jpg'],
   },
 

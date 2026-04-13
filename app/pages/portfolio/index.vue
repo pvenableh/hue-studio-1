@@ -89,7 +89,7 @@ import type { DirectusPortfolioItem } from '~/composables/useDirectus'
 import { industries as staticIndustries } from '~/data/industries'
 
 useSeoMeta({
-  title: 'Portfolio | Creative Marketing Work | Hue Studios',
+  title: 'Portfolio | Creative Marketing Work | Hue',
   description: 'Browse our portfolio of brand strategy, web design, print, and creative marketing work for growth-stage companies.',
 })
 
