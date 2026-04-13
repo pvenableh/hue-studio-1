@@ -16,7 +16,7 @@
   >
     <!-- Background image -->
     <img
-      src="https://admin.earnest.guru/assets/4a330103-c090-4dff-867f-3077f0470af9?key=hero"
+      :src="backgroundSrc"
       width="1200"
       height="630"
       :style="{
@@ -124,9 +124,12 @@ const props = withDefaults(defineProps<{
   title: string
   description?: string
   label?: string
+  background?: string
 }>(), {
-  title: 'Hue',
+  title: 'Hue Creative Marketing',
 })
+
+const backgroundSrc = computed(() => props.background || '/og-background.jpg')
 
 const truncatedDescription = computed(() => {
   if (!props.description) return ''
