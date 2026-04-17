@@ -30,7 +30,7 @@
         <span v-if="!compact && industry && !item.service?.name" class="hue-label-sm text-[var(--silver)]">{{ industry }}</span>
       </div>
       <h3 :class="compact ? 'text-[0.6875rem] font-medium uppercase tracking-[0.12em] leading-snug' : 'text-[1rem] font-light leading-snug'" class="transition-transform duration-300 group-hover:translate-x-1">{{ item.name }}</h3>
-      <p v-if="item.client" class="mt-1 text-[0.8125rem] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
+      <p v-if="item.client" class="mt-1 text-[0.625rem] uppercase tracking-[0.12em] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
       <p v-if="!compact && item.caption" class="mt-3 text-[0.8125rem] text-[var(--dark-grey)] leading-relaxed line-clamp-2" v-html="stripTags(item.caption ?? '')" />
     </div>
   </NuxtLink>

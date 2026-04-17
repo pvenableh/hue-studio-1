@@ -95,12 +95,18 @@ const caseStudyList = computed(() => caseStudies.value ?? [])
 /** Smart image fallback: logo portfolio item → featured_image → first portfolio item image */
 function cardImage(cs: DirectusCaseStudy): string | null {
   const portfolioItems = cs.portfolio_items ?? []
-  const logoItem = portfolioItems.find((pi) =>
-    pi.portfolio_id?.service?.name?.toLowerCase().includes('brand') && pi.portfolio_id?.featured_image
-  )
-  if (logoItem?.portfolio_id?.featured_image) {
-    return assetUrl(logoItem.portfolio_id.featured_image, 'medium-contain')
-  }
+
+  const logoImageId = (() => {
+    const logoItem = portfolioItems.find((pi) => {
+      const svc = pi.portfolio_id?.service?.name?.toLowerCase() ?? ''
+      const name = pi.portfolio_id?.name?.toLowerCase() ?? ''
+      return svc.includes('logo') || svc.includes('brand') || name.includes('logo')
+    })
+    return logoItem?.portfolio_id?.featured_image
+      ?? logoItem?.portfolio_id?.images?.[0]?.directus_files_id
+      ?? null
+  })()
+  if (logoImageId) return assetUrl(logoImageId, 'medium-contain')
 
   if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
 
