@@ -97,11 +97,14 @@
         <template v-if="allImages.length === 1">
           <p class="hue-label mb-8">Gallery</p>
           <div class="relative flex items-center justify-center overflow-hidden border border-black/[0.04] bg-white p-4 aspect-[4/3] md:aspect-[16/9] shadow-[0_8px_40px_rgba(0,0,0,0.08)]">
-            <img
-              :src="assetUrl(allImages[0].directus_files_id, 'large-contain')"
-              :alt="item.name"
-              class="relative max-h-full max-w-full object-contain"
-            />
+            <picture>
+              <source media="(min-width: 768px)" :srcset="assetUrl(allImages[0].directus_files_id, 'xlarge-contain')" />
+              <img
+                :src="assetUrl(allImages[0].directus_files_id, 'large-contain')"
+                :alt="item.name"
+                class="relative max-h-full max-w-full object-contain"
+              />
+            </picture>
           </div>
         </template>
 
@@ -132,12 +135,15 @@
               :key="img.directus_files_id"
               class="relative w-full flex-none snap-start flex items-center justify-center overflow-hidden border border-black/[0.04] bg-white p-4 aspect-[4/3] md:aspect-[16/9] shadow-[0_8px_40px_rgba(0,0,0,0.08)]"
             >
-              <img
-                :src="assetUrl(img.directus_files_id, 'large-contain')"
-                :alt="`${item.name} — image ${i + 1}`"
-                class="relative max-h-full max-w-full object-contain"
-                loading="lazy"
-              />
+              <picture>
+                <source media="(min-width: 768px)" :srcset="assetUrl(img.directus_files_id, 'xlarge-contain')" />
+                <img
+                  :src="assetUrl(img.directus_files_id, 'large-contain')"
+                  :alt="`${item.name} — image ${i + 1}`"
+                  class="relative max-h-full max-w-full object-contain"
+                  loading="lazy"
+                />
+              </picture>
             </div>
           </div>
         </template>

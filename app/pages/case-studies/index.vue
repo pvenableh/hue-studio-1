@@ -92,10 +92,8 @@ const { data: caseStudies, pending } = await useAsyncData('case-studies', () => 
 
 const caseStudyList = computed(() => caseStudies.value ?? [])
 
-/** Smart image fallback: featured_image → logo portfolio item → first portfolio item image */
+/** Smart image fallback: logo portfolio item → featured_image → first portfolio item image */
 function cardImage(cs: DirectusCaseStudy): string | null {
-  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
-
   const portfolioItems = cs.portfolio_items ?? []
   const logoItem = portfolioItems.find((pi) =>
     pi.portfolio_id?.service?.name?.toLowerCase().includes('brand') && pi.portfolio_id?.featured_image
@@ -103,6 +101,8 @@ function cardImage(cs: DirectusCaseStudy): string | null {
   if (logoItem?.portfolio_id?.featured_image) {
     return assetUrl(logoItem.portfolio_id.featured_image, 'medium-contain')
   }
+
+  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
 
   const anyWithImage = portfolioItems.find((pi) => pi.portfolio_id?.featured_image)
   if (anyWithImage?.portfolio_id?.featured_image) {
