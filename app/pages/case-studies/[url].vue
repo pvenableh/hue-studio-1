@@ -230,12 +230,12 @@
                 <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-5 transition-colors hover:bg-[var(--snow)]">
                   <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
-                  <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+                  <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
                 </NuxtLink>
                 <div v-else class="p-5">
                   <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
-                  <p v-if="item.caption" class="mt-2 text-[0.75rem] italic text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+                  <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
                 </div>
               </div>
             </div>

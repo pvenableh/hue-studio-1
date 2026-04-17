@@ -17,6 +17,7 @@
             </h1>
             <p v-if="item.description" class="hue-body-lg max-w-lg text-[var(--grey)]" v-html="item.description" />
             <p v-else-if="item.synopsis" class="hue-body-lg max-w-lg text-[var(--grey)]" v-html="item.synopsis" />
+            <p v-if="item.caption" class="mt-4 max-w-lg text-[0.875rem] leading-relaxed text-[var(--grey)]" v-html="item.caption" />
           </div>
 
           <!-- Meta card -->
