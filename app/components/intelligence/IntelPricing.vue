@@ -18,7 +18,7 @@
           }"
         >
           <!-- Badge -->
-          <span v-if="pkg.featured" class="intel-pill-gold absolute -top-3 left-6">Most Popular</span>
+          <span v-if="pkg.featured" class="intel-pill-gold absolute -top-3 left-6 !bg-black">Most Popular</span>
 
           <p class="intel-eyebrow mb-3" :style="{ color: pkg.featured ? 'var(--color-accent)' : 'var(--color-text-muted)' }">
             {{ pkg.name }}
