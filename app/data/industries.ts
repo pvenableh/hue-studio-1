@@ -197,6 +197,29 @@ export const industries: Industry[] = [
     clients: ['A|X Armani Exchange BeachDance', 'Bridge Run', 'Industry Summit', 'BPO Launch Event'],
     quote: { text: 'The experience started before anyone walked through the door — and never let up.', author: 'Director of Marketing, A|X Armani Exchange' },
   },
+  {
+    slug: 'marketing-communications',
+    name: 'Marketing & Communications',
+    shortName: 'Marketing',
+    color: '#4A1E1E',
+    headline: 'Campaigns and content that earn attention — and convert it.',
+    description: 'Marketing teams, PR firms, and in-house communications leaders need creative partners who can move at the pace of the market. We bring brand-grade craft to campaigns, content, and collateral — so every send, post, and pitch lands with the same polish as your flagship work.',
+    challenges: [
+      'Producing on-brand campaign assets at the pace marketing actually moves',
+      'Translating brand strategy into channel-ready creative',
+      'Maintaining quality across paid, owned, and earned touchpoints',
+      'Supporting in-house teams without losing brand cohesion',
+    ],
+    solutions: [
+      'Campaign concepts and asset systems built for production scale',
+      'Email, social, and ad creative that ladders up to brand',
+      'Press kits, launch materials, and PR collateral',
+      'Annual reports and corporate communications design',
+    ],
+    services: ['Brand Strategy & Identity', 'Print & Graphic Design', 'Digital & Web Design', 'Audio & Video Production'],
+    clients: ['A|X Armani Exchange', 'The Agency · Broome County IDA', 'Bridge Run', 'Industry Summit'],
+    quote: { text: 'Every channel landed in sync — no handoff drag, no brand drift.', author: 'Director of Communications' },
+  },
 ]
 
 export function getIndustryBySlug(slug: string) {
