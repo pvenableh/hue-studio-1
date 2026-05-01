@@ -259,6 +259,79 @@
       </div>
     </section>
 
+    <!-- Desktop: deliverables only (no outcome) -->
+    <section
+      v-else-if="!narrativeResults && childProjects.length"
+      class="hidden lg:block border-t border-[var(--silk)] px-2 md:px-6 py-20"
+    >
+      <div class="hue-container">
+        <p class="hue-label mb-8">Project Deliverables</p>
+        <div class="grid grid-cols-2 gap-6 lg:grid-cols-3">
+          <div
+            v-for="item in childProjects"
+            :key="item.id"
+            class="group block overflow-hidden border border-[var(--silk)] bg-white"
+          >
+            <!-- Video carousel -->
+            <div v-if="itemVideos(item).length" class="relative overflow-hidden bg-black" style="aspect-ratio: 16/9;">
+              <Transition name="video-fade" mode="out-in">
+                <iframe
+                  v-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'youtube'"
+                  :key="`d-yt-${item.id}-${currentVideoIndex(item.id)}`"
+                  :src="`https://www.youtube.com/embed/${extractYouTubeId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                  class="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                />
+                <iframe
+                  v-else-if="itemVideos(item)[currentVideoIndex(item.id)]?.platform === 'vimeo'"
+                  :key="`d-vi-${item.id}-${currentVideoIndex(item.id)}`"
+                  :src="`https://player.vimeo.com/video/${extractVimeoId(itemVideos(item)[currentVideoIndex(item.id)].link)}`"
+                  class="absolute inset-0 h-full w-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                />
+              </Transition>
+              <div v-if="itemVideos(item).length > 1" class="pointer-events-none absolute inset-0 z-10 flex items-center justify-between px-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <button class="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)] transition-colors hover:bg-white hover:text-[var(--near-black)]" @click="stepVideo(item.id, -1, itemVideos(item).length)">
+                  <Icon name="lucide:chevron-left" class="size-4" />
+                </button>
+                <button class="pointer-events-auto flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm text-[var(--grey)] transition-colors hover:bg-white hover:text-[var(--near-black)]" @click="stepVideo(item.id, 1, itemVideos(item).length)">
+                  <Icon name="lucide:chevron-right" class="size-4" />
+                </button>
+              </div>
+              <div v-if="itemVideos(item).length > 1" class="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 flex gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span v-for="(_, vi) in itemVideos(item)" :key="vi" class="block h-1.5 w-1.5 rounded-full transition-colors" :class="vi === currentVideoIndex(item.id) ? 'bg-white' : 'bg-white/40'" />
+              </div>
+            </div>
+            <!-- Image fallback -->
+            <component
+              v-else
+              :is="item.url ? NuxtLink : 'div'"
+              v-bind="item.url ? { to: `/portfolio/${item.url}` } : {}"
+              class="block transition-colors hover:bg-[var(--snow)]"
+            >
+              <div v-if="portfolioImgUrl(item)" class="flex items-center justify-center overflow-hidden bg-white" style="aspect-ratio: 16/9;">
+                <img :src="portfolioImgUrl(item)!" :alt="item.name" class="max-h-[70%] max-w-[75%] object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+              </div>
+            </component>
+            <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-5 transition-colors hover:bg-[var(--snow)]">
+              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
+              <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+            </NuxtLink>
+            <div v-else class="p-5">
+              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
+              <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══ MOBILE FALLBACK — current sequential layout ═══ -->
 
     <!-- Mobile: deliverables -->

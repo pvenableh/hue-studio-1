@@ -97,7 +97,7 @@ defineOgImage({ component: 'HueOg', props: { title: 'Portfolio', description: 'S
 
 const { fetchPortfolio, assetUrl, primaryImageId, primaryIndustryName } = useDirectus()
 
-const { data: allItems, pending } = await useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100, parentOnly: true }))
+const { data: allItems, pending } = await useAsyncData('portfolio-all', () => fetchPortfolio({ limit: 100, parentOnly: true, featured: true }))
 
 const activeService  = ref('All')
 const activeIndustry = ref('All')

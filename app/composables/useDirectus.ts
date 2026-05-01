@@ -334,7 +334,7 @@ export function useDirectus() {
     'hero',
   ].join(',')
 
-  async function fetchPortfolio(options: { limit?: number; parentOnly?: boolean } = {}): Promise<DirectusPortfolioItem[]> {
+  async function fetchPortfolio(options: { limit?: number; parentOnly?: boolean; featured?: boolean } = {}): Promise<DirectusPortfolioItem[]> {
     const params = new URLSearchParams({
       fields: PORTFOLIO_FIELDS,
       'filter[status][_eq]': 'published',
@@ -342,6 +342,7 @@ export function useDirectus() {
       sort: 'sort',
     })
     if (options.parentOnly) params.set('filter[parent_id][_null]', 'true')
+    if (options.featured) params.set('filter[featured][_eq]', 'true')
     const res = await directusFetch<{ data: DirectusPortfolioItem[] }>('items/portfolio', params)
     return res.data ?? []
   }
