@@ -174,6 +174,29 @@ export const industries: Industry[] = [
     clients: ['Binghamton Philharmonic Orchestra', 'Broome is Good', 'Bridge Run'],
     quote: { text: 'The rebrand helped us raise more in one gala than the previous three combined.', author: 'Executive Director' },
   },
+  {
+    slug: 'hospitality-events',
+    name: 'Hospitality & Events',
+    shortName: 'Hospitality',
+    color: '#3D2C2E',
+    headline: 'Brands that turn moments into memories — and guests into regulars.',
+    description: 'Restaurants, hotels, venues, and event producers compete on experience. We create brand identities, environmental graphics, menus, and digital touchpoints that extend the hospitality you offer in person — so the first impression online matches the one guests get at the door.',
+    challenges: [
+      'Brand presence that doesn\'t match the in-person experience',
+      'Event launches that fail to generate press and social momentum',
+      'Menus, signage, and collateral that feel disconnected from the identity',
+      'Booking and reservation flows that lose guests before they convert',
+    ],
+    solutions: [
+      'Brand identity and visual systems built for hospitality settings',
+      'End-to-end event design — from save-the-dates to on-site environment',
+      'Menu, signage, and collateral systems that scale across locations',
+      'Booking-first websites and digital touchpoints',
+    ],
+    services: ['Brand Strategy & Identity', 'Event Design & Production', 'Print & Graphic Design', 'Digital & Web Design'],
+    clients: ['A|X Armani Exchange BeachDance', 'Bridge Run', 'Industry Summit', 'BPO Launch Event'],
+    quote: { text: 'The experience started before anyone walked through the door — and never let up.', author: 'Director of Marketing, A|X Armani Exchange' },
+  },
 ]
 
 export function getIndustryBySlug(slug: string) {

@@ -11,7 +11,7 @@
       <div class="hue-container relative">
         <div class="grid gap-12 lg:grid-cols-[1fr_320px]">
           <div>
-            <p ref="heroLabel" class="hue-label mb-4">{{ item.service?.name }}{{ industryLabel ? ` · ${industryLabel}` : '' }}</p>
+            <p ref="heroLabel" class="hue-label mb-4">{{ primaryService(item)?.name }}{{ industryLabel ? ` · ${industryLabel}` : '' }}</p>
             <h1 ref="heroTitle" class="mb-5 max-w-[14ch] uppercase tracking-[0.08em] leading-[0.95] font-light text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem]" style="font-family: var(--font)">
               {{ item.name }}
             </h1>
@@ -37,11 +37,13 @@
                 >{{ ind.name }}</NuxtLink>
               </div>
             </div>
-            <div v-if="item.service">
+            <div v-if="itemServices.length">
               <p class="hue-label-sm mb-1.5 text-[var(--silver)]">Services</p>
               <div class="flex flex-wrap gap-1.5">
-                <NuxtLink v-if="item.service.url" :to="`/creative-services/${item.service.url}`" class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]">{{ item.service.name }}</NuxtLink>
-                <span v-else class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ item.service.name }}</span>
+                <template v-for="svc in itemServices" :key="svc.id">
+                  <NuxtLink v-if="svc.url" :to="`/creative-services/${svc.url}`" class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)] transition-all hover:border-[var(--near-black)] hover:text-[var(--near-black)]">{{ svc.name }}</NuxtLink>
+                  <span v-else class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ svc.name }}</span>
+                </template>
                 <template v-if="childServices.length">
                   <span v-for="svc in childServices" :key="svc" class="rounded-full border border-[var(--silk)] px-3 py-1 text-[0.5625rem] font-medium uppercase tracking-[0.15em] text-[var(--grey)]">{{ svc }}</span>
                 </template>
@@ -200,7 +202,7 @@
               <img :src="childImgUrl(child)!" :alt="child.name" class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
             </div>
             <div class="p-5">
-              <p v-if="child.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ child.service.name }}</p>
+              <p v-if="primaryService(child)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(child)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ child.name }}</h3>
             </div>
           </component>
@@ -300,7 +302,7 @@
               <img :src="childImgUrl(sib)!" :alt="sib.name" class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy" />
             </div>
             <div class="p-5">
-              <p v-if="sib.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ sib.service.name }}</p>
+              <p v-if="primaryService(sib)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(sib)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ sib.name }}</h3>
             </div>
           </component>
@@ -384,7 +386,7 @@ const route = useRoute()
 const slug = route.params.slug as string
 const { trackBeforeAfterInteraction, trackPortfolioView } = useAnalytics()
 const { useScrollDepthTracker } = useTracking()
-const { fetchPortfolioItem, fetchPortfolio, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, stripHtml } = useDirectus()
+const { fetchPortfolioItem, fetchPortfolio, fetchCaseStudies, assetUrl, resolvedBeforeAfters, primaryImageId, primaryIndustryName, primaryService, stripHtml } = useDirectus()
 
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 
@@ -402,7 +404,7 @@ if (!item.value) {
 if (import.meta.client) {
   trackPortfolioView(
     item.value.name ?? '',
-    item.value.service?.name,
+    primaryService(item.value)?.name,
     primaryIndustryName(item.value),
   )
 }
@@ -451,7 +453,7 @@ const bgWord = computed(() => {
 const ctaHeadline = computed(() => {
   if (beforeAfters.value.length) return 'Ready for your own<br><em>before &amp; after?</em>'
   if (itemVideos.value.length) return 'Ready to tell<br><em>your story?</em>'
-  const svc = item.value?.service?.name?.toLowerCase() ?? ''
+  const svc = primaryService(item.value)?.name?.toLowerCase() ?? ''
   if (svc.includes('brand')) return 'Ready to build<br><em>your brand?</em>'
   if (svc.includes('digital') || svc.includes('web')) return 'Ready for a<br><em>digital presence?</em>'
   if (svc.includes('print') || svc.includes('graphic')) return 'Ready to make<br><em>an impression?</em>'
@@ -589,14 +591,19 @@ function startDrag(idx: number, e: MouseEvent | TouchEvent) {
   window.addEventListener('touchend', onUp)
 }
 
-// Collect unique service names from child projects
+const itemServices = computed(() =>
+  (item.value?.services ?? []).map((s) => s.services_id).filter((s): s is NonNullable<typeof s> => !!s)
+)
+
+// Collect unique service names from child projects (excluding parent's services)
 const childServices = computed(() => {
-  const parentService = item.value?.service?.name
+  const parentNames = new Set(itemServices.value.map((s) => s.name))
   const names = new Set<string>()
   ;(item.value?.projects ?? []).forEach((child) => {
-    if (child.service?.name && child.service.name !== parentService) {
-      names.add(child.service.name)
-    }
+    child.services?.forEach((s) => {
+      const n = s.services_id?.name
+      if (n && !parentNames.has(n)) names.add(n)
+    })
   })
   return [...names]
 })
@@ -612,13 +619,13 @@ const { data: allPortfolio } = await useAsyncData('portfolio-all-for-related', (
 const relatedWork = computed(() => {
   if (!item.value || !allPortfolio.value) return []
   const currentId = item.value.id
-  const serviceId = item.value.service?.id
+  const serviceIds = new Set((item.value.services ?? []).map((s) => s.services_id?.id).filter(Boolean))
   const industryIds = new Set((item.value.industries ?? []).map((i) => i.industries_id?.id).filter(Boolean))
 
   return allPortfolio.value
     .filter((p) => {
       if (p.id === currentId) return false
-      const sameService = serviceId && p.service?.id === serviceId
+      const sameService = (p.services ?? []).some((s) => serviceIds.has(s.services_id?.id))
       const sameIndustry = (p.industries ?? []).some((i) => industryIds.has(i.industries_id?.id))
       return sameService || sameIndustry
     })
@@ -648,7 +655,7 @@ const ogDesc = computed(() => item.value?.synopsis ? stripHtml(item.value.synops
 
 const seoTitle = computed(() => {
   const name = item.value?.name ?? 'Project'
-  const service = item.value?.service?.name
+  const service = primaryService(item.value)?.name
   const industry = primaryIndustryName(item.value!)
   const context = [service, industry].filter(Boolean).join(' & ')
   return context ? `${name} — ${context} | Hue` : `${name} | Hue`

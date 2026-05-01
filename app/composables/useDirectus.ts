@@ -112,7 +112,7 @@ export interface DirectusPortfolioItem {
   date_created: string | null
   date_updated: string | null
   client: DirectusClient | null
-  service: DirectusService | null
+  services: { services_id: DirectusService | null }[]
   industries: DirectusPortfolioIndustry[]
   images: DirectusPortfolioFile[]
   before_and_afters: DirectusPortfolioBeforeAndAfter[]
@@ -312,8 +312,9 @@ export function useDirectus() {
     'client.id', 'client.name', 'client.slug', 'client.code',
     'client.website', 'client.logo', 'client.industry',
     'client.organization.id', 'client.organization.name', 'client.organization.short_name',
-    'service.id', 'service.name', 'service.title', 'service.url',
-    'service.color', 'service.class', 'service.caption', 'service.word',
+    'services.services_id.id', 'services.services_id.name', 'services.services_id.title',
+    'services.services_id.url', 'services.services_id.color', 'services.services_id.class',
+    'services.services_id.caption', 'services.services_id.word',
     'industries.id', 'industries.sort',
     'industries.industries_id.id', 'industries.industries_id.name',
     'industries.industries_id.url', 'industries.industries_id.color',
@@ -328,7 +329,8 @@ export function useDirectus() {
     'before_and_afters.before_and_afters_id.is_logo',
     'projects.id', 'projects.name', 'projects.slug', 'projects.url', 'projects.status',
     'projects.caption', 'projects.featured_image',
-    'projects.service.id', 'projects.service.name', 'projects.service.url',
+    'projects.services.services_id.id', 'projects.services.services_id.name',
+    'projects.services.services_id.url',
     'projects.images.directus_files_id', 'projects.images.sort',
     'videos.id', 'videos.platform', 'videos.link', 'videos.title', 'videos.description',
     'hero',
@@ -398,7 +400,7 @@ export function useDirectus() {
         'synopsis', 'challenge', 'creation', 'results',
         'featured_image', 'featured', 'parent_id',
         'client.id', 'client.name',
-        'service.id', 'service.name', 'service.url',
+        'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
         'images.directus_files_id',
         'before_and_afters.before_and_afters_id.id',
         'before_and_afters.before_and_afters_id.title',
@@ -406,7 +408,7 @@ export function useDirectus() {
         'before_and_afters.before_and_afters_id.after_image',
     'before_and_afters.before_and_afters_id.is_logo',
         'projects.id', 'projects.name', 'projects.slug', 'projects.url',
-        'projects.featured_image', 'projects.service.name',
+        'projects.featured_image', 'projects.services.services_id.name',
         'projects.images.directus_files_id',
       ].join(','),
       'filter[status][_eq]': 'published',
@@ -454,14 +456,14 @@ export function useDirectus() {
         'synopsis', 'challenge', 'creation', 'results',
         'featured_image', 'featured', 'parent_id',
         'client.id', 'client.name',
-        'service.id', 'service.name', 'service.url',
+        'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
         'images.directus_files_id',
         'projects.id', 'projects.name', 'projects.slug', 'projects.url',
-        'projects.featured_image', 'projects.service.name',
+        'projects.featured_image', 'projects.services.services_id.name',
         'projects.images.directus_files_id',
       ].join(','),
       'filter[status][_eq]': 'published',
-      'filter[service][_eq]': serviceId,
+      'filter[services][services_id][_eq]': serviceId,
       limit: '100',
       sort: 'sort',
     })
@@ -513,8 +515,8 @@ export function useDirectus() {
     'portfolio_items.portfolio_id.parent_id',
     'portfolio_items.portfolio_id.client.id',
     'portfolio_items.portfolio_id.client.name',
-    'portfolio_items.portfolio_id.service.id',
-    'portfolio_items.portfolio_id.service.name',
+    'portfolio_items.portfolio_id.services.services_id.id',
+    'portfolio_items.portfolio_id.services.services_id.name',
     'portfolio_items.portfolio_id.images.directus_files_id',
     'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.id',
     'portfolio_items.portfolio_id.before_and_afters.before_and_afters_id.title',
@@ -695,6 +697,10 @@ export function useDirectus() {
     return item.industries?.[0]?.industries_id?.url ?? ''
   }
 
+  function primaryService(item: DirectusPortfolioItem): DirectusService | null {
+    return item.services?.[0]?.services_id ?? null
+  }
+
   function stripHtml(html: string | null | undefined): string {
     return html?.replace(/<[^>]+>/g, '') ?? ''
   }
@@ -867,6 +873,7 @@ export function useDirectus() {
     resolvedBeforeAfters,
     primaryIndustryName,
     primaryIndustryUrl,
+    primaryService,
     stripHtml,
     fetchBlogPosts,
     fetchBlogPost,

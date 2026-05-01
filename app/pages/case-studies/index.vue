@@ -98,7 +98,7 @@ function cardImage(cs: DirectusCaseStudy): string | null {
 
   const logoImageId = (() => {
     const logoItem = portfolioItems.find((pi) => {
-      const svc = pi.portfolio_id?.service?.name?.toLowerCase() ?? ''
+      const svc = pi.portfolio_id?.services?.[0]?.services_id?.name?.toLowerCase() ?? ''
       const name = pi.portfolio_id?.name?.toLowerCase() ?? ''
       return svc.includes('logo') || svc.includes('brand') || name.includes('logo')
     })

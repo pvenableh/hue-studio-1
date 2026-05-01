@@ -104,7 +104,9 @@ const activeIndustry = ref('All')
 
 const serviceFilters = computed(() => {
   const names = new Set<string>(['All'])
-  ;(allItems.value ?? []).forEach((p) => { if (p.service?.name) names.add(p.service.name) })
+  ;(allItems.value ?? []).forEach((p) => {
+    p.services?.forEach((s) => { if (s.services_id?.name) names.add(s.services_id.name) })
+  })
   return [...names]
 })
 
@@ -118,7 +120,7 @@ const dynamicIndustries = computed(() => {
 
 const filtered = computed(() => {
   return (allItems.value ?? []).filter((p) => {
-    const svc = activeService.value === 'All' || p.service?.name === activeService.value
+    const svc = activeService.value === 'All' || (p.services ?? []).some((s) => s.services_id?.name === activeService.value)
     const ind = activeIndustry.value === 'All' ||
       p.industries?.some((i) => i.industries_id?.name === activeIndustry.value)
     return svc && ind

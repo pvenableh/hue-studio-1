@@ -203,7 +203,7 @@ import type { DirectusPortfolioItem, DirectusCaseStudy } from '~/composables/use
 
 const route = useRoute()
 const { trackArticleView } = useAnalytics()
-const { fetchBlogPost, fetchPortfolio, fetchCaseStudies, fetchRelatedBlogPosts, assetUrl } = useDirectus()
+const { fetchBlogPost, fetchPortfolio, fetchCaseStudies, fetchRelatedBlogPosts, assetUrl, primaryService } = useDirectus()
 
 const { data: post } = await useAsyncData(
   `blog-${route.params.slug}`,
@@ -370,7 +370,7 @@ const relatedWork = computed<WorkCard[]>(() => {
   // Then portfolio items
   for (const p of (allPortfolio.value ?? [])) {
     if (!p.id || seen.has(p.id)) continue
-    const matchesSvc = svcIds.size > 0 && svcIds.has(p.service?.id)
+    const matchesSvc = svcIds.size > 0 && (p.services ?? []).some((s) => svcIds.has(s.services_id?.id))
     const matchesInd = (p.industries ?? []).some((i: any) => indIds.has(i.industries_id?.id))
     if (!matchesSvc && !matchesInd) continue
     seen.add(p.id)
@@ -381,7 +381,7 @@ const relatedWork = computed<WorkCard[]>(() => {
       excerpt: null,
       to: `/portfolio/${p.url}`,
       image: workImgUrl(p),
-      service: p.service?.name ?? null,
+      service: primaryService(p)?.name ?? null,
       client: p.client?.name ?? null,
     })
   }

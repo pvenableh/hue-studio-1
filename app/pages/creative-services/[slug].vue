@@ -121,7 +121,7 @@ import type { DirectusPortfolioItem, DirectusCaseStudy } from '~/composables/use
 const route = useRoute()
 const slug = route.params.slug as string
 
-const { fetchServiceByUrl, fetchServicePortfolio, fetchServiceCaseStudies, fetchServices, fetchIndustries, assetUrl } = useDirectus()
+const { fetchServiceByUrl, fetchServicePortfolio, fetchServiceCaseStudies, fetchServices, fetchIndustries, assetUrl, primaryService } = useDirectus()
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 
 const heroRef = ref<HTMLElement | null>(null)
@@ -192,7 +192,7 @@ const allWork = computed<WorkCard[]>(() => {
       excerpt: null,
       to: `/portfolio/${p.url}`,
       image: imgUrl(p),
-      service: p.service?.name ?? null,
+      service: primaryService(p)?.name ?? null,
       client: p.client?.name ?? null,
     })
   }

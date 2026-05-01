@@ -26,8 +26,8 @@
     <!-- Info -->
     <div :class="compact ? 'p-5' : 'p-6'">
       <div class="mb-2 flex items-center justify-between">
-        <span class="hue-label-sm" style="color: var(--color-accent);">{{ item.service?.name }}{{ industry ? ` · ${industry}` : '' }}</span>
-        <span v-if="!compact && industry && !item.service?.name" class="hue-label-sm text-[var(--silver)]">{{ industry }}</span>
+        <span class="hue-label-sm" style="color: var(--color-accent);">{{ primaryService(item)?.name }}{{ industry ? ` · ${industry}` : '' }}</span>
+        <span v-if="!compact && industry && !primaryService(item)?.name" class="hue-label-sm text-[var(--silver)]">{{ industry }}</span>
       </div>
       <h3 :class="compact ? 'text-[0.6875rem] font-medium uppercase tracking-[0.12em] leading-snug' : 'text-[1rem] font-light leading-snug'" class="transition-transform duration-300 group-hover:translate-x-1">{{ item.name }}</h3>
       <p v-if="item.client" class="mt-1 text-[0.625rem] uppercase tracking-[0.12em] text-[var(--color-text-muted)]">{{ item.client.name }}</p>
@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<{
   overlay: false,
 })
 
-const { stripHtml } = useDirectus()
+const { stripHtml, primaryService } = useDirectus()
 
 function stripTags(html: string) {
   return stripHtml(html)

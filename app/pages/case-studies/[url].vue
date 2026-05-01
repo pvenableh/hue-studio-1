@@ -228,12 +228,12 @@
                   </div>
                 </component>
                 <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-5 transition-colors hover:bg-[var(--snow)]">
-                  <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+                  <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
                   <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
                 </NuxtLink>
                 <div v-else class="p-5">
-                  <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+                  <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
                   <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
                   <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
                 </div>
@@ -318,12 +318,12 @@
               </div>
             </component>
             <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-5 transition-colors hover:bg-[var(--snow)]">
-              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
               <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
             </NuxtLink>
             <div v-else class="p-5">
-              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
               <p v-if="item.caption" class="mt-2 text-[0.75rem] text-[var(--grey)] line-clamp-2" v-html="item.caption" />
             </div>
@@ -392,11 +392,11 @@
               </div>
             </component>
             <NuxtLink v-if="item.url" :to="`/portfolio/${item.url}`" class="block p-4 transition-colors hover:bg-[var(--snow)]">
-              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
             </NuxtLink>
             <div v-else class="p-4">
-              <p v-if="item.service?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ item.service.name }}</p>
+              <p v-if="primaryService(item)?.name" class="hue-label-sm mb-1" style="color: var(--color-accent);">{{ primaryService(item)?.name }}</p>
               <h3 class="text-[0.6875rem] font-medium uppercase tracking-[0.12em]">{{ item.name }}</h3>
             </div>
           </div>
@@ -553,7 +553,7 @@ const NuxtLink = resolveComponent('NuxtLink')
 
 const route = useRoute()
 const url = route.params.url as string
-const { fetchCaseStudyByUrl, fetchPortfolioItemById, assetUrl, resolvedBeforeAfters } = useDirectus()
+const { fetchCaseStudyByUrl, fetchPortfolioItemById, assetUrl, resolvedBeforeAfters, primaryService } = useDirectus()
 const { parallaxElement, staggerEntrance } = useHeroAnimations()
 const { trackBeforeAfterInteraction, trackCaseStudyView } = useAnalytics()
 const { trackCaseStudyView: trackCaseStudyViewNew, useScrollDepthTracker } = useTracking()
@@ -677,7 +677,7 @@ const narrativeResults = computed(() => cs.value?.results ?? null)
 const allServices = computed(() => {
   const names = new Set<string>()
   cs.value?.services?.forEach((s) => { if (s.services_id?.name) names.add(s.services_id.name) })
-  childProjects.value.forEach((p) => { if (p.service?.name) names.add(p.service.name) })
+  childProjects.value.forEach((p) => { p.services?.forEach((s) => { if (s.services_id?.name) names.add(s.services_id.name) }) })
   return [...names]
 })
 

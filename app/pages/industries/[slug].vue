@@ -121,7 +121,7 @@ import type { DirectusPortfolioItem, DirectusCaseStudy, DirectusIndustry } from 
 const route = useRoute()
 const slug = route.params.slug as string
 
-const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchServices, assetUrl } = useDirectus()
+const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchServices, assetUrl, primaryService } = useDirectus()
 const { pinHero, parallaxElement, staggerEntrance } = useHeroAnimations()
 const { trackIndustryView, useScrollDepthTracker } = useTracking()
 
@@ -174,9 +174,13 @@ const serviceLinks = computed(() => {
   // Count how many times each service appears in this industry's work
   const counts = new Map<string, number>()
   ;(portfolioItems.value ?? []).forEach((p) => {
-    if (p.service?.name) counts.set(p.service.name, (counts.get(p.service.name) ?? 0) + 1)
+    p.services?.forEach((s) => {
+      if (s.services_id?.name) counts.set(s.services_id.name, (counts.get(s.services_id.name) ?? 0) + 1)
+    })
     ;((p.projects ?? []) as DirectusPortfolioItem[]).forEach((child) => {
-      if (child.service?.name) counts.set(child.service.name, (counts.get(child.service.name) ?? 0) + 1)
+      child.services?.forEach((s) => {
+        if (s.services_id?.name) counts.set(s.services_id.name, (counts.get(s.services_id.name) ?? 0) + 1)
+      })
     })
   })
   ;(industryCaseStudyData.value ?? []).forEach((cs) => {
@@ -242,7 +246,7 @@ const allWork = computed<WorkCard[]>(() => {
       excerpt: null,
       to: `/portfolio/${p.url}`,
       image: imgUrl(p),
-      service: p.service?.name ?? null,
+      service: primaryService(p)?.name ?? null,
       client: p.client?.name ?? null,
       sort: p.sort ?? 999,
     })
