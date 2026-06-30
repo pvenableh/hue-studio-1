@@ -6,7 +6,7 @@
  * SSR-safe — nuxt-gtag no-ops on the server automatically.
  */
 
-type FormType = 'contact' | 'audit' | 'subscribe'
+type FormType = 'contact' | 'audit' | 'subscribe' | 'meeting' | 'scope'
 
 function useScrollDepthTracker() {
   if (import.meta.server) return

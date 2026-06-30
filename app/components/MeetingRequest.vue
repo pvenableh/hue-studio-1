@@ -101,7 +101,10 @@
               <Icon v-if="!submitting" name="lucide:arrow-right" class="size-3.5" />
             </button>
 
-            <p class="mt-3 text-center text-[0.6875rem] text-[var(--silver)]">
+            <p v-if="submitError" class="mt-3 text-center text-[0.6875rem] text-red-600">
+              Something went wrong. Please try again, or email us at contact@huestudios.com.
+            </p>
+            <p v-else class="mt-3 text-center text-[0.6875rem] text-[var(--silver)]">
               We'll confirm your meeting within 1 business day.
             </p>
           </div>
@@ -132,10 +135,12 @@
 defineOptions({ inheritAttrs: false })
 
 const { trackMeetingModalOpen, trackFormSubmit } = useAnalytics()
+const { trackFormSuccess, trackFormError } = useTracking()
 
 const isOpen = ref(false)
 const submitting = ref(false)
 const submitted = ref(false)
+const submitError = ref(false)
 
 // Option B — uncomment when calendar sync is ready
 // const earnestBookingUrl = 'https://earnest.guru/book/YOUR_USER_ID'
@@ -173,7 +178,8 @@ const { submitMeeting } = useDirectus()
 
 async function handleSubmit() {
   submitting.value = true
-  await submitMeeting({
+  submitError.value = false
+  const result = await submitMeeting({
     first_name: form.firstName,
     last_name: form.lastName,
     email: form.email,
@@ -185,8 +191,16 @@ async function handleSubmit() {
     explanation: form.notes,
   })
   submitting.value = false
-  submitted.value = true
   trackFormSubmit('meeting', { meeting_type: form.meetingType, duration: form.duration })
+  // A meeting request is a real lead — only show success (and fire the GA4 key
+  // event) when the server actually accepted it.
+  if (result?.success) {
+    submitted.value = true
+    trackFormSuccess('meeting')
+  } else {
+    submitError.value = true
+    trackFormError('meeting', 'Meeting submission failed')
+  }
 }
 </script>
 

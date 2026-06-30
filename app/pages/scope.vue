@@ -192,6 +192,9 @@
                 <span v-if="submitting">Sending…</span>
                 <span v-else>Send Proposal Request</span>
               </button>
+              <p v-if="submitError" class="text-center text-[0.75rem] text-red-600">
+                Something went wrong. Please try again, or email us at contact@huestudios.com.
+              </p>
             </div>
 
             <div v-else class="py-8 text-center">
@@ -325,6 +328,7 @@ const selected = ref<Set<string>>(new Set())
 const showForm = ref(false)
 const submitting = ref(false)
 const submitted = ref(false)
+const submitError = ref(false)
 
 const form = reactive({
   firstName: '', lastName: '', email: '', company: '', notes: '',
@@ -394,6 +398,7 @@ const alwaysIncluded = [
 
 const { submitContact } = useDirectus()
 const { trackFormSubmit, trackScopeServiceSelected, trackScopeProposalRequested } = useAnalytics()
+const { trackFormSuccess, trackFormError } = useTracking()
 
 function toggleServiceTracked(id: string) {
   const wasSelected = selected.value.has(id)
@@ -404,8 +409,9 @@ function toggleServiceTracked(id: string) {
 
 async function submitProposal() {
   submitting.value = true
+  submitError.value = false
   const serviceNames = selectedServices.value.map((s) => s.name).join(', ')
-  await submitContact({
+  const result = await submitContact({
     first_name: form.firstName,
     last_name: form.lastName,
     email: form.email,
@@ -415,9 +421,17 @@ async function submitProposal() {
     budget: estimateRange.value,
   })
   submitting.value = false
-  submitted.value = true
   trackScopeProposalRequested(estimateRange.value, selectedServices.value.length)
   trackFormSubmit('scope_proposal', { estimate: estimateRange.value, services: serviceNames })
+  // A proposal request is a real lead — only show success (and fire the GA4 key
+  // event) when the server actually accepted it.
+  if (result?.success) {
+    submitted.value = true
+    trackFormSuccess('scope')
+  } else {
+    submitError.value = true
+    trackFormError('scope', 'Scope proposal submission failed')
+  }
 }
 </script>
 

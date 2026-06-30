@@ -8,10 +8,12 @@
       @scroll.passive="onScroll"
     >
       <component
-        :is="item.to ? resolveDynamicComponent('NuxtLink') : 'div'"
+        :is="item.to ? NuxtLink : 'div'"
         v-for="(item, i) in items"
         :key="item.id"
         :to="item.to"
+        :target="isExternal(item.to) ? '_blank' : undefined"
+        :rel="isExternal(item.to) ? 'noopener noreferrer' : undefined"
         class="group reveal relative block aspect-[4/5] w-[82%] flex-shrink-0 snap-start overflow-hidden rounded-sm sm:aspect-[3/2] sm:w-[calc(50%-0.5rem)]"
         :style="{ transitionDelay: `${i * 80}ms` }"
       >
@@ -95,7 +97,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted, resolveDynamicComponent } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { NuxtLink } from '#components'
 import { currentWork, type CurrentWorkItem } from '~/data/currentWork'
 
 const { assetUrl, fetchCurrentWork } = useDirectus()
@@ -124,6 +127,10 @@ function resolveImage(src?: string): string | null {
   if (!src) return null
   if (src.startsWith('http') || src.startsWith('/')) return src
   return assetUrl(src, 'medium-contain')
+}
+
+function isExternal(to?: string): boolean {
+  return !!to && /^https?:\/\//.test(to)
 }
 
 function gradientFor(tint: string): string {
