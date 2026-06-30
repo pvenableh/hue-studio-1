@@ -44,7 +44,17 @@
         </div>
         <div class="space-y-8 lg:pt-2">
           <!-- Contact -->
-          <div v-if="member.linkedin_url || member.email" class="space-y-3">
+          <div v-if="bookingUser || member.linkedin_url || member.email" class="space-y-3">
+            <!-- Book directly into this person's Earnest scheduler -->
+            <button
+              v-if="bookingUser"
+              type="button"
+              class="hue-btn w-full justify-center"
+              @click="openBooking"
+            >
+              <Icon name="lucide:calendar-clock" class="size-3.5" />
+              Book a call with {{ member.first_name }}
+            </button>
             <a
               v-if="member.linkedin_url"
               :href="member.linkedin_url"
@@ -174,6 +184,37 @@ const { data: member } = await useAsyncData(
 if (!member.value) throw createError({ statusCode: 404, statusMessage: 'Team member not found' })
 
 const fullName = computed(() => [member.value?.first_name, member.value?.last_name].filter(Boolean).join(' '))
+
+// ── Earnest booking ──────────────────────────────────────────────────────────
+// Each team member books into their OWN Earnest scheduler. Maps a profile URL
+// to that person's Earnest booking identifier — a custom slug if they've set one
+// in Scheduler → Booking Page, otherwise their user UUID (the booking page
+// accepts either). Org is always 'hue'. Add a line here for each new member;
+// people without an entry simply don't show a booking button.
+const EARNEST_ORG = 'hue'
+const EARNEST_BOOKING: Record<string, string> = {
+  'peter-hoffman': 'peter-venable-hoffman',
+  'camila-hoffman': '77641f2c-a463-4f9f-bd25-b8d95c9655a7',
+}
+const bookingUser = computed(() => EARNEST_BOOKING[member.value?.url ?? ''] ?? null)
+
+// Load the Earnest embed script only on profile pages that actually have a
+// booking link. It exposes window.EarnestEmbed.open() (opens the booking page
+// in a modal) — see https://app.earnest.guru/embed.js.
+if (bookingUser.value) {
+  useHead({ script: [{ src: 'https://app.earnest.guru/embed.js', async: true }] })
+}
+
+function openBooking() {
+  if (!bookingUser.value) return
+  const w = window as unknown as { EarnestEmbed?: { open: (o: Record<string, string>) => void } }
+  if (w.EarnestEmbed?.open) {
+    w.EarnestEmbed.open({ org: EARNEST_ORG, user: bookingUser.value })
+  } else {
+    // Fallback if the embed script hasn't loaded yet — open the page directly.
+    window.open(`https://app.earnest.guru/book/${EARNEST_ORG}/${bookingUser.value}`, '_blank', 'noopener')
+  }
+}
 
 const heroImgSrc = computed(() => {
   const id = member.value?.photo ?? member.value?.image
