@@ -3,61 +3,37 @@
     <!-- ═══ HERO SLIDER ═══ -->
     <HomeHeroSlider />
 
-    <!-- ═══ PHILOSOPHY ═══ -->
+    <!-- ═══ IN THE STUDIO (current / in-progress work) ═══ -->
     <section class="hue-section px-5 md:px-6 py-14 md:py-32">
-      <div class="hue-container max-w-3xl mx-auto text-center">
-        <div class="mx-auto mb-10 h-px w-10 bg-[var(--silk)]" />
-        <p class="hue-editorial-lg mb-7 reveal">
-          "Visual excellence is achieved through a process that is executed with a defined purpose."
-        </p>
-        <p class="hue-body-lg mb-5 reveal reveal-delay-1">
-          Every engagement begins with understanding your business — your market, competitive landscape, and growth objectives — before any design work starts.
-          It ensures every creative deliverable is purposeful, aligned, and built to perform.
-        </p>
-        <p class="hue-body-sm reveal reveal-delay-2">
-          Woman-owned. Founded in 2005. Boutique by design. From New York to Miami Beach.
-        </p>
-      </div>
-    </section>
-
-    <!-- ═══ SERVICE PACKAGES ═══ -->
-    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
-        <div class="mb-8 md:mb-14 text-center">
-          <p class="hue-label mb-3">What We Do</p>
-          <h2 class="hue-display-lg">Service Packages</h2>
-          <p class="mx-auto mt-4 max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
-            Three tiers designed to scale with your growth. Every package is strategic, measurable, and built to generate results.
-          </p>
-        </div>
-        <div class="grid items-start gap-3 md:gap-5 lg:grid-cols-3">
-          <div
-            v-for="(pkg, i) in packages"
-            :key="pkg.id"
-            class="hue-card reveal flex flex-col px-8 py-9"
-            :class="{ 'hue-card-featured': pkg.featured }"
-            :style="{ transitionDelay: `${i * 80}ms` }"
-          >
-            <span class="hue-label-sm mb-3">{{ String(i + 1).padStart(2, '0') }}</span>
-            <h3 class="hue-display-md mb-1.5">{{ pkg.name }}</h3>
-            <p class="mb-5 text-[0.875rem]" :class="pkg.featured ? 'text-white/50' : 'text-[var(--color-text-muted)]'">{{ pkg.tagline }}</p>
-            <div class="mb-6 flex items-baseline gap-2">
-              <span class="hue-price-label" :class="pkg.featured ? 'text-white/40' : ''">Starting at</span>
-              <span class="hue-price" :class="pkg.featured ? 'text-white' : ''">{{ pkg.price }}</span>
-            </div>
-            <p class="mb-8 flex-1 text-[0.8125rem] leading-relaxed" :class="pkg.featured ? 'text-white/40' : 'text-[var(--color-text-secondary)]'">{{ pkg.bestFor }}</p>
-            <NuxtLink to="/creative-services" :class="pkg.featured ? 'hue-btn-ghost' : 'hue-link'">
-              Learn More
-              <Icon name="lucide:arrow-right" class="size-3.5" />
-            </NuxtLink>
+        <div class="mb-8 md:mb-14 flex items-end justify-between">
+          <div>
+            <p class="hue-label mb-3">In the Studio</p>
+            <h2 class="hue-display-lg">Currently on<br>the bench.</h2>
           </div>
-        </div>
-        <div class="mt-10 text-center">
-          <NuxtLink to="/creative-services" class="hue-link">
-            View all services, retainers &amp; à la carte
+          <NuxtLink to="/portfolio" class="hue-link hidden sm:inline-flex">
+            View all work
             <Icon name="lucide:arrow-right" class="size-3.5" />
           </NuxtLink>
         </div>
+        <HomeCurrentWork />
+      </div>
+    </section>
+
+    <!-- ═══ FEATURED WORK ═══ -->
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
+      <div class="hue-container">
+        <div class="mb-8 md:mb-14 flex items-end justify-between">
+          <div>
+            <p class="hue-label mb-3">Portfolio</p>
+            <h2 class="hue-display-lg">Creating impact<br>through visual excellence.</h2>
+          </div>
+          <NuxtLink to="/portfolio" class="hue-link hidden sm:inline-flex">
+            View all work
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+        <HomePortfolioPreview />
       </div>
     </section>
 
@@ -120,8 +96,92 @@
       </div>
     </section>
 
+    <!-- ═══ CONVERSION BRIDGE (peak interest, right after the proof) ═══ -->
+    <section class="px-5 md:px-6 py-16 md:py-28" style="background: var(--color-accent-tint);">
+      <div class="hue-container-sm text-center">
+        <p class="hue-label mb-4 reveal" style="color: var(--color-accent);">Let's Begin</p>
+        <h2 class="hue-display-lg mb-5 reveal reveal-delay-1">
+          Like what you
+          <span style="font-family:var(--font-editorial);font-style:italic;">see?</span>
+        </h2>
+        <p class="hue-body-lg mx-auto mb-9 max-w-xl reveal reveal-delay-2">
+          Tell us about your business, your market, and what winning looks like. No pitch decks — just a conversation.
+        </p>
+        <div class="flex flex-col items-center justify-center gap-5 reveal reveal-delay-3 sm:flex-row">
+          <MeetingRequest>
+            Book a Call
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </MeetingRequest>
+          <NuxtLink to="/contact" class="hue-link" @click="trackCtaClick('Start a project', 'homepage_casestudy_bridge')">
+            Or start a project
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PHILOSOPHY ═══ -->
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
+      <div class="hue-container max-w-3xl mx-auto text-center">
+        <div class="mx-auto mb-10 h-px w-10 bg-[var(--silk)]" />
+        <p class="hue-editorial-lg mb-7 reveal">
+          "Visual excellence is achieved through a process that is executed with a defined purpose."
+        </p>
+        <p class="hue-body-sm reveal reveal-delay-1">
+          Woman-owned. Founded in 2005. Boutique by design. From New York to Miami Beach.
+        </p>
+        <RevealText open-label="Read our approach" close-label="Show less" align="center" class="mt-2">
+          <p class="hue-body-lg mx-auto max-w-2xl pt-6">
+            Every engagement begins with understanding your business — your market, competitive landscape, and growth objectives — before any design work starts.
+            It ensures every creative deliverable is purposeful, aligned, and built to perform.
+          </p>
+        </RevealText>
+      </div>
+    </section>
+
+    <!-- ═══ SERVICE PACKAGES ═══ -->
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
+      <div class="hue-container">
+        <div class="mb-8 md:mb-14 text-center">
+          <p class="hue-label mb-3">What We Do</p>
+          <h2 class="hue-display-lg">Service Packages</h2>
+          <p class="mx-auto mt-4 max-w-md text-[0.9375rem] text-[var(--color-text-muted)]">
+            Three tiers designed to scale with your growth. Every package is strategic, measurable, and built to generate results.
+          </p>
+        </div>
+        <div class="grid items-start gap-3 md:gap-5 lg:grid-cols-3">
+          <div
+            v-for="(pkg, i) in packages"
+            :key="pkg.id"
+            class="hue-card reveal flex flex-col px-8 py-9"
+            :class="{ 'hue-card-featured': pkg.featured }"
+            :style="{ transitionDelay: `${i * 80}ms` }"
+          >
+            <span class="hue-label-sm mb-3">{{ String(i + 1).padStart(2, '0') }}</span>
+            <h3 class="hue-display-md mb-1.5">{{ pkg.name }}</h3>
+            <p class="mb-5 text-[0.875rem]" :class="pkg.featured ? 'text-white/50' : 'text-[var(--color-text-muted)]'">{{ pkg.tagline }}</p>
+            <div class="mb-6 flex items-baseline gap-2">
+              <span class="hue-price-label" :class="pkg.featured ? 'text-white/40' : ''">Starting at</span>
+              <span class="hue-price" :class="pkg.featured ? 'text-white' : ''">{{ pkg.price }}</span>
+            </div>
+            <p class="mb-8 flex-1 text-[0.8125rem] leading-relaxed" :class="pkg.featured ? 'text-white/40' : 'text-[var(--color-text-secondary)]'">{{ pkg.bestFor }}</p>
+            <NuxtLink to="/creative-services" :class="pkg.featured ? 'hue-btn-ghost' : 'hue-link'">
+              Learn More
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </NuxtLink>
+          </div>
+        </div>
+        <div class="mt-10 text-center">
+          <NuxtLink to="/creative-services" class="hue-link">
+            View all services, retainers &amp; à la carte
+            <Icon name="lucide:arrow-right" class="size-3.5" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══ HOW WE WORK ═══ -->
-    <section class="hue-section overflow-hidden px-5 md:px-6 py-14 md:py-32">
+    <section class="hue-section-alt overflow-hidden px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 text-center lg:text-left">
           <p class="hue-label mb-3">How We Work</p>
@@ -156,7 +216,7 @@
     -->
 
     <!-- ═══ SERVICES CAROUSEL ═══ -->
-    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
@@ -169,23 +229,6 @@
           </NuxtLink>
         </div>
         <NumberedGrid :items="serviceGridItems" :carousel="true" :visible-cols="4" />
-      </div>
-    </section>
-
-    <!-- ═══ FEATURED WORK ═══ -->
-    <section class="hue-section bg-white px-5 md:px-6 py-14 md:py-32">
-      <div class="hue-container">
-        <div class="mb-8 md:mb-14 flex items-end justify-between">
-          <div>
-            <p class="hue-label mb-3">Portfolio</p>
-            <h2 class="hue-display-lg">Creating impact<br>through visual excellence.</h2>
-          </div>
-          <NuxtLink to="/portfolio" class="hue-link hidden sm:inline-flex">
-            View all work
-            <Icon name="lucide:arrow-right" class="size-3.5" />
-          </NuxtLink>
-        </div>
-        <HomePortfolioPreview />
       </div>
     </section>
 
@@ -215,9 +258,11 @@
             We believe effective design<br>begins with
             <span style="font-family:var(--font-editorial);font-style:italic;">understanding.</span>
           </h2>
-          <p class="mb-8 text-[1.0625rem] leading-relaxed text-white/45">
-            From our roots in New York City to our home in Miami Beach, we craft brand experiences that resonate. Founded by Camila Hoffman — Art Director at A|X Armani Exchange for over 8 years, Parsons BFA — and Peter Hoffman, our boutique approach ensures every project receives the attention and creative excellence it deserves.
-          </p>
+          <RevealText open-label="More about Hue" close-label="Show less" class="mb-8">
+            <p class="text-[1.0625rem] leading-relaxed text-white/45">
+              From our roots in New York City to our home in Miami Beach, we craft brand experiences that resonate. Founded by Camila Hoffman — Art Director at A|X Armani Exchange for over 8 years, Parsons BFA — and Peter Hoffman, our boutique approach ensures every project receives the attention and creative excellence it deserves.
+            </p>
+          </RevealText>
           <NuxtLink to="/about" class="hue-link">
             Learn more about us
             <Icon name="lucide:arrow-right" class="size-3.5" />

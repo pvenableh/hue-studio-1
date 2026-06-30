@@ -39,6 +39,20 @@ export interface DirectusIndustry {
   portfolio?: { portfolio_id: DirectusPortfolioItem | null }[]
 }
 
+export interface DirectusCurrentWork {
+  id: number
+  status: string
+  sort: number | null
+  name: string
+  category: string | null
+  stage: string | null
+  descriptor: string | null
+  disciplines: string[] | null
+  tint: string | null
+  image: string | null
+  link: string | null
+}
+
 export interface DirectusService {
   id: string
   name: string | null
@@ -433,6 +447,18 @@ export function useDirectus() {
       ].join(','),
     })
     const res = await directusFetch<{ data: DirectusService[] }>('items/services', params)
+    return res.data ?? []
+  }
+
+  /** Fetch "In the Studio" current / in-progress work items (CMS-managed) */
+  async function fetchCurrentWork(options: { limit?: number } = {}): Promise<DirectusCurrentWork[]> {
+    const params = new URLSearchParams({
+      'filter[status][_eq]': 'published',
+      sort: 'sort',
+      fields: 'id,status,sort,name,category,stage,descriptor,disciplines,tint,image,link',
+    })
+    if (options.limit) params.set('limit', String(options.limit))
+    const res = await directusFetch<{ data: DirectusCurrentWork[] }>('items/current_work', params)
     return res.data ?? []
   }
 
@@ -857,6 +883,7 @@ export function useDirectus() {
     fetchIndustryByUrl,
     fetchIndustryPortfolio,
     fetchServices,
+    fetchCurrentWork,
     fetchServiceByUrl,
     fetchServicePortfolio,
     fetchServiceCaseStudies,

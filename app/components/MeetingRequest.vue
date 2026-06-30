@@ -17,7 +17,7 @@
           <div class="flex items-center justify-between border-b border-[var(--silk)] px-2 md:px-6 py-4">
             <div>
               <p class="text-[0.625rem] font-medium uppercase tracking-[0.2em] text-[var(--silver)]">Schedule</p>
-              <p class="text-[1.125rem] font-light" style="font-family: var(--font-editorial);">Strategy Session</p>
+              <p class="text-[0.9375rem] font-normal uppercase tracking-[0.2em]">Strategy Session</p>
             </div>
             <button @click="isOpen = false" class="text-[var(--silver)] hover:text-[var(--near-black)]">
               <Icon name="lucide:x" class="size-5" />
