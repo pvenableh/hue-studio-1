@@ -4,7 +4,7 @@
     <HomeHeroSlider />
 
     <!-- ═══ IN THE STUDIO (current / in-progress work) ═══ -->
-    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
+    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
@@ -21,7 +21,7 @@
     </section>
 
     <!-- ═══ FEATURED WORK ═══ -->
-    <section class="hue-section-alt px-5 md:px-6 py-14 md:py-32">
+    <section class="hue-section px-5 md:px-6 py-14 md:py-32">
       <div class="hue-container">
         <div class="mb-8 md:mb-14 flex items-end justify-between">
           <div>
