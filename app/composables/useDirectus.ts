@@ -147,7 +147,7 @@ export interface DirectusCaseStudy {
   challenge: string | null
   solution: string | null
   results: string | null
-  client: string | null
+  client: DirectusClient | null
   project_year: string | null
   project_duration: string | null
   project_url: string | null
@@ -159,6 +159,14 @@ export interface DirectusCaseStudy {
   services: { services_id: DirectusService | null }[]
   industries: { industries_id: DirectusIndustry | null }[]
   portfolio_items: DirectusCaseStudyPortfolioItem[]
+}
+
+/** One entry in an industry's curated `featured_work` M2A list */
+export interface IndustryFeaturedWorkItem {
+  type: 'case-study' | 'portfolio'
+  sort: number
+  caseStudy: DirectusCaseStudy | null
+  portfolio: DirectusPortfolioItem | null
 }
 
 export interface DirectusBlogCategory {
@@ -604,6 +612,48 @@ export function useDirectus() {
     return res.data ?? []
   }
 
+  /**
+   * Fetch an industry's curated "Featured Work" (M2A `industries.featured_work`):
+   * an ordered mix of case studies + portfolio items, the single source of truth
+   * for the industry page's work grid. Returns [] when the industry has no
+   * curated list yet (the page then falls back to the legacy merge).
+   */
+  async function fetchIndustryFeaturedWork(industryId: string): Promise<IndustryFeaturedWorkItem[]> {
+    const csFields = [
+      'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
+      'organization.id', 'organization.name', 'organization.short_name', 'organization.logo', 'organization.icon',
+      'client.id', 'client.name',
+      'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+      ...CASE_STUDY_PORTFOLIO_FIELDS,
+    ]
+    const pfFields = [
+      'id', 'name', 'slug', 'url', 'status', 'sort', 'featured_image', 'parent_id',
+      'client.id', 'client.name',
+      'services.services_id.id', 'services.services_id.name', 'services.services_id.url',
+      'images.directus_files_id',
+      'projects.id', 'projects.name', 'projects.featured_image', 'projects.images.directus_files_id',
+    ]
+    const params = new URLSearchParams({
+      fields: [
+        'sort', 'collection',
+        ...csFields.map((f) => `item:case_studies.${f}`),
+        ...pfFields.map((f) => `item:portfolio.${f}`),
+      ].join(','),
+      'filter[industries_id][_eq]': industryId,
+      sort: 'sort',
+      limit: '50',
+    })
+    const res = await directusFetch<{ data: any[] }>('items/industries_featured_work', params)
+    return (res.data ?? [])
+      .filter((r) => r?.item)
+      .map((r) => ({
+        type: r.collection === 'case_studies' ? 'case-study' : 'portfolio',
+        sort: r.sort ?? 0,
+        caseStudy: r.collection === 'case_studies' ? (r.item as DirectusCaseStudy) : null,
+        portfolio: r.collection === 'portfolio' ? (r.item as DirectusPortfolioItem) : null,
+      }) as IndustryFeaturedWorkItem)
+  }
+
   async function fetchCaseStudyByUrl(url: string): Promise<DirectusCaseStudy | null> {
     const params = new URLSearchParams({
       fields: [
@@ -889,6 +939,7 @@ export function useDirectus() {
     fetchServiceCaseStudies,
     fetchCaseStudies,
     fetchIndustryCaseStudies,
+    fetchIndustryFeaturedWork,
     fetchCaseStudyByUrl,
     fetchTestimonials,
     submitContact,

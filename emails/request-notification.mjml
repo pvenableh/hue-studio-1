@@ -1,0 +1,80 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" />
+      <mj-text font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="gold-eyebrow" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#D4973A" letter-spacing="2px" text-transform="uppercase" />
+      <mj-class name="heading" font-family="Georgia, 'Times New Roman', serif" font-size="30px" color="#F0EDE8" line-height="1.15" />
+      <mj-class name="body-text" font-size="16px" color="#F0EDE8" line-height="1.6" />
+      <mj-class name="muted" font-size="14px" color="#8A8278" line-height="1.6" />
+      <mj-class name="label" font-family="Georgia, 'Times New Roman', serif" font-size="11px" color="#8A8278" letter-spacing="1px" text-transform="uppercase" />
+    </mj-attributes>
+    <mj-preview>New {{request_type}} request from {{full_name}}</mj-preview>
+    <mj-style>
+      a { color: #D4973A; text-decoration: underline; }
+      .field-card { background-color: #1C1A17 !important; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#0B0A09">
+    <!-- Header -->
+    <mj-include path="./partials/header.mjml" />
+
+    <!-- Hero -->
+    <mj-section background-color="#0B0A09" padding="40px 40px 10px">
+      <mj-column>
+        <mj-text mj-class="gold-eyebrow" padding-bottom="16px">New Website Request</mj-text>
+        <mj-text mj-class="heading" padding-bottom="12px">{{request_type}}</mj-text>
+        <mj-text mj-class="muted" padding-bottom="0">Submitted {{date_submitted}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Contact block -->
+    <mj-section background-color="#0B0A09" padding="20px 30px 0">
+      <mj-column padding="20px" css-class="field-card">
+        <mj-text mj-class="label" padding-bottom="4px">Name</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{full_name}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Email</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px"><a href="mailto:{{email}}">{{email}}</a></mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Phone</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{phone}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Company</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{company}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Title</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="0">{{title}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Project block -->
+    <mj-section background-color="#0B0A09" padding="16px 30px 0">
+      <mj-column padding="20px" css-class="field-card">
+        <mj-text mj-class="label" padding-bottom="4px">Project</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{project}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Budget</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{budget}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Contact preference</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="16px">{{contact_preference}}</mj-text>
+
+        <mj-text mj-class="label" padding-bottom="4px">Message</mj-text>
+        <mj-text mj-class="body-text" padding-bottom="0">{{explanation}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- CTA -->
+    <mj-section background-color="#0B0A09" padding="24px 40px 10px">
+      <mj-column>
+        <mj-button background-color="#D4973A" color="#0B0A09" font-family="Georgia, 'Times New Roman', serif" font-size="15px" font-weight="bold" border-radius="2px" href="{{admin_url}}" align="left" padding="0">
+          Open in Earnest
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-include path="./partials/footer.mjml" />
+  </mj-body>
+</mjml>

@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "emails:build": "npx mjml emails/*.mjml -o emails/compiled/"
+    "emails:build": "node scripts/build-emails.mjs"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.1",
@@ -17,6 +17,7 @@
     "@nuxt/icon": "^1.11.0",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/seo": "^3.3.0",
+    "@sendgrid/mail": "^8.1.6",
     "@tailwindcss/vite": "^4.1.4",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^14.1.0",

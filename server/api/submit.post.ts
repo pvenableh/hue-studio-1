@@ -204,13 +204,30 @@ export default defineEventHandler(async (event) => {
       next_action_date: new Date().toISOString().split('T')[0],
     })
 
-    await directusCreate('requests', {
+    const request = await directusCreate('requests', {
       status: 'published',
       first_name: body.first_name || null,
       email: body.email,
       project: ['AI & Automation'],
       explanation: `AI Intelligence audit request. Organization type: ${body.organization_type || 'not specified'}`,
       date_submitted: new Date().toISOString(),
+    })
+
+    await sendRequestNotification(event, {
+      request_type: 'AI Intelligence Audit',
+      first_name: body.first_name,
+      email: body.email,
+      company: body.company,
+      project: 'AI & Automation',
+      explanation: `AI Intelligence audit request. Organization type: ${body.organization_type || 'not specified'}`,
+      requestId: request.id,
+    })
+
+    // Hue's own branded confirmation to the visitor (replaces the old Earnest flow email)
+    await sendRequestConfirmation(event, {
+      request_type: 'AI Intelligence Audit',
+      first_name: body.first_name,
+      email: body.email,
     })
 
     // Subscribe to newsletter
@@ -273,7 +290,7 @@ export default defineEventHandler(async (event) => {
   })
 
   // Step 4: Create request as audit trail
-  await directusCreate('requests', {
+  const request = await directusCreate('requests', {
     status: 'published',
     first_name: body.first_name || null,
     last_name: body.last_name || null,
@@ -286,6 +303,29 @@ export default defineEventHandler(async (event) => {
     budget: body.budget || null,
     contact_preference: body.contact_preference || null,
     date_submitted: new Date().toISOString(),
+  })
+
+  // Notify the team of the new request (replaces the old Directus flow)
+  await sendRequestNotification(event, {
+    request_type: isAudit ? 'Brand Analysis' : 'Contact',
+    first_name: body.first_name,
+    last_name: body.last_name,
+    email: body.email,
+    phone: body.phone,
+    company: body.company,
+    title: body.title,
+    project: body.project || (isAudit ? 'Branding / Strategy' : null),
+    budget: body.budget,
+    contact_preference: body.contact_preference,
+    explanation: body.explanation,
+    requestId: request.id,
+  })
+
+  // Hue's own branded confirmation to the visitor (replaces the old Earnest flow email)
+  await sendRequestConfirmation(event, {
+    request_type: isAudit ? 'Brand Analysis' : 'Contact',
+    first_name: body.first_name,
+    email: body.email,
   })
 
   // Step 5: Also subscribe to newsletter if it's a contact form

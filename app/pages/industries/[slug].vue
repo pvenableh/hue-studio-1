@@ -121,7 +121,7 @@ import type { DirectusPortfolioItem, DirectusCaseStudy, DirectusIndustry } from 
 const route = useRoute()
 const slug = route.params.slug as string
 
-const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchServices, assetUrl, primaryService } = useDirectus()
+const { fetchIndustryByUrl, fetchIndustryPortfolio, fetchIndustries, fetchIndustryCaseStudies, fetchIndustryFeaturedWork, fetchServices, assetUrl, primaryService } = useDirectus()
 const { pinHero, parallaxElement, staggerEntrance } = useHeroAnimations()
 const { trackIndustryView, useScrollDepthTracker } = useTracking()
 
@@ -140,10 +140,11 @@ const { data: industry } = await useAsyncData(`industry-${slug}`, () => fetchInd
 
 if (!industry.value) throw createError({ statusCode: 404, statusMessage: 'Industry not found' })
 
-const [{ data: portfolioItems }, { data: allIndustries }, { data: industryCaseStudyData }, { data: allServices }] = await Promise.all([
+const [{ data: portfolioItems }, { data: allIndustries }, { data: industryCaseStudyData }, { data: featuredWorkData }, { data: allServices }] = await Promise.all([
   useAsyncData(`industry-portfolio-${slug}`, () => fetchIndustryPortfolio(industry.value!.id)),
   useAsyncData('industries-all', () => fetchIndustries()),
   useAsyncData(`industry-case-studies-${slug}`, () => fetchIndustryCaseStudies(industry.value!.id)),
+  useAsyncData(`industry-featured-work-${slug}`, () => fetchIndustryFeaturedWork(industry.value!.id)),
   useAsyncData('services-all', () => fetchServices()),
 ])
 
@@ -216,6 +217,45 @@ interface WorkCard {
 }
 
 const allWork = computed<WorkCard[]>(() => {
+  // Preferred source of truth: the industry's curated Featured Work (M2A),
+  // an ordered mix of case studies + portfolio items set on the Industry record.
+  const featured = featuredWorkData.value ?? []
+  if (featured.length) {
+    const cards: WorkCard[] = []
+    for (const entry of featured) {
+      if (entry.type === 'case-study' && entry.caseStudy?.id) {
+        const cs = entry.caseStudy
+        cards.push({
+          id: cs.id,
+          type: 'case-study',
+          name: cs.title ?? '',
+          excerpt: cs.excerpt ?? null,
+          to: `/case-studies/${cs.url}`,
+          image: csImage(cs),
+          service: cs.services?.[0]?.services_id?.name ?? null,
+          client: cs.organization?.name ?? cs.client?.name ?? null,
+          sort: entry.sort,
+        })
+      } else if (entry.type === 'portfolio' && entry.portfolio?.id) {
+        const p = entry.portfolio
+        cards.push({
+          id: p.id,
+          type: 'portfolio',
+          name: p.name ?? '',
+          excerpt: null,
+          to: `/portfolio/${p.url}`,
+          image: imgUrl(p),
+          service: primaryService(p)?.name ?? null,
+          client: p.client?.name ?? null,
+          sort: entry.sort,
+        })
+      }
+    }
+    return cards.slice(0, 12)
+  }
+
+  // Fallback for industries without a curated list yet: merge the two M2M
+  // relationships (case studies first, then portfolio).
   const cards: WorkCard[] = []
 
   // Case studies first
@@ -229,7 +269,7 @@ const allWork = computed<WorkCard[]>(() => {
       to: `/case-studies/${cs.url}`,
       image: csImage(cs),
       service: cs.services?.[0]?.services_id?.name ?? null,
-      client: cs.organization?.name ?? cs.client ?? null,
+      client: cs.organization?.name ?? cs.client?.name ?? null,
       sort: 0,
     })
   }

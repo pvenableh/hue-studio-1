@@ -176,7 +176,7 @@ const allWork = computed<WorkCard[]>(() => {
       to: `/case-studies/${cs.url}`,
       image: csImage(cs),
       service: cs.services?.[0]?.services_id?.name ?? service.value?.name ?? null,
-      client: cs.organization?.name ?? cs.client ?? null,
+      client: cs.organization?.name ?? cs.client?.name ?? null,
     })
   }
 

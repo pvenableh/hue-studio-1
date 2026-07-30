@@ -33,6 +33,10 @@ export default defineNuxtConfig({
     googleServiceAccount: process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
     ga4PropertyId: process.env.GA4_PROPERTY_ID,
     analyticsPassword: process.env.ANALYTICS_PASSWORD,
+    // Transactional email (SendGrid) — request notifications sent from Nuxt
+    sendgridApiKey: process.env.SENDGRID_API_KEY || '',
+    notifyFromEmail: process.env.NOTIFY_FROM_EMAIL || 'notifications@huestudios.com',
+    notifyToEmail: process.env.NOTIFY_TO_EMAIL || 'peter@huestudios.com',
     public: {
       directusUrl: process.env.NUXT_PUBLIC_DIRECTUS_URL || 'https://admin.earnest.guru',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://huestudios.com',
