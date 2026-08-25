@@ -69,12 +69,18 @@ export default defineEventHandler(async (event) => {
     return res.data
   }
 
-  // Helper to find existing contact by email
+  // Helper to find existing contact by email, SCOPED TO HUE.
+  //
+  // The org filter is load-bearing, not defensive. `contacts` is a shared
+  // multi-tenant table: an unscoped email match will happily return another
+  // tenant's contact row, and everything below (lead, lead_activity, mailing
+  // list) would then be attached to a stranger's record.
   async function findContactByEmail(email: string): Promise<any | null> {
     const res = await $fetch<{ data: any[] }>(`${baseUrl}/items/contacts`, {
       headers,
       params: {
         'filter[email][_eq]': email.toLowerCase().trim(),
+        'filter[organizations][organizations_id][_eq]': HUE_ORG_ID,
         'fields': 'id,first_name,last_name,email',
         'limit': 1,
       },
@@ -97,6 +103,16 @@ export default defineEventHandler(async (event) => {
       category: 'prospect',
       email_subscribed: true,
       source: 'website',
+    })
+
+    // Tenant membership lives in the junction, NOT on the contact row. Without
+    // this the contact belongs to no organization and is invisible to every
+    // org-scoped query in Earnest — the form appears to work while the lead
+    // never reaches anyone. This is how 39 contacts went missing before it was
+    // fixed; the HUE_ORG_ID constant had been sitting here unused.
+    await directusCreate('contacts_organizations', {
+      contacts_id: contact.id,
+      organizations_id: HUE_ORG_ID,
     })
   }
 
@@ -132,6 +148,7 @@ export default defineEventHandler(async (event) => {
       priority: 'high',
       lead_score: 80,
       source: 'website',
+      organization: HUE_ORG_ID,
       project_type: 'Strategy Session',
       notes: body.explanation || null,
       related_contact: contactId,
@@ -186,6 +203,7 @@ export default defineEventHandler(async (event) => {
       priority: 'high',
       lead_score: 70,
       source: 'website_intelligence',
+      organization: HUE_ORG_ID,
       project_type: 'AI Intelligence Audit',
       notes: body.organization_type ? `Organization type: ${body.organization_type}` : null,
       related_contact: contactId,
@@ -268,6 +286,7 @@ export default defineEventHandler(async (event) => {
     priority,
     lead_score: isAudit ? 50 : 65,
     source: 'website',
+    organization: HUE_ORG_ID,
     project_type: projectType,
     estimated_value: estimatedValue,
     timeline: 'flexible',
