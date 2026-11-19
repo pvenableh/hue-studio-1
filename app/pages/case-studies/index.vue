@@ -14,31 +14,7 @@
 
     <section class="hue-section px-2 md:px-6 pb-24 pt-10">
       <div class="hue-container">
-        <!-- Loading -->
-        <div v-if="pending" class="space-y-12">
-          <div v-for="i in 3" :key="i" class="h-80 animate-pulse rounded-sm bg-[var(--cloud)]" />
-        </div>
-
-        <!-- Case studies -->
-        <div v-else-if="caseStudyList.length" class="space-y-12">
-          <CaseStudiesCaseStudyCard
-            v-for="(cs, i) in caseStudyList"
-            :key="cs.id"
-            :cs="cs"
-            :image-src="cardImage(cs)"
-            :eager="i < 2"
-            :number="String(i + 1).padStart(2, '0')"
-            :reverse="i % 2 === 1"
-            class="reveal"
-            :style="{ transitionDelay: `${i * 60}ms` }"
-          />
-        </div>
-
-        <!-- Fallback -->
-        <div v-else-if="!pending" class="rounded-sm border border-[var(--silk)] bg-[var(--snow)] py-20 text-center">
-          <p class="hue-editorial-md mb-4">Case studies coming soon.</p>
-          <NuxtLink to="/portfolio" class="hue-link inline-flex">Browse the full portfolio <Icon name="lucide:arrow-right" class="size-3.5" /></NuxtLink>
-        </div>
+        <HomeWorkIndex />
       </div>
     </section>
 
@@ -77,59 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import type { DirectusCaseStudy } from '~/composables/useDirectus'
-
 useSeoMeta({
   title: 'Case Studies | B2B Branding & Lead Generation | Hue',
   description: 'Explore our case studies in brand strategy, website design, and lead generation for government, architecture, real estate, technology, and professional services.',
 })
 
 defineOgImage({ component: 'HueOg', props: { title: 'Case Studies', description: 'Deep dives into strategy, execution, and measurable outcomes.', label: 'Case Studies' } })
-
-const { fetchCaseStudies, assetUrl } = useDirectus()
-
-const { data: caseStudies, pending } = await useAsyncData('case-studies', () => fetchCaseStudies({ limit: 50 }))
-
-const caseStudyList = computed(() => caseStudies.value ?? [])
-
-/** Smart image fallback: logo portfolio item → featured_image → first portfolio item image */
-function cardImage(cs: DirectusCaseStudy): string | null {
-  const portfolioItems = cs.portfolio_items ?? []
-
-  const logoImageId = (() => {
-    const logoItem = portfolioItems.find((pi) => {
-      const svc = pi.portfolio_id?.services?.[0]?.services_id?.name?.toLowerCase() ?? ''
-      const name = pi.portfolio_id?.name?.toLowerCase() ?? ''
-      return svc.includes('logo') || svc.includes('brand') || name.includes('logo')
-    })
-    return logoItem?.portfolio_id?.featured_image
-      ?? logoItem?.portfolio_id?.images?.[0]?.directus_files_id
-      ?? null
-  })()
-  if (logoImageId) return assetUrl(logoImageId, 'medium-contain')
-
-  if (cs.featured_image) return assetUrl(cs.featured_image, 'medium-contain')
-
-  const anyWithImage = portfolioItems.find((pi) => pi.portfolio_id?.featured_image)
-  if (anyWithImage?.portfolio_id?.featured_image) {
-    return assetUrl(anyWithImage.portfolio_id.featured_image, 'medium-contain')
-  }
-
-  const anyWithGallery = portfolioItems.find((pi) => pi.portfolio_id?.images?.length)
-  if (anyWithGallery?.portfolio_id?.images?.[0]?.directus_files_id) {
-    return assetUrl(anyWithGallery.portfolio_id.images[0].directus_files_id, 'medium-contain')
-  }
-
-  for (const pi of portfolioItems) {
-    const projects = (pi.portfolio_id as any)?.projects ?? []
-    for (const child of projects) {
-      const childId = child.featured_image ?? child.images?.[0]?.directus_files_id
-      if (childId) return assetUrl(childId, 'medium-contain')
-    }
-  }
-
-  return null
-}
 
 useScrollReveal()
 </script>

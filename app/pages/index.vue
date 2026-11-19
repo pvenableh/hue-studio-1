@@ -6,10 +6,7 @@
     <section id="work" class="border-t border-[var(--color-border)] px-5 md:px-6 py-16 md:py-28">
       <div class="hue-container">
         <p class="hue-marginalia mb-4">Selected Work</p>
-        <!-- PHASE 4 PLACEHOLDER: mount <HomeWorkIndex /> here -->
-        <div class="border border-dashed border-[var(--color-border)] p-10 text-center text-[0.875rem] text-[var(--grey)]">
-          Work Index — coming in Phase 4
-        </div>
+        <HomeWorkIndex :limit="6" show-current show-all-link />
       </div>
     </section>
 
