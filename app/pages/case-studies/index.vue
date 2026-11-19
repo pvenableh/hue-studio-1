@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="root">
     <section class="hue-section relative overflow-x-clip px-2 md:px-6 pb-16 pt-24 md:pt-32">
       <SectionWatermark word="Stories" />
       <div class="hue-container relative">
@@ -21,8 +21,8 @@
     <!-- Editorial break -->
     <section class="hue-section-alt px-2 md:px-6 py-20 text-center">
       <div class="hue-container-sm">
-        <p class="hue-pullquote reveal">Every project starts with<br class="hidden md:block"> understanding why.</p>
-        <p class="mt-6 hue-body reveal reveal-delay-1">Our rationale-first process ensures every deliverable is purposeful, aligned, and built to perform.</p>
+        <p class="hue-pullquote" data-reveal>Every project starts with<br class="hidden md:block"> understanding why.</p>
+        <p class="mt-6 hue-body" data-reveal>Our rationale-first process ensures every deliverable is purposeful, aligned, and built to perform.</p>
       </div>
     </section>
 
@@ -44,8 +44,8 @@
 
     <section class="hue-section-dark px-2 md:px-6 py-28 text-center md:py-36">
       <div class="mx-auto max-w-md">
-        <h2 class="hue-display-lg mb-6 reveal text-white">Your Project Could<br>Be Next</h2>
-        <p class="mb-10 text-[0.9375rem] leading-relaxed text-white/45 reveal reveal-delay-1">Let's discuss your brand, your market, and what success looks like.</p>
+        <h2 class="hue-display-lg mb-6 text-white" data-reveal>Your Project Could<br>Be Next</h2>
+        <p class="mb-10 text-[0.9375rem] leading-relaxed text-white/45" data-reveal>Let's discuss your brand, your market, and what success looks like.</p>
         <NuxtLink to="/contact" class="hue-btn-ghost">Schedule a Discovery Call</NuxtLink>
       </div>
     </section>
@@ -60,5 +60,10 @@ useSeoMeta({
 
 defineOgImage({ component: 'HueOg', props: { title: 'Case Studies', description: 'Deep dives into strategy, execution, and measurable outcomes.', label: 'Case Studies' } })
 
-useScrollReveal()
+const root = ref<HTMLElement | null>(null)
+const { reveal } = useEditorialMotion(root)
+
+onMounted(() => {
+  root.value?.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => reveal(el))
+})
 </script>
