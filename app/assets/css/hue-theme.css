@@ -29,12 +29,13 @@
   /* ── Neutrals ──────────────────────────────────────── */
   --white:      #ffffff;
   --snow:       #fafafa;
+  --stone:      #F3F3F0;
   --cloud:      #f5f5f5;
   --silk:       #ebebeb;
   --silver:     #c7c7c7;
-  --grey:       #86868b;
-  --dark-grey:  #6e6e73;
-  --near-black: #1d1d1f;
+  --grey:       #9E9D97;
+  --dark-grey:  #6E6D68;
+  --near-black: #141413;
 
   --color-bg:             var(--white);
   --color-bg-alt:         var(--snow);
@@ -43,7 +44,7 @@
   --color-text-secondary: var(--dark-grey);
   --color-text-muted:     var(--grey);
   --color-text-inverse:   var(--white);
-  --color-border:         var(--cloud);
+  --color-border:         #E8E8E3;
   --color-border-light:   var(--silk);
   --color-accent:         var(--accent);
   --color-accent-tint:    var(--accent-tint);
@@ -61,36 +62,6 @@
   --radius: 2px;  /* Sleek, straight edges — luxury editorial feel */
 }
 
-/* ── DARK MODE ─────────────────────────────────────
-   Flips semantic variables. Raw neutrals (--near-black, --white, etc.)
-   stay the same so .hue-section-dark and footer keep their explicit
-   near-black backgrounds in both modes.
-   ──────────────────────────────────────────────────── */
-
-html.dark {
-  --color-bg:             var(--near-black);
-  --color-bg-alt:         #161618;
-  --color-bg-dark:        var(--near-black);
-  --color-text:           #F0EDE8;
-  --color-text-secondary: #a1a1a6;
-  --color-text-muted:     var(--grey);
-  --color-text-inverse:   var(--near-black);
-  --color-border:         #2c2c2e;
-  --color-border-light:   #3a3a3c;
-  --color-accent:         var(--accent-on-dark);
-  --color-accent-tint:    rgba(196, 151, 59, 0.1);
-  --color-accent-hover:   #E0B85C;
-  --color-accent-on-dark: var(--accent-on-dark);
-
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.2);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
-
-  color-scheme: dark;
-}
-
-/* In dark mode, selection inverts */
-html.dark ::selection { background: var(--accent-on-dark); color: var(--near-black); }
 
 @layer base {
   html {

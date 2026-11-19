@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'en' },
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover' },
-        { name: 'theme-color', content: '#1d1d1f' },
+        { name: 'theme-color', content: '#FFFFFF' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
       ],

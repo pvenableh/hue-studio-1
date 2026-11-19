@@ -30,10 +30,6 @@ useHead({
 
 useScrollReveal()
 
-// Intelligence page forces dark mode
-const { forceOn, restore } = useDarkMode()
-onMounted(() => forceOn())
-onUnmounted(() => restore())
 
 // --- ScrollTrigger animations (lg+ only) ---
 const heroComp = ref<InstanceType<typeof IntelligenceIntelHero> | null>(null)
