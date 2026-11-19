@@ -137,6 +137,15 @@ export interface DirectusCaseStudyPortfolioItem {
   portfolio_id: DirectusPortfolioItem | null
 }
 
+/** One pin in a case study's Rationale View. `x`/`y` are percentages on `image` (an asset id). */
+export interface DirectusRationalePin {
+  image: string
+  x: number
+  y: number
+  title: string
+  note: string
+}
+
 export interface DirectusCaseStudy {
   id: string
   status: string
@@ -147,6 +156,9 @@ export interface DirectusCaseStudy {
   challenge: string | null
   solution: string | null
   results: string | null
+  rationale?: string | null
+  outcome_tag?: string | null
+  rationale_pins?: DirectusRationalePin[] | null
   client: DirectusClient | null
   project_year: string | null
   project_duration: string | null
@@ -575,6 +587,7 @@ export function useDirectus() {
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
         'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'project_url', 'tags', 'featured', 'date_created',
+        'rationale', 'outcome_tag',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
@@ -660,6 +673,7 @@ export function useDirectus() {
         'id', 'status', 'title', 'url', 'excerpt', 'featured_image',
         'challenge', 'solution', 'results', 'client.id', 'client.name', 'project_year',
         'project_duration', 'project_url', 'tags', 'featured', 'date_created',
+        'rationale', 'outcome_tag', 'rationale_pins',
         'organization.id', 'organization.name', 'organization.short_name',
         'organization.logo', 'organization.icon', 'organization.website',
         'gallery.directus_files_id',
